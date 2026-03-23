@@ -575,6 +575,7 @@ textarea.form-input {
   cursor: pointer;
 }
 
+
 .form-select option { background: var(--bg2); color: var(--texto); }
 
 .check-group {
