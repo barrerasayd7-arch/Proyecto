@@ -642,3 +642,193 @@ textarea.form-input {
   .form-grid.cols-2,
   .form-grid.cols-3     { grid-template-columns: 1fr; }
 }
+
+
+
+
+
+/* ── BOTONES PERSONALIZADOS ── */
+
+/* Botón principal (acción positiva — color teal) */
+.boton-principal {
+    background-color: #0ea5a0;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-weight: 700;
+}
+
+.boton-principal:hover {
+    background-color: #0b8a86;
+    color: #fff;
+}
+
+/* Botón secundario (solo borde, sin relleno) */
+.boton-secundario {
+    background-color: transparent;
+    color: #e8edf5;
+    border: 1px solid #2a3245;
+    border-radius: 8px;
+    padding: 10px 22px;
+}
+
+
+/* Botón de peligro (rechazar, cancelar — color rojo/coral) */
+.boton-peligro {
+    background-color: rgba(240, 100, 73, 0.15);
+    color: #f06449;
+    border: 1px solid rgba(240, 100, 73, 0.3);
+    border-radius: 8px;
+    padding: 10px 22px;
+}
+
+
+/* ── FILAS DE SOLICITUDES ── */
+
+/* Cada fila que muestra una solicitud de servicio */
+.fila-pedido {
+    background-color: #161c26;
+    border: 1px solid #1e2636;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+}
+
+.fila-pedido:hover {
+    border-color: #0ea5a0;
+}
+
+
+/* Campos de texto, correo, número, etc. */
+.form-control, .form-select {
+    background-color: #0d1117;
+    border: 1px solid #2a3245;
+    color: #e8edf5;
+    border-radius: 8px;
+    width: 100%;
+}
+
+
+
+
+footer {
+    background-color: #161c26;
+    border-top: 1px solid #1e2636;
+    padding: 40px 0 20px;
+    color: #8896ae;
+    font-size: 0.85rem;
+}
+
+/* Logo */
+footer .logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0ea5a0;
+    margin-bottom: 10px;
+}
+
+footer .logo span {
+    color: #f5c842;
+}
+
+/* Títulos */
+footer h6 {
+    color: #e8edf5;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+/* Links en grid (2 columnas) */
+footer .links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 20px;
+}
+
+/* Links */
+footer a {
+    color: #8896ae;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+footer a:hover {
+    color: #0ea5a0;
+}
+
+/* Línea */
+footer hr {
+    border-color: #1e2636;
+    margin: 24px 0 16px;
+}
+
+/* Copy */
+.footer-copy {
+    text-align: center;
+    margin: 0;
+}
+
+/* Responsive: en móvil vuelve a 1 columna */
+@media (max-width: 576px) {
+    footer .links-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estrellas de calificación en amarillo */
+.calificacion-estrellas {
+    color: #f5c842;
+}
+
+/* Texto secundario en gris (universidad, cantidad de reseñas, etc.) */
+.texto-gris {
+    color: #8896ae;
+    font-size: 0.82rem;
+}
+/* Base de la insignia pequeña (ej: "Tutoría", "Activo") */
+.insignia {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+}
+
+/* Caja que envuelve un formulario */
+.contenedor-formulario {
+    background-color: #161c26;
+    border: 1px solid #1e2636;
+    border-radius: 12px;
+    padding: 30px;
+}
+
+
+/* Cuando el usuario hace clic en el campo */
+.form-control:focus, .form-select:focus {
+    background-color: #0d1117;
+    color: #e8edf5;
+    border-color: #0ea5a0;
+    box-shadow: 0 0 0 2px rgba(14, 165, 160, 0.2);
+}
+
+/* Versión pequeña — aparece en tarjetas y solicitudes */
+.foto-perfil {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+}
+
+
+
+
+
+
+
+
+
