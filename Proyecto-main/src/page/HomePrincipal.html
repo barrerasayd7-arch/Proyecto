@@ -802,7 +802,18 @@
     </div>
 </footer>
 
- 
+ <!-- =============================== SCRIPTS =============================== -->
+
+<script>
+    //Verificar si el usuario está logueado al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  const logueado = localStorage.getItem("logueado");
+  if (logueado !== "true") {
+    // Si no está logueado, redirige al login
+    window.location.href = "login.html";
+  }
+});
+</script>
 
 </body>
 </html>
