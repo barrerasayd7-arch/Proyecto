@@ -287,4 +287,3 @@ function buscarUsuario(telefono) {
   }
   return usuario;
 }
-
