@@ -111,3 +111,13 @@ window.verServicios = function() {
   console.log('Total de servicios: ' + serviciosGuardados.length);
   return serviciosGuardados;
 };
+
+const servicios = [
+  { id: "servicio1", titulo: "Java y C++", ... },
+  { id: "servicio2", titulo: "Python básico", ... },
+  { id: "servicio3", titulo: "Diseño Web", ... },
+  // hasta 8
+];
+localStorage.setItem("servicios", JSON.stringify(servicios));
+
+console.log(JSON.parse(localStorage.getItem("servicios")));

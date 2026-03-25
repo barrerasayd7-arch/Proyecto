@@ -69,183 +69,154 @@
             <p class="seccion-desc">Los últimos servicios añadidos por la comunidad</p>
 
 
-            <div class="cards-grid">
-                <a href="Servicio.html?id=servicio1" class="card-servicio">
-                    <div class="card-icono card-icono-azul">💻</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-azul">Programación</span>
-                        <p class="card-meta">🏫 U. del Valle · Cali</p>
-                        <h5>Desarrollo en Java y C++</h5>
-                        <p class="texto-muted">Te ayudo con proyectos, lógica y algoritmos. Ideal para parciales y entregas.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-azul">JM</div>
-                            <span class="texto-muted">Juan M.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★★</div>
-                                <div class="texto-muted">4.8 (45 reseñas)</div>
-                            </div>
-                            <div class="precio">$35.000/h</div>
-                        </div>
-                    </div>
-                </a>
+            <div id="contenedor-tarjetas"></div>
+            <script>
+                // 1. Datos de ejemplo (esto normalmente lo guardarías una sola vez)
+                const servicios = [
+                   {
+                     id: "servicio1",
+                     icono: "💻",
+                     etiqueta: "Programación",
+                     meta: "UPC",
+                     titulo: "Java y C++",
+                     descripcion: "Te ayudo con proyectos, lógica y algoritmos.",
+                     autor: "Juan M.",
+                     avatar: "JM",
+                     estrellas: "★★★★★",
+                     reseñas: "4.8 (45 reseñas)",
+                     precio: "$35.000/h"
+                   },
+                   {
+                     id: "servicio2",
+                     icono: "💻",
+                     etiqueta: "Programación",
+                     meta: "U. Nacional",
+                     titulo: "Python básico",
+                     descripcion: "Clases prácticas de Python para principiantes.",
+                     autor: "Ana P.",
+                     avatar: "AP",
+                     estrellas: "★★★★☆",
+                     reseñas: "4.5 (30 reseñas)",
+                     precio: "$30.000/h"
+                   },
+                   {
+                     id: "servicio3",
+                     icono: "🎨",
+                     etiqueta: "Diseño",
+                     meta: "U. del Valle",
+                     titulo: "Diseño Web",
+                     descripcion: "Aprende HTML, CSS y JavaScript desde cero.",
+                     autor: "Carlos G.",
+                     avatar: "CG",
+                     estrellas: "★★★★★",
+                     reseñas: "5.0 (12 reseñas)",
+                     precio: "$40.000/h"
+                   },
+                   {
+                     id: "servicio4",
+                     icono: "📊",
+                     etiqueta: "Estadística",
+                     meta: "U. Javeriana",
+                     titulo: "Análisis de datos",
+                     descripcion: "Uso de R y Python para estadística aplicada.",
+                     autor: "Laura S.",
+                     avatar: "LS",
+                     estrellas: "★★★★☆",
+                     reseñas: "4.6 (20 reseñas)",
+                     precio: "$38.000/h"
+                   },
+                   {
+                     id: "servicio5",
+                     icono: "🔧",
+                     etiqueta: "Ingeniería",
+                     meta: "UIS",
+                     titulo: "Mecánica básica",
+                     descripcion: "Asesorías en dinámica y resistencia de materiales.",
+                     autor: "Pedro R.",
+                     avatar: "PR",
+                     estrellas: "★★★★☆",
+                     reseñas: "4.4 (18 reseñas)",
+                     precio: "$32.000/h"
+                   },
+                   {
+                     id: "servicio6",
+                     icono: "📚",
+                     etiqueta: "Idiomas",
+                     meta: "U. Andes",
+                     titulo: "Inglés intermedio",
+                     descripcion: "Conversación y gramática para exámenes internacionales.",
+                     autor: "María T.",
+                     avatar: "MT",
+                     estrellas: "★★★★★",
+                     reseñas: "4.9 (50 reseñas)",
+                     precio: "$45.000/h"
+                   },
+                   {
+                     id: "servicio7",
+                     icono: "🧮",
+                     etiqueta: "Matemáticas",
+                     meta: "U. Cauca",
+                     titulo: "Álgebra lineal",
+                     descripcion: "Matrices, vectores y aplicaciones prácticas.",
+                     autor: "José L.",
+                     avatar: "JL",
+                     estrellas: "★★★★☆",
+                     reseñas: "4.7 (22 reseñas)",
+                     precio: "$33.000/h"
+                   },
+                   {
+                     id: "servicio8",
+                     icono: "⚛️",
+                     etiqueta: "Física",
+                     meta: "U. Antioquia",
+                     titulo: "Electromagnetismo",
+                     descripcion: "Clases de teoría y resolución de problemas.",
+                     autor: "Sofía V.",
+                     avatar: "SV",
+                     estrellas: "★★★★★",
+                     reseñas: "5.0 (15 reseñas)",
+                     precio: "$42.000/h"
+                   }
+                 ];
+                
+                localStorage.setItem("servicios", JSON.stringify(servicios));
 
-                <a href="Servicio.html?id=servicio2" class="card-servicio">
-                    <div class="card-icono card-icono-morado">🎨</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-morado">Diseño</span>
-                        <p class="card-meta">🏫 U. Javeriana · Bogotá</p>
-                        <h5>Diseño de logos y branding</h5>
-                        <p class="texto-muted">Creación de identidad visual profesional para proyectos y emprendimientos.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-morado">SM</div>
-                            <span class="texto-muted">Sofía M.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★★</div>
-                                <div class="texto-muted">5.0 (60 reseñas)</div>
-                            </div>
-                            <div class="precio">$80.000</div>
-                        </div>
-                    </div>
-                </a>
+                // Guardar en localStorage (solo la primera vez)
+                if (!localStorage.getItem("servicios")) {
+                  localStorage.setItem("servicios", JSON.stringify(servicios));
+                }
 
-                <a href="Servicio.html?id=servicio3" class="card-servicio">
-                    <div class="card-icono card-icono-naranja">🗂️</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-naranja">Proyectos</span>
-                        <p class="card-meta">🏫 U. Industrial · Bucaramanga</p>
-                        <h5>Proyectos de ingeniería</h5>
-                        <p class="texto-muted">Apoyo en documentación, desarrollo y presentación de proyectos académicos.</p>
+                // 2. Recuperar y renderizar
+                const contenedor = document.getElementById("contenedor-tarjetas");
+                const data = JSON.parse(localStorage.getItem("servicios")) || [];
+                
+                data.slice(0, 8).forEach(servicio => {
+                  const tarjeta = `
+                    <a href="Servicio.html?id=${servicio.id}" class="card-servicio">
+                      <div class="card-icono card-icono-azul">${servicio.icono}</div>
+                      <div class="card-body-custom">
+                        <span class="etiqueta et-azul">${servicio.etiqueta}</span>
+                        <p class="card-meta">${servicio.meta}</p>
+                        <h5>${servicio.titulo}</h5>
+                        <p class="texto-muted">${servicio.descripcion}</p>
                         <div class="card-autor">
-                            <div class="avatar avatar-naranja">CR</div>
-                            <span class="texto-muted">Carlos R.</span>
+                          <div class="avatar avatar-azul">${servicio.avatar}</div>
+                          <span class="texto-muted">${servicio.autor}</span>
                         </div>
                         <hr class="card-divider">
                         <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★☆</div>
-                                <div class="texto-muted">4.6 (30 reseñas)</div>
-                            </div>
-                            <div class="precio">$50.000</div>
+                          <div>
+                            <div class="estrellas">${servicio.estrellas}</div>
+                            <div class="texto-muted">${servicio.reseñas}</div>
+                          </div>
+                          <div class="precio">${servicio.precio}</div>
                         </div>
-                    </div>
-                </a>
-
-                <a href="Servicio.html?id=servicio4" class="card-servicio">
-                    <div class="card-icono card-icono-rojo">🏠</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-rojo">Arriendo</span>
-                        <p class="card-meta">📍 Valledupar</p>
-                        <h5>Habitación cerca a universidad</h5>
-                        <p class="texto-muted">Incluye servicios, wifi y cocina compartida. Ideal para estudiantes.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-rojo">DL</div>
-                            <span class="texto-muted">Daniel L.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★☆</div>
-                                <div class="texto-muted">4.5 (18 reseñas)</div>
-                            </div>
-                            <div class="precio">$400.000/mes</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Servicio.html?id=servicio5" class="card-servicio">
-                    <div class="card-icono card-icono-verde">📊</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-verde">Tutoría</span>
-                        <p class="card-meta">🏫 U. Externado · Bogotá</p>
-                        <h5>Estadística y probabilidad</h5>
-                        <p class="texto-muted">Clases personalizadas con ejercicios prácticos y simulacros de examen.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-verde">MG</div>
-                            <span class="texto-muted">María G.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★★</div>
-                                <div class="texto-muted">4.9 (27 reseñas)</div>
-                            </div>
-                            <div class="precio">$30.000/h</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Servicio.html?id=servicio6" class="card-servicio">
-                    <div class="card-icono card-icono-azul">🌐</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-azul">Otros</span>
-                        <p class="card-meta">🏫 U. del Norte · Barranquilla</p>
-                        <h5>Traducción inglés-español</h5>
-                        <p class="texto-muted">Traducción de textos académicos y documentos técnicos.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-azul">AF</div>
-                            <span class="texto-muted">Andrea F.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★☆</div>
-                                <div class="texto-muted">4.7 (22 reseñas)</div>
-                            </div>
-                            <div class="precio">$20.000/página</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Servicio.html?id=servicio7" class="card-servicio">
-                    <div class="card-icono card-icono-morado">🎬</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-morado">Diseño</span>
-                        <p class="card-meta">🏫 U. de Medellín</p>
-                        <h5>Edición de videos</h5>
-                        <p class="texto-muted">Edición profesional para presentaciones, redes sociales y proyectos.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-morado">JR</div>
-                            <span class="texto-muted">Julián R.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★★</div>
-                                <div class="texto-muted">4.9 (41 reseñas)</div>
-                            </div>
-                            <div class="precio">$60.000</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Servicio.html?id=servicio8" class="card-servicio">
-                    <div class="card-icono card-icono-naranja">📐</div>
-                    <div class="card-body-custom">
-                        <span class="etiqueta et-naranja">Proyectos</span>
-                        <p class="card-meta">🏫 U. Nacional · Medellín</p>
-                        <h5>Planos AutoCAD</h5>
-                        <p class="texto-muted">Diseño de planos arquitectónicos y técnicos para trabajos universitarios.</p>
-                        <div class="card-autor">
-                            <div class="avatar avatar-naranja">PS</div>
-                            <span class="texto-muted">Pedro S.</span>
-                        </div>
-                        <hr class="card-divider">
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★☆</div>
-                                <div class="texto-muted">4.6 (29 reseñas)</div>
-                            </div>
-                            <div class="precio">$55.000</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                      </div>
+                    </a>
+                  `;
+                  contenedor.innerHTML += tarjeta;
+                });
+            </script>
         </div>
     </section>
 

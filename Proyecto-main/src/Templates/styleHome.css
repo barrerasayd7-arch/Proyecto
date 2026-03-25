@@ -321,6 +321,15 @@ fieldset { border: none; padding: 0; }
   transition: var(--trans);
   display: flex;
   flex-direction: column;
+  max-width: 350px;
+  margin: 10px;
+}
+
+/* Contenedor en rejilla */
+#contenedor-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px; /* separación entre tarjetas */
 }
 
 .card-servicio:hover {
