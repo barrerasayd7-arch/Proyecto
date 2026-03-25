@@ -7,9 +7,7 @@ const descripcion = document.getElementById("descripcion");
 const precio = document.getElementById("precio");
 const categoria = document.getElementById("categoria");
 const Universidad = document.getElementById("universidad");
-const presencial = document.getElementById("presencial");
-const virtual = document.getElementById("virtual");
-const mixta = document.getElementById("mixta");
+const presencial = document.getElementById("modalidad-servicio");
 const semana = document.getElementById("semana");
 const finDeSemana = document.getElementById("finesemana");
 const siempre = document.getElementById("siempre");
@@ -29,10 +27,12 @@ if (!localStorage.getItem('logstore_servicios')) {
       precio: '30000',
       universidad: 'Universidad Nacional',
       contacto: '7778889944',
-      modalidad: { presencial: true, virtual: true, mixta: false },
+      modalidad: 'presencial',
       disponibilidad: 'Entre semana',
       publicador: '7778889944',
-      fechaPublicacion: new Date().toLocaleString()
+      fechaPublicacion: new Date().toLocaleString(),
+      Estrellas: ['0', '4.5', '5', '3'],
+      Reseñas: 4,
     },
     {
       id: Date.now() + 1,
@@ -42,10 +42,12 @@ if (!localStorage.getItem('logstore_servicios')) {
       precio: '25000',
       universidad: 'Universidad Javeriana',
       contacto: '7778889944',
-      modalidad: { presencial: false, virtual: true, mixta: false },
+      modalidad: 'virtual',
       disponibilidad: 'Siempre disponible',
       publicador: '7778889944',
-      fechaPublicacion: new Date().toLocaleString()
+      fechaPublicacion: new Date().toLocaleString(),
+      Estrellas: ['1', '2.5', '3', '4.5', '5', '0'],
+      Reseñas: 6,
     }
   ];
 
@@ -80,7 +82,10 @@ if (!formPublicar) {
       },
       disponibilidad: document.querySelector('input[name="disponibilidad"]:checked')?.value || 'No especificado',
       publicador: publicador,
-      fechaPublicacion: new Date().toLocaleString()
+      fechaPublicacion: new Date().toLocaleString(),
+      activo: true,
+      Estrellas: ['0'],           // Inicialmente sin calificaciones
+      Reseñas: 0,                 // Contador de reseñas inicia en 0
     };
 
     // Leemos los servicios guardados (si existen), agregamos el nuevo y volvemos a guardar
