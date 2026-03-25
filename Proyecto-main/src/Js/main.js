@@ -144,6 +144,7 @@ document.querySelector("#panel-login .btn-principal").addEventListener("click", 
     window.location.href = "HomePrincipal.html"; // Redirige a página de usuario
     localStorage.setItem("logueado", "true");             // Marca como logueado
     localStorage.setItem("usuario", usuario.nombre);      // Guarda nombre para mostrar en Home
+    localStorage.setItem("usuarioTelefono", usuario.telefono); // Guarda teléfono para contactos
   } else {
     alert("❌ Teléfono o contraseña incorrectos ❌");
   }
