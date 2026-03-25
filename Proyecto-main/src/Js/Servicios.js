@@ -7,95 +7,111 @@ const descripcion = document.getElementById("descripcion");
 const precio = document.getElementById("precio");
 const categoria = document.getElementById("categoria");
 const Universidad = document.getElementById("universidad");
-const presencial = document.getElementById("modalidad-servicio");
-const semana = document.getElementById("semana");
-const finDeSemana = document.getElementById("finesemana");
-const siempre = document.getElementById("siempre");
+const contacto = document.getElementById("contacto");
+const modalidad_servicio = document.getElementById("modalidad-servicio");
+
 
 // El identificador del usuario que está logueado en el sistema (se asume que viene de localStorage)
-const publicador = localStorage.getItem('usuarioTelefono') || localStorage.getItem('usuario') || 'Desconocido';
+const publicador =
+  localStorage.getItem("usuarioTelefono") ||
+  localStorage.getItem("usuario") ||
+  "Desconocido";
+
+// Inicializar contador de servicios si no existe
+if (!localStorage.getItem("servicioCounter")) {
+  localStorage.setItem("servicioCounter", "0");
+}
 
 // IF de inicialización: si todavia no hay servicios en localStorage, agregamos un par de ejemplos
 // para que la app no inicie vacía y se puedan ver datos de prueba.
-if (!localStorage.getItem('logstore_servicios')) {
+if (!localStorage.getItem("logstore_servicios")) {
+  let counter = parseInt(localStorage.getItem("servicioCounter")) || 0;
   const serviciosIniciales = [
     {
-      id: Date.now(),
-      titulo: 'Tutoría de Álgebra Lineal',
-      descripcion: 'Clases online o presencial de álgebra y matrices.',
-      categoria: 'tutorias',
-      precio: '30000',
-      universidad: 'Universidad Nacional',
-      contacto: '7778889944',
-      modalidad: 'presencial',
-      disponibilidad: 'Entre semana',
-      publicador: '7778889944',
+      id: "servicios" + (++counter),
+      titulo: "Tutoría de Álgebra Lineal",
+      descripcion: "Clases online o presencial de álgebra y matrices.",
+      categoria: "tutorias",
+      precio: "30000",
+      universidad: "Universidad Nacional",
+      contacto: "7778889944",
+      modalidad: "mixta",
+      disponibilidad: "Entre semana",
+      publicador: "7778889944",
       fechaPublicacion: new Date().toLocaleString(),
-      Estrellas: ['0', '4.5', '5', '3'],
-      Reseñas: 4,
     },
     {
-      id: Date.now() + 1,
-      titulo: 'Revisión de ensayo en normas APA',
-      descripcion: 'Corrección y estructura de ensayos universitarios.',
-      categoria: 'ensayos',
-      precio: '25000',
-      universidad: 'Universidad Javeriana',
-      contacto: '7778889944',
-      modalidad: 'virtual',
-      disponibilidad: 'Siempre disponible',
-      publicador: '7778889944',
+      id: "servicios" + (++counter),
+      titulo: "Revisión de ensayo en normas APA",
+      descripcion: "Corrección y estructura de ensayos universitarios.",
+      categoria: "ensayos",
+      precio: "25000",
+      universidad: "Universidad Javeriana",
+      contacto: "7778889944",
+      modalidad: "presencial",
+      disponibilidad: "Siempre disponible",
+      publicador: "7778889944",
       fechaPublicacion: new Date().toLocaleString(),
-      Estrellas: ['1', '2.5', '3', '4.5', '5', '0'],
-      Reseñas: 6,
-    }
+    },
   ];
 
+  // Actualizar el contador en localStorage
+  localStorage.setItem("servicioCounter", counter.toString());
+
   // Guardamos el arreglo de servicios de ejemplo en localStorage como JSON.
-  localStorage.setItem('logstore_servicios', JSON.stringify(serviciosIniciales));
+  localStorage.setItem(
+    "logstore_servicios",
+    JSON.stringify(serviciosIniciales),
+  );
 }
 
 // Intentamos buscar el formulario para publicar servicios (diferentes IDs/estructura por si cambia HTML)
-const formPublicar = document.getElementById('form-publicar-servicio') || document.querySelector('#publicar')?.closest('form');
+const formPublicar =
+  document.getElementById("form-publicar-servicio") ||
+  document.querySelector("#publicar")?.closest("form");
 
 if (!formPublicar) {
   // Mensaje de error de depuración si el formulario no existe
-  console.error('No se encontró el formulario de publicar servicio.');
+  console.error("No se encontró el formulario de publicar servicio.");
 } else {
   // Listener que procesa el submit del formulario
-  formPublicar.addEventListener('submit', function(e) {
+  formPublicar.addEventListener("submit", function (e) {
     e.preventDefault(); // evita recarga de página al enviar
+
+    // Obtener y actualizar el contador
+    let counter = parseInt(localStorage.getItem("servicioCounter")) || 0;
+    counter++;
+    localStorage.setItem("servicioCounter", counter.toString());
 
     // Creación del objeto con los datos ingresados
     const nuevoServicio = {
-      id: Date.now(),
+      id: "servicios" + counter,
       titulo: titulo.value.trim(),
       descripcion: descripcion.value.trim(),
       categoria: categoria.value,
       precio: precio.value,
       universidad: Universidad.value.trim(),
-      contacto: localStorage.getItem('usuarioTelefono') || localStorage.getItem('usuario') || 'Sin contacto',
-      modalidad: {
-        presencial: presencial.checked,
-        virtual: virtual.checked,
-        mixta: mixta.checked
-      },
-      disponibilidad: document.querySelector('input[name="disponibilidad"]:checked')?.value || 'No especificado',
+      contacto: contacto.value.trim(),
+      modalidad: modalidad_servicio.value.trim(),
+      disponibilidad:
+        document.querySelector('input[name="disponibilidad"]:checked')?.value ||
+        "No especificado",
       publicador: publicador,
       fechaPublicacion: new Date().toLocaleString(),
-      activo: true,
-      Estrellas: ['0'],           // Inicialmente sin calificaciones
-      Reseñas: 0,                 // Contador de reseñas inicia en 0
     };
 
     // Leemos los servicios guardados (si existen), agregamos el nuevo y volvemos a guardar
-    let serviciosGuardados = JSON.parse(localStorage.getItem('logstore_servicios')) || [];
+    let serviciosGuardados =
+      JSON.parse(localStorage.getItem("logstore_servicios")) || [];
     serviciosGuardados.push(nuevoServicio);
-    localStorage.setItem('logstore_servicios', JSON.stringify(serviciosGuardados));
+    localStorage.setItem(
+      "logstore_servicios",
+      JSON.stringify(serviciosGuardados),
+    );
 
     // Feedback visual / consola para saber que la acción se completó
-    console.log('Servicio guardado:', nuevoServicio);
-    alert('¡Servicio publicado con éxito!');
+    console.log("Servicio guardado:", nuevoServicio);
+    alert("¡Servicio publicado con éxito!");
 
     // Limpiamos el formulario para un nuevo registro
     formPublicar.reset();
@@ -103,21 +119,16 @@ if (!formPublicar) {
 }
 
 // Función global para ver servicios cargados en consola (puede llamarse desde HTML con onclick)
-window.verServicios = function() {
-  const serviciosGuardados = JSON.parse(localStorage.getItem('logstore_servicios')) || [];
+window.verServicios = function () {
+  const serviciosGuardados =
+    JSON.parse(localStorage.getItem("logstore_servicios")) || [];
   console.clear();
-  console.log('🛠️ SERVICIOS PUBLICADOS:');
+  console.log("🛠️ SERVICIOS PUBLICADOS:");
   console.table(serviciosGuardados);
-  console.log('Total de servicios: ' + serviciosGuardados.length);
+  console.log("Total de servicios: " + serviciosGuardados.length);
   return serviciosGuardados;
 };
 
-const servicios = [
-  { id: "servicio1", titulo: "Java y C++", ... },
-  { id: "servicio2", titulo: "Python básico", ... },
-  { id: "servicio3", titulo: "Diseño Web", ... },
-  // hasta 8
-];
-localStorage.setItem("servicios", JSON.stringify(servicios));
 
-console.log(JSON.parse(localStorage.getItem("servicios")));
+
+//iconos:
