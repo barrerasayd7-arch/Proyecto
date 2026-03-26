@@ -259,3 +259,65 @@ function renderTop3() {
 
 // Ejecutar cuando la página esté lista
 window.addEventListener("DOMContentLoaded", renderTop3);
+
+
+
+/**
+ * Renderiza exclusivamente los servicios del usuario logueado
+ */
+function renderMisServicios() {
+    const contenedor = document.getElementById("contenedor-mis-servicios");
+    const todosLosServicios = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
+    const usuarioActual = localStorage.getItem("usuario"); // El usuario logueado
+
+    if (!contenedor) return;
+
+    // 1. Filtramos por dueño
+    const misServicios = todosLosServicios.filter(s => s.publicador === usuarioActual);
+
+    // Si no tiene nada publicado
+    if (misServicios.length === 0) {
+        contenedor.innerHTML = `
+            <div class="text-center p-5 border rounded" style="border-style: dashed !important;">
+                <p class="texto-gris">Aún no has publicado ningún servicio.</p>
+                <a href="#publicar" class="btn btn-sm boton-principal">¡Publicar mi primer servicio!</a>
+            </div>`;
+        return;
+    }
+
+    // 2. Generamos el HTML (usando tu estructura de "fila-pedido")
+    contenedor.innerHTML = misServicios.reverse().map(servicio => {
+        const infoEstrellas = obtenerEstrellasHTML(servicio.estrellas);
+        
+        return `
+            <div class="fila-pedido">
+                <div class="row align-items-center g-2">
+                    <div class="col-auto" style="font-size:1.8rem;">${servicio.icono || "🌐"}</div>
+                    <div class="col">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <strong>${servicio.titulo}</strong>
+                            <span class="insignia et-verde">Activo</span>
+                        </div>
+                        <div class="texto-gris">
+                            Publicado el ${servicio.fechaPublicacion} · ${servicio.modalidad}
+                        </div>
+                    </div>
+                    <div class="col-auto text-end">
+                        <div class="calificacion-estrellas" style="color: #ffc107;">${infoEstrellas.html}</div>
+                        <div class="texto-gris">${infoEstrellas.promedio} (${servicio.estrellas?.length || 0})</div>
+                    </div>
+                    <div class="col-auto d-flex gap-2">
+                        <button class="btn boton-secundario btn-sm" onclick="editarServicio('${servicio.id}')">✏️ Editar</button>
+                        <button class="btn boton-peligro btn-sm" onclick="pausarServicio('${servicio.id}')">⏸ Pausar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Asegúrate de llamarla cuando cargue el DOM
+window.addEventListener("DOMContentLoaded", () => {
+    renderTop3();
+    renderMisServicios();
+});
