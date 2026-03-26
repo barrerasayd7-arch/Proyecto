@@ -76,11 +76,12 @@
                     const data = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
                     contenedor.innerHTML = "";
 
-                    data.slice(0, 8).forEach(servicio => {
+                    data.reverse().slice(0, 8).forEach(servicio => {
                       const estrellasTexto = typeof calcularEstrellas === 'function'
                         ? calcularEstrellas(servicio.estrellas)
                         : (servicio.estrellas || "☆☆☆☆☆ (0)");
 
+                        const numReseñas = servicio.estrellas ? servicio.estrellas.length : 0;
                       const tarjeta = `
                         <a href="Servicio.html?id=${servicio.id}" class="card-servicio">
                           <div class="card-icono card-icono-azul">${servicio.icono}</div>
@@ -98,7 +99,7 @@
                               <div>
                                 <hr class="card-divider">
                                 <div class="estrellas">${estrellasTexto}</div>
-                                <div class="texto-muted">${servicio.reseñas || "0 reseñas"}</div>
+                                <div class="texto-muted">${numReseñas} reseñas</div>
                               </div>
                               <div class="precio">${servicio.precio}$</div>
                             </div>
@@ -118,35 +119,13 @@
 
     <!-- ── TOP VALORADOS ── -->
     <section class="seccion seccion-oscura" id="mejor-calificados">
-        <div class="container">
-            <p class="label-seccion">🏆 Top valorados</p>
-            <h2>Servicios mejor calificados ⭐</h2>
-            <p class="seccion-desc">Ordenados por satisfacción de los usuarios</p>
+    <div class="container">
+        <p class="label-seccion">🏆 Top valorados</p>
+        <h2>Servicios mejor calificados ⭐</h2>
+        <p class="seccion-desc">Ordenados por satisfacción de los usuarios</p>
 
-            <div class="cards-grid">
-                <div class="card-servicio card-top">
-                    <div class="card-body-custom">
-                        <div class="card-top-header">
-                            <div>
-                                <p class="badge-top">#1 MEJOR CALIFICADO</p>
-                                <h5>Diseño gráfico — logos e infografías</h5>
-                                <p class="texto-muted">U. Jorge Tadeo · Bogotá</p>
-                            </div>
-                            <div class="card-emoji">🎨</div>
-                        </div>
-                        <div class="estrellas">★★★★★</div>
-                        <div class="texto-muted">5.0 (64 reseñas)</div>
-                        <div class="card-footer card-footer-top">
-                            <div class="card-autor">
-                                <div class="avatar avatar-amarillo avatar-sm">SM</div>
-                                <span class="texto-muted">Sofía M.</span>
-                            </div>
-                            <div class="precio">$80.000</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="cards-grid" id="contenedor-top-3"></div>
+    </div>
     </section>
 
 

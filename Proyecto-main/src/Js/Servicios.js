@@ -132,7 +132,6 @@ if (!formPublicar) {
         document.querySelector('input[name="disponibilidad"]:checked')?.value ||
         "No especificado",
       publicador: publicador,
-
       fechaPublicacion: new Date().toLocaleString(),
     };
 
@@ -187,3 +186,76 @@ function calcularEstrellas(arrayEstrellas) {
 
   return `${estrellasHtml} (${promedio.toFixed(1)})`;
 }
+
+
+
+/**
+ * Calcula el promedio de un array de estrellas y devuelve el HTML de estrellas
+ */
+function obtenerEstrellasHTML(estrellasArray) {
+    if (!estrellasArray || estrellasArray.length === 0) return "☆☆☆☆☆ (0)";
+    
+    const suma = estrellasArray.reduce((a, b) => a + b, 0);
+    const promedio = suma / estrellasArray.length;
+    const redondeado = Math.round(promedio * 2) / 2;
+    
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= redondeado) html += "★";
+        else if (i - 0.5 === redondeado) html += "⯨";
+        else html += "☆";
+    }
+    return { html, promedio: promedio.toFixed(1) };
+}
+
+/**
+ * Filtra, ordena y renderiza el Top 3 de servicios
+ */
+function renderTop3() {
+    const contenedor = document.getElementById("contenedor-top-3");
+    const servicios = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
+
+    if (!contenedor) return;
+
+    // 1. Procesar y Ordenar: De mayor promedio a menor
+    const top3 = servicios
+        .map(s => {
+            const info = obtenerEstrellasHTML(s.estrellas);
+            return { ...s, promedioNum: parseFloat(info.promedio), estrellasVisual: info.html };
+        })
+        .sort((a, b) => b.promedioNum - a.promedioNum) // Orden descendente
+        .slice(0, 3); // Solo los mejores 3
+
+    // 2. Generar el HTML
+    contenedor.innerHTML = top3.map((servicio, index) => `
+        <div class="card-servicio card-top">
+            <div class="card-body-custom">
+                <div class="card-top-header">
+                    <div>
+                        <p class="badge-top">#${index + 1} MEJOR CALIFICADO</p>
+                        <h5>${servicio.titulo}</h5>
+                        <p class="texto-muted">${servicio.universidad}</p>
+                    </div>
+                    <div class="card-emoji">${servicio.icono || "⭐"}</div>
+                </div>
+                <div class="estrellas" style="color: #ffc107; font-size: 1.2rem;">
+                    ${servicio.estrellasVisual}
+                </div>
+                <div class="texto-muted">${servicio.promedioNum} (${servicio.estrellas?.length || 0} reseñas)</div>
+                <div class="card-footer card-footer-top">
+                    <div class="card-autor">
+                        <div class="avatar avatar-amarillo avatar-sm">
+                            ${servicio.avatar || servicio.publicador.charAt(0).toUpperCase()}
+                        </div>
+                        <span class="texto-muted">${servicio.publicador}</span>
+                    </div>
+                    <div class="precio">${Number(servicio.precio).toLocaleString()}$</div>
+                </div>
+                 <p class="texto-muted">${servicio.descripcion}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Ejecutar cuando la página esté lista
+window.addEventListener("DOMContentLoaded", renderTop3);
