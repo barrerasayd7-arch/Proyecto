@@ -228,7 +228,7 @@ function renderTop3() {
 
     // 2. Generar el HTML
     contenedor.innerHTML = top3.map((servicio, index) => `
-        <div class="card-servicio card-top">
+        <a href="Servicio.html?id=${servicio.id}" class="card-servicio card-top">
             <div class="card-body-custom">
                 <div class="card-top-header">
                     <div>
@@ -253,7 +253,7 @@ function renderTop3() {
                 </div>
                  <p class="texto-muted">${servicio.descripcion}</p>
             </div>
-        </div>
+        </a>
     `).join('');
 }
 
@@ -280,7 +280,7 @@ function renderMisServicios() {
         contenedor.innerHTML = `
             <div class="text-center p-5 border rounded" style="border-style: dashed !important;">
                 <p class="texto-gris">Aún no has publicado ningún servicio.</p>
-                <a href="#publicar" class="btn btn-sm boton-principal">¡Publicar mi primer servicio!</a>
+                <a href="#publicar servicio" class="btn btn-sm boton-principal">¡Publicar mi primer servicio!</a>
             </div>`;
         return;
     }
