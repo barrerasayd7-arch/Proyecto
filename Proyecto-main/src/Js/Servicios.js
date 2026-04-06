@@ -132,7 +132,6 @@ if (!formPublicar) {
         document.querySelector('input[name="disponibilidad"]:checked')?.value ||
         "No especificado",
       publicador: publicador,
-
       fechaPublicacion: new Date().toLocaleString(),
     };
 
@@ -165,13 +164,15 @@ window.verServicios = function () {
 function calcularEstrellas(arrayEstrellas) {
   if (!arrayEstrellas || arrayEstrellas.length === 0) return "☆☆☆☆☆ (0)";
   
+  // Calcular el promedio de las estrellas
   const suma = arrayEstrellas.reduce((a, b) => a + b, 0);
   const promedio = suma / arrayEstrellas.length;
   
-  // Redondeo a .5 o .0
+  // Redondeo a x.5 o x.0
   const redondeado = Math.round(promedio * 2) / 2;
-  
+   
   const fullStars = Math.floor(redondeado);
+  // Verificar si hay media estrella
   const hasHalf = redondeado % 1 !== 0;
 
   let estrellasHtml = "";
@@ -187,3 +188,140 @@ function calcularEstrellas(arrayEstrellas) {
 
   return `${estrellasHtml} (${promedio.toFixed(1)})`;
 }
+
+
+
+/**
+ * Calcula el promedio de un array de estrellas y devuelve el HTML de estrellas
+ */
+function obtenerEstrellasHTML(estrellasArray) {
+    if (!estrellasArray || estrellasArray.length === 0) return { html: "☆☆☆☆☆", promedio: "0.0" };
+    
+    const suma = estrellasArray.reduce((a, b) => a + b, 0);
+    const promedio = suma / estrellasArray.length;
+    const redondeado = Math.round(promedio * 2) / 2;
+    
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= redondeado) html += "★";
+        else if (i - 0.5 === redondeado) html += "⯨";
+        else html += "☆";
+    }
+    return { html, promedio: promedio.toFixed(1) };
+}
+
+/**
+ * Filtra, ordena y renderiza el Top 3 de servicios
+ */
+function renderTop3() {
+    const contenedor = document.getElementById("contenedor-top-3");
+    const servicios = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
+
+    if (!contenedor) return;
+
+    // 1. Procesar y Ordenar: De mayor promedio a menor
+    const top3 = servicios
+        .map(s => {
+            const info = obtenerEstrellasHTML(s.estrellas);
+            return { ...s, promedioNum: parseFloat(info.promedio), estrellasVisual: info.html };
+        })
+        .sort((a, b) => b.promedioNum - a.promedioNum) // Orden descendente
+        .slice(0, 3); // Solo los mejores 3
+
+    // 2. Generar el HTML
+    contenedor.innerHTML = top3.map((servicio, index) => `
+        <a href="Servicio.html?id=${servicio.id}" class="card-servicio card-top">
+            <div class="card-body-custom">
+                <div class="card-top-header">
+                    <div>
+                        <p class="badge-top">#${index + 1} MEJOR CALIFICADO</p>
+                        <h5>${servicio.titulo}</h5>
+                        <p class="texto-muted">${servicio.universidad}</p>
+                    </div>
+                    <div class="card-emoji">${servicio.icono || "⭐"}</div>
+                </div>
+                <div class="estrellas" style="color: #ffc107; font-size: 1.2rem;">
+                    ${servicio.estrellasVisual}
+                </div>
+                <div class="texto-muted">${servicio.promedioNum} (${servicio.estrellas?.length || 0} reseñas)
+
+                </div>
+                <div class="card-footer card-footer-top">
+                    <div class="card-autor">
+                        <div class="avatar avatar-amarillo avatar-sm">
+                            ${servicio.avatar || servicio.publicador.charAt(0).toUpperCase()}
+                        </div>
+                        <span class="texto-muted">${servicio.publicador}</span>
+                    </div>
+                    <div class="precio">${Number(servicio.precio).toLocaleString()}$</div>
+                </div>
+                 <p class="texto-muted">${servicio.descripcion}</p>
+            </div>
+        </a>
+    `).join('');
+}
+
+// Ejecutar cuando la página esté lista
+window.addEventListener("DOMContentLoaded", renderTop3);
+
+
+
+/**
+ * Renderiza exclusivamente los servicios del usuario logueado
+ */
+function renderMisServicios() {
+    const contenedor = document.getElementById("contenedor-mis-servicios");
+    const todosLosServicios = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
+    const usuarioActual = localStorage.getItem("usuario"); // El usuario logueado
+
+    if (!contenedor) return;
+
+    // 1. Filtramos por dueño
+    const misServicios = todosLosServicios.filter(s => s.publicador === usuarioActual);
+
+    // Si no tiene nada publicado
+    if (misServicios.length === 0) {
+        contenedor.innerHTML = `
+            <div class="text-center p-5 border rounded" style="border-style: dashed !important;">
+                <p class="texto-gris">Aún no has publicado ningún servicio.</p>
+                <a href="#publicar servicio" class="btn btn-sm boton-principal">¡Publicar mi primer servicio!</a>
+            </div>`;
+        return;
+    }
+
+    // 2. Generamos el HTML (usando tu estructura de "fila-pedido")
+    contenedor.innerHTML = misServicios.reverse().map(servicio => {
+        const infoEstrellas = obtenerEstrellasHTML(servicio.estrellas);
+        
+        return `
+            <div class="fila-pedido">
+                <div class="row align-items-center g-2">
+                    <div class="col-auto" style="font-size:1.8rem;">${servicio.icono || "🌐"}</div>
+                    <div class="col">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <strong>${servicio.titulo}</strong>
+                            <span class="insignia et-verde">Activo</span>
+                        </div>
+                        <div class="texto-gris">
+                            Publicado el ${servicio.fechaPublicacion} · ${servicio.modalidad}
+                        </div>
+                    </div>
+                    <div class="col-auto text-end">
+                        <div class="calificacion-estrellas" style="color: #ffc107;">${infoEstrellas.html}</div>
+                        <div class="texto-gris">${infoEstrellas.promedio} (${servicio.estrellas?.length || 0})</div>
+                    </div>
+                    <div class="col-auto d-flex gap-2">
+                        <button class="btn boton-secundario btn-sm" onclick="editarServicio('${servicio.id}')">✏️ Editar</button>
+                        <button class="btn boton-peligro btn-sm" onclick="pausarServicio('${servicio.id}')">⏸ Pausar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Asegúrate de llamarla cuando cargue el DOM
+window.addEventListener("DOMContentLoaded", () => {
+    renderTop3();
+    renderMisServicios();
+});

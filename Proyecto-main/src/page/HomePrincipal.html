@@ -45,7 +45,7 @@
             </p>
             <div class="hero-btns">
                 <a href="#buscar"   class="btn btn-verde">🔍 Explorar servicios</a>
-                <a href="#publicar" class="btn btn-borde">➕ Publicar mi servicio</a>
+                <a href="#publicar servicio" class="btn btn-borde">➕ Publicar mi servicio</a>
             </div>
         </div>
     </section>
@@ -102,11 +102,12 @@
                     const data = JSON.parse(localStorage.getItem("logstore_servicios")) || [];
                     contenedor.innerHTML = "";
 
-                    data.slice(0, 8).forEach(servicio => {
+                    data.reverse().slice(0, 8).forEach(servicio => {
                       const estrellasTexto = typeof calcularEstrellas === 'function'
                         ? calcularEstrellas(servicio.estrellas)
                         : (servicio.estrellas || "☆☆☆☆☆ (0)");
 
+                        const numReseñas = servicio.estrellas ? servicio.estrellas.length : 0;
                       const tarjeta = `
                         <a href="Servicio.html?id=${servicio.id}" class="card-servicio card-3d">
                           <div class="card-icono card-icono-azul">${servicio.icono}</div>
@@ -124,7 +125,7 @@
                               <div>
                                 <hr class="card-divider">
                                 <div class="estrellas">${estrellasTexto}</div>
-                                <div class="texto-muted">${servicio.reseñas || "0 reseñas"}</div>
+                                <div class="texto-muted">${numReseñas} reseñas</div>
                               </div>
                               <div class="precio">${servicio.precio}$</div>
                             </div>
@@ -143,86 +144,31 @@
 
 
     <!-- ── TOP VALORADOS ── -->
-    <section class="seccion seccion-oscura section-dynamic" id="mejor-calificados">
-        <div class="dynamic-bg">
-            <canvas class="particles-canvas" id="particles-top"></canvas>
-            <div class="floating-shapes-small">
-                <div class="shape-sm shape-sm-1"></div>
-                <div class="shape-sm shape-sm-2"></div>
-                <div class="shape-sm shape-sm-3"></div>
-            </div>
-        </div>
+    <section class="seccion seccion-oscura" id="mejor-calificados">
         <div class="container">
             <p class="label-seccion">🏆 Top valorados</p>
             <h2>Servicios mejor calificados ⭐</h2>
             <p class="seccion-desc">Ordenados por satisfacción de los usuarios</p>
 
-            <div class="top-cards-3d">
-                <div class="top-card top-card-1 card-3d-ranking">
-                    <div class="top-card-rank">
-                        <span class="rank-number">1</span>
-                        <span class="rank-medal">🥇</span>
-                    </div>
-                    <div class="top-card-content">
-                        <div class="top-card-icon">🎨</div>
-                        <h5>Diseño gráfico — logos e infografías</h5>
-                        <p class="top-card-meta">U. Jorge Tadeo · Bogotá</p>
-                        <div class="top-card-rating">
-                            <div class="stars">★★★★★</div>
-                            <span class="rating-text">5.0 (64 reseñas)</span>
-                        </div>
-                        <div class="top-card-footer">
-                            <div class="author">
-                                <div class="avatar avatar-amarillo">SM</div>
-                                <span>Sofía M.</span>
+            <div class="cards-grid">
+                <div class="card-servicio card-top">
+                    <div class="card-body-custom">
+                        <div class="card-top-header">
+                            <div>
+                                <p class="badge-top">#1 MEJOR CALIFICADO</p>
+                                <h5>Diseño gráfico — logos e infografías</h5>
+                                <p class="texto-muted">U. Jorge Tadeo · Bogotá</p>
                             </div>
-                            <div class="price">$80.000</div>
+                            <div class="card-emoji">🎨</div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="top-card top-card-2 card-3d-ranking">
-                    <div class="top-card-rank">
-                        <span class="rank-number">2</span>
-                        <span class="rank-medal">🥈</span>
-                    </div>
-                    <div class="top-card-content">
-                        <div class="top-card-icon">💻</div>
-                        <h5>Desarrollo web full stack</h5>
-                        <p class="top-card-meta">U. Nacional · Medellín</p>
-                        <div class="top-card-rating">
-                            <div class="stars">★★★★★</div>
-                            <span class="rating-text">4.9 (52 reseñas)</span>
-                        </div>
-                        <div class="top-card-footer">
-                            <div class="author">
-                                <div class="avatar avatar-verde">JC</div>
-                                <span>Juan C.</span>
+                        <div class="estrellas">★★★★★</div>
+                        <div class="texto-muted">5.0 (64 reseñas)</div>
+                        <div class="card-footer card-footer-top">
+                            <div class="card-autor">
+                                <div class="avatar avatar-amarillo avatar-sm">SM</div>
+                                <span class="texto-muted">Sofía M.</span>
                             </div>
-                            <div class="price">$120.000</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="top-card top-card-3 card-3d-ranking">
-                    <div class="top-card-rank">
-                        <span class="rank-number">3</span>
-                        <span class="rank-medal">🥉</span>
-                    </div>
-                    <div class="top-card-content">
-                        <div class="top-card-icon">📚</div>
-                        <h5>Tutorías matemáticas avanzadas</h5>
-                        <p class="top-card-meta">U. de los Andes · Bogotá</p>
-                        <div class="top-card-rating">
-                            <div class="stars">★★★★★</div>
-                            <span class="rating-text">4.9 (48 reseñas)</span>
-                        </div>
-                        <div class="top-card-footer">
-                            <div class="author">
-                                <div class="avatar avatar-morado">ML</div>
-                                <span>María L.</span>
-                            </div>
-                            <div class="price">$35.000/h</div>
+                            <div class="precio">$80.000</div>
                         </div>
                     </div>
                 </div>
@@ -285,7 +231,7 @@
                         </div>
 
                         <div class="form-btns">
-                            <button type="submit" class="btn btn-verde">🔍 Buscar</button>
+                            <a href="ServiciosTotales.html" class="btn btn-verde">🔍 Buscar</a>
                             <button type="reset"  class="btn btn-borde">🗑️ Limpiar filtros</button>
                         </div>
                     </fieldset>
@@ -423,81 +369,20 @@
 
 
     <!-- =============================== 4. MIS SERVICIOS =============================== -->
-    <div class="bloque-pagina" id="mis-servicios">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                <div>
-                    <p class="insignia-seccion mb-1">💼 Panel personal</p>
-                    <h2 class="mb-0">Mis servicios</h2>
-                </div>
-                <a href="#publicar" class="btn boton-principal">➕ Nuevo servicio</a>
+    <br><div class="bloque-pagina" id="mis-servicios">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+            <div>
+                <p class="insignia-seccion mb-1">💼 Panel personal</p>
+                <h2 class="mb-0">Mis servicios</h2>
             </div>
- 
-            <div class="fila-pedido">
-                <div class="row align-items-center g-2">
-                    <div class="col-auto" style="font-size:1.8rem;">📚</div>
-                    <div class="col">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <strong>Tutoría cálculo diferencial</strong>
-                            <span class="insignia et-verde">Activo</span>
-                        </div>
-                        <div class="texto-gris">Publicado hace 3 días · 12 visitas · 4 solicitudes</div>
-                    </div>
-                    <div class="col-auto text-end">
-                        <div class="calificacion-estrellas">★★★★★</div>
-                        <div class="texto-gris">4.9 (38)</div>
-                    </div>
-                    <div class="col-auto d-flex gap-2">
-                        <button class="btn boton-secundario btn-sm">✏️ Editar</button>
-                        <button class="btn boton-peligro btn-sm">⏸ Pausar</button>
-                    </div>
-                </div>
+            <a href="#publicar servicio" class="btn boton-principal">➕ Nuevo servicio</a>
+        </div><br>
+
+        <div id="contenedor-mis-servicios">
             </div>
- 
-            <div class="fila-pedido">
-                <div class="row align-items-center g-2">
-                    <div class="col-auto" style="font-size:1.8rem;">💻</div>
-                    <div class="col">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <strong>Desarrollo web React + Node</strong>
-                            <span class="insignia et-verde">Activo</span>
-                        </div>
-                        <div class="texto-gris">Publicado hace 1 semana · 28 visitas · 7 solicitudes</div>
-                    </div>
-                    <div class="col-auto text-end">
-                        <div class="calificacion-estrellas">★★★★★</div>
-                        <div class="texto-gris">5.0 (15)</div>
-                    </div>
-                    <div class="col-auto d-flex gap-2">
-                        <button class="btn boton-secundario btn-sm">✏️ Editar</button>
-                        <button class="btn boton-peligro btn-sm">⏸ Pausar</button>
-                    </div>
-                </div>
-            </div>
- 
-            <div class="fila-pedido" style="opacity:0.7;">
-                <div class="row align-items-center g-2">
-                    <div class="col-auto" style="font-size:1.8rem;">✍️</div>
-                    <div class="col">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <strong>Ensayo argumentativo — normas APA</strong>
-                            <span class="insignia et-amarillo">Pausado</span>
-                        </div>
-                        <div class="texto-gris">Publicado hace 2 semanas · 8 visitas · 2 solicitudes</div>
-                    </div>
-                    <div class="col-auto text-end">
-                        <div class="calificacion-estrellas">★★★★☆</div>
-                        <div class="texto-gris">4.5 (6)</div>
-                    </div>
-                    <div class="col-auto d-flex gap-2">
-                        <button class="btn boton-secundario btn-sm">✏️ Editar</button>
-                        <button class="btn boton-principal btn-sm">▶ Activar</button>
-                    </div>
-                </div>
-            </div>
- 
-        </div>
-    </div>
+    </div><br>
+</div>
 
 
 
@@ -689,7 +574,7 @@
                 <div class="links-grid">
                     <a href="#inicio">Inicio</a>
                     <a href="#buscar">Buscar servicios</a>
-                    <a href="#publicar">Publicar servicio</a>
+                    <a href="#publicar servicio">Publicar servicio</a>
                 </div>
             </div>
 
