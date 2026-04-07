@@ -288,28 +288,40 @@
                 <p class="seccion-desc">Comparte tu talento con la comunidad universitaria</p>
 
                 <div class="caja-formulario">
-                    <form action="#">
+                    <form action="#" id="form-publicar-servicio">
                         <fieldset>
-                            <legend class="legend-custom">Información del servicio</legend>
+                            <legend class="legend-custom">📌 Información del servicio</legend>
 
                             <div class="form-grid cols-1">
                                 <div class="form-grupo">
-                                    <label for="titulo" class="form-label">📌 Título del servicio</label>
-                                    <input type="text" class="form-input" id="titulo" placeholder="Ej: Tutoría de Cálculo Diferencial para ingeniería">
+                                    <label for="titulo" class="form-label">
+                                        <span>✍️</span>
+                                        <span>Título del servicio</span>
+                                        <span style="color: var(--teal); margin-left: auto;">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" id="titulo" placeholder="Ej: Tutoría de Cálculo Diferencial para ingeniería" required>
                                 </div>
                                 <div class="form-grupo">
-                                    <label for="descripcion" class="form-label">📝 Descripción</label>
-                                    <textarea class="form-input" id="descripcion" rows="4" placeholder="Describe tu servicio: qué ofreces, cómo trabajas, qué incluye el precio..."></textarea>
+                                    <label for="descripcion" class="form-label">
+                                        <span>📝</span>
+                                        <span>Descripción completa</span>
+                                        <span style="color: var(--teal); margin-left: auto;">*</span>
+                                    </label>
+                                    <textarea class="form-input" id="descripcion" placeholder="Describe tu servicio: qué ofreces, cómo trabajas, qué incluye el precio, experiencia, metodología..." required></textarea>
                                 </div>
                             </div>
 
                             <div class="form-grid cols-2">
                                 <div class="form-grupo">
-                                    <label for="categoria" class="form-label">📂 Categoría</label>
-                                    <select class="form-select" id="categoria">
+                                    <label for="categoria" class="form-label">
+                                        <span>📂</span>
+                                        <span>Categoría</span>
+                                        <span style="color: var(--teal);">*</span>
+                                    </label>
+                                    <select class="form-select" id="categoria" required>
                                         <option value="">Selecciona una categoría</option>
                                         <option value="tutorias">📚 Tutorías</option>
-                                        <option value="ensayos">✍️ Ensayos</option>
+                                        <option value="ensayos">✍️ Ensayos y redacción</option>
                                         <option value="proyectos">🗂️ Proyectos</option>
                                         <option value="programacion">💻 Programación</option>
                                         <option value="diseno">🎨 Diseño</option>
@@ -318,46 +330,78 @@
                                     </select>
                                 </div>
                                 <div class="form-grupo">
-                                    <label for="precio" class="form-label">💰 Precio (COP)</label>
-                                    <input type="number" class="form-input" id="precio" placeholder="Ej: 30000">
+                                    <label for="precio" class="form-label">
+                                        <span>💰</span>
+                                        <span>Precio (COP/hora)</span>
+                                        <span style="color: var(--teal);">*</span>
+                                    </label>
+                                    <input type="number" class="form-input" id="precio" placeholder="Ej: 30000" min="1000" required>
                                 </div>
                                 <div class="form-grupo">
-                                    <label for="universidad" class="form-label">🏫 Universidad</label>
-                                    <input type="text" class="form-input" id="universidad" placeholder="Ej: Universidad Nacional de Colombia">
+                                    <label for="universidad" class="form-label">
+                                        <span>🏫</span>
+                                        <span>Tu universidad</span>
+                                        <span style="color: var(--teal);">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" id="universidad" placeholder="Ej: Universidad Nacional de Colombia" required>
                                 </div>
                                 <div class="form-grupo">
-                                    <label for="contacto" class="form-label">📞 Contacto (WhatsApp o correo)</label>
-                                    <input type="text" class="form-input" id="contacto" placeholder="Ej: +57 300 123 4567">
-                                </div>
-                            </div>
-
-                            <div class="form-grupo" id="modalidad-servicio">
-                              <p class="form-label">📍 Modalidad del servicio</p>
-                              <div class="check-group">
-                                 <label class="check-item">
-                                   <input type="radio" name="modalidad" value="presencial"> Presencial
-                                 </label>
-                                 <label class="check-item">
-                                   <input type="radio" name="modalidad" value="virtual"> Virtual
-                                 </label>
-                                 <label class="check-item">
-                                     <input type="radio" name="modalidad" value="mixta"> Mixta
-                                 </label>
+                                    <label for="contacto" class="form-label">
+                                        <span>📱</span>
+                                        <span>Contacto (WhatsApp/Email)</span>
+                                        <span style="color: var(--teal);">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" id="contacto" placeholder="Ej: +57 300 123 4567 o correo@email.com" required>
                                 </div>
                             </div>
 
                             <div class="form-grupo">
-                                <p class="form-label">📅 Disponibilidad</p>
-                                <div class="check-group">
-                                    <label class="check-item"><input type="radio" name="disponibilidad" id="semana"      value="semana">      Entre semana</label>
-                                    <label class="check-item"><input type="radio" name="disponibilidad" id="finesemana"  value="finesemana">  Fines de semana</label>
-                                    <label class="check-item"><input type="radio" name="disponibilidad" id="siempre"     value="siempre">     Siempre disponible</label>
+                                <p class="form-label" style="margin-bottom: 14px;">
+                                    <span>📍</span>
+                                    <span>Modalidad del servicio</span>
+                                    <span style="color: var(--teal);">*</span>
+                                </p>
+                                <div class="check-group button-style">
+                                    <label class="check-item">
+                                        <input type="radio" name="modalidad" value="presencial" required>
+                                        <span>🏫 Presencial</span>
+                                    </label>
+                                    <label class="check-item">
+                                        <input type="radio" name="modalidad" value="virtual" required>
+                                        <span>💻 Virtual</span>
+                                    </label>
+                                    <label class="check-item">
+                                        <input type="radio" name="modalidad" value="mixta" required>
+                                        <span>🔄 Mixta</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-grupo">
+                                <p class="form-label" style="margin-bottom: 14px;">
+                                    <span>📅</span>
+                                    <span>Disponibilidad</span>
+                                    <span style="color: var(--teal);">*</span>
+                                </p>
+                                <div class="check-group button-style">
+                                    <label class="check-item">
+                                        <input type="radio" name="disponibilidad" value="semana" required>
+                                        <span>📆 Entre semana</span>
+                                    </label>
+                                    <label class="check-item">
+                                        <input type="radio" name="disponibilidad" value="finesemana" required>
+                                        <span>🎉 Fines de semana</span>
+                                    </label>
+                                    <label class="check-item">
+                                        <input type="radio" name="disponibilidad" value="siempre" required>
+                                        <span>⏰ Siempre disponible</span>
+                                    </label>
                                 </div>
                             </div>
 
                             <div class="form-btns">
-                                <button type="submit" class="btn btn-verde" id="publicar">Publicar servicio</button>
-                                <button type="reset"  class="btn btn-borde"> 🗑️ Limpiar</button>
+                                <button type="submit" class="btn btn-verde" id="publicar">✓ Publicar servicio</button>
+                                <button type="reset" class="btn btn-borde">🗑️ Limpiar formulario</button>
                             </div>
 
                         </fieldset>
@@ -597,6 +641,78 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "HomeGuest.html";        // redirige a la página pública
   });
 });
+</script>
+
+<script>
+    // Mejorar validación y experiencia del formulario de publicar servicio
+    const formPublicar = document.getElementById('form-publicar-servicio');
+    if (formPublicar) {
+        const inputs = formPublicar.querySelectorAll('.form-input, .form-select, input[type="radio"]');
+        
+        inputs.forEach(input => {
+            // Agregar clase cuando hay contenido o se selecciona opción
+            function updateFilledState() {
+                const group = input.closest('.form-grupo');
+                if (group) {
+                    if (input.type === 'radio') {
+                        if (input.checked) group.classList.add('filled');
+                    } else if (input.value.trim() !== '') {
+                        group.classList.add('filled');
+                    } else {
+                        group.classList.remove('filled');
+                    }
+                }
+            }
+            
+            input.addEventListener('change', updateFilledState);
+            input.addEventListener('input', updateFilledState);
+            input.addEventListener('blur', updateFilledState);
+            updateFilledState();
+        });
+        
+        // Mejorar envío del formulario
+        formPublicar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('#publicar');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Publicando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.textContent = '✓ ¡Servicio publicado!';
+                setTimeout(() => {
+                    // Guardar los datos en localStorage
+                    const nuevServicio = {
+                        id: Date.now(),
+                        titulo: document.getElementById('titulo').value,
+                        descripcion: document.getElementById('descripcion').value,
+                        categoria: document.getElementById('categoria').value,
+                        precio: document.getElementById('precio').value,
+                        universidad: document.getElementById('universidad').value,
+                        contacto: document.getElementById('contacto').value,
+                        modalidad: document.querySelector('input[name="modalidad"]:checked').value,
+                        disponibilidad: document.querySelector('input[name="disponibilidad"]:checked').value,
+                        fechaPublicacion: new Date().toLocaleDateString('es-ES'),
+                        estrellas: [],
+                        avatar: 'ME',
+                        icono: '📚',
+                        publicador: 'Mi nombre'
+                    };
+                    
+                    const servicios = JSON.parse(localStorage.getItem('logstore_servicios')) || [];
+                    servicios.push(nuevServicio);
+                    localStorage.setItem('logstore_servicios', JSON.stringify(servicios));
+                    
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    formPublicar.reset();
+                    
+                    // Scroll a servicios recientes
+                    document.getElementById('recientes').scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+            }, 800);
+        });
+    }
 </script>
 
 <script src="../Js/Servicios.js"></script>

@@ -132,12 +132,19 @@
 
         /* ── TARJETA DE PROVEEDOR ── */
         .card-proveedor {
-            background: linear-gradient(135deg, var(--card) 0%, var(--card-hover) 100%);
-            border: 1px solid var(--borde);
+            background: linear-gradient(135deg, var(--card) 0%, rgba(14, 165, 160, 0.03) 100%);
+            border: 2px solid var(--borde);
             border-radius: 16px;
-            padding: 24px;
+            padding: 32px 24px;
             text-align: center;
             margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card-proveedor:hover {
+            border-color: var(--teal);
+            box-shadow: 0 8px 24px rgba(14, 165, 160, 0.1);
         }
 
         .avatar-grande {
@@ -188,6 +195,28 @@
             transform: translateY(-2px);
         }
 
+        /* ── ESTILO MEJORADO PARA EL BOTÓN EN FORMULARIO ── */
+        .form-solicitud .btn-primary {
+            padding: 14px 24px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(14, 165, 160, 0.2);
+            margin-top: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-solicitud .btn-primary:hover {
+            background: var(--teal2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(14, 165, 160, 0.3);
+        }
+
+        .form-solicitud .btn-primary:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 160, 0.2);
+        }
+
         .btn-secondary {
             display: inline-block;
             width: 100%;
@@ -204,6 +233,32 @@
         .btn-secondary:hover {
             border-color: var(--teal);
             color: var(--teal);
+        }
+
+        /* ── BOTONES EN TARJETA DE PROVEEDOR ── */
+        .card-proveedor .btn-primary {
+            padding: 13px 24px;
+            font-size: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(14, 165, 160, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .card-proveedor .btn-primary:hover {
+            box-shadow: 0 6px 18px rgba(14, 165, 160, 0.25);
+        }
+
+        .card-proveedor .btn-secondary {
+            padding: 13px 24px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--borde);
+            transition: all 0.3s ease;
+        }
+
+        .card-proveedor .btn-secondary:hover {
+            border-color: var(--teal);
+            background: rgba(14, 165, 160, 0.05);
         }
 
         /* ── SECCIONES DE INFORMACIÓN ── */
@@ -306,35 +361,66 @@
 
         /* ── FORMULARIO DE SOLICITUD ── */
         .form-solicitud {
-            background: var(--card);
+            background: linear-gradient(135deg, var(--card) 0%, rgba(14, 165, 160, 0.02) 100%);
             border: 1px solid var(--borde);
-            border-radius: 12px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-solicitud h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--texto);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--teal);
+            padding-bottom: 16px;
         }
 
         .form-grupo-custom {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .form-label-custom {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--texto2);
+            color: var(--texto);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
         }
 
         .form-input-custom,
         .form-select-custom,
         textarea.form-input-custom {
-            padding: 10px 12px;
-            background: var(--bg2);
-            border: 1px solid var(--borde);
-            border-radius: 8px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--bg2) 0%, rgba(14, 165, 160, 0.05) 100%);
+            border: 2px solid var(--borde);
+            border-radius: 12px;
             color: var(--texto);
             font-family: 'Poppins', sans-serif;
-            transition: var(--trans);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input-custom::placeholder,
+        textarea.form-input-custom::placeholder {
+            color: var(--texto3);
+        }
+
+        .form-input-custom:hover,
+        .form-select-custom:hover,
+        textarea.form-input-custom:hover {
+            border-color: var(--teal);
+            box-shadow: 0 4px 12px rgba(14, 165, 160, 0.1);
         }
 
         .form-input-custom:focus,
@@ -343,12 +429,35 @@
             outline: none;
             border-color: var(--teal);
             background: var(--card);
+            box-shadow: 0 6px 16px rgba(14, 165, 160, 0.15);
+            transform: translateY(-2px);
         }
 
         textarea.form-input-custom {
             resize: vertical;
-            min-height: 100px;
-            font-size: 0.9rem;
+            min-height: 120px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ── ESTILOS MEJORADOS PARA SELECT ── */
+        .form-select-custom {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230ea5a0' d='M1.5 4l4.5 4 4.5-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        /* ── VALIDACIÓN VISUAL ── */
+        .form-grupo-custom.filled .form-label-custom {
+            color: var(--teal);
+        }
+
+        .form-grupo-custom.filled .form-input-custom,
+        .form-grupo-custom.filled .form-select-custom {
+            border-color: var(--teal);
         }
 
         /* ── RESPONSIVE ── */
@@ -570,54 +679,115 @@
                 </div>
 
                 <!-- Formulario de Solicitud -->
-                <form class="form-solicitud">
-                    <h3 style="margin-bottom: 16px; border-bottom: 2px solid var(--teal); padding-bottom: 12px;">
-                        📝 Realizar Solicitud
-                    </h3>
+                <form class="form-solicitud" id="form-solicitud">
+                    <h3>📝 Solicitar Servicio</h3>
 
                     <div class="form-grupo-custom">
-                        <label class="form-label-custom">Tipo de servicio</label>
-                        <select class="form-select-custom">
-                            <option>Selecciona el tipo</option>
+                        <label class="form-label-custom">
+                            <span>📌 Tipo de servicio</span>
+                            <span style="color: var(--teal);">*</span>
+                        </label>
+                        <select class="form-select-custom" required>
+                            <option value="">Selecciona el tipo de servicio</option>
                             <option>Tutoría individual</option>
                             <option>Ayuda con proyecto</option>
-                            <option>Preparación parcial</option>
+                            <option>Preparación para parcial</option>
+                            <option>Resolución de dudas</option>
                             <option>Otro</option>
                         </select>
                     </div>
 
                     <div class="form-grupo-custom">
-                        <label class="form-label-custom">Fecha preferida</label>
-                        <input type="date" class="form-input-custom">
+                        <label class="form-label-custom">
+                            <span>📅 Fecha preferida</span>
+                            <span style="color: var(--teal);">*</span>
+                        </label>
+                        <input type="date" class="form-input-custom" required>
                     </div>
 
                     <div class="form-grupo-custom">
-                        <label class="form-label-custom">Hora preferida</label>
-                        <input type="time" class="form-input-custom">
+                        <label class="form-label-custom">
+                            <span>⏰ Hora preferida</span>
+                            <span style="color: var(--teal);">*</span>
+                        </label>
+                        <input type="time" class="form-input-custom" required>
                     </div>
 
                     <div class="form-grupo-custom">
-                        <label class="form-label-custom">Duración (minutos)</label>
-                        <select class="form-select-custom">
-                            <option>30 minutos</option>
-                            <option>60 minutos</option>
-                            <option>90 minutos</option>
-                            <option>120 minutos</option>
+                        <label class="form-label-custom">
+                            <span>⏱️ Duración de la sesión</span>
+                            <span style="color: var(--teal);">*</span>
+                        </label>
+                        <select class="form-select-custom" required>
+                            <option value="">Elige una duración</option>
+                            <option>30 minutos - $17.500</option>
+                            <option>60 minutos - $35.000</option>
+                            <option>90 minutos - $52.500</option>
+                            <option>120 minutos - $70.000</option>
                         </select>
                     </div>
 
                     <div class="form-grupo-custom">
-                        <label class="form-label-custom">Descripción de la solicitud</label>
-                        <textarea class="form-input-custom" placeholder="Cuéntale detalles específicos de lo que necesitas..."></textarea>
+                        <label class="form-label-custom">
+                            <span>💬 Cuéntame tu necesidad</span>
+                        </label>
+                        <textarea class="form-input-custom" placeholder="Describe con detalle qué necesitas ayuda. Por ejemplo: 'Estoy atascado con funciones en Java' o 'Necesito preparación para mi parcial de C++'..."></textarea>
                     </div>
 
-                    <button type="submit" class="btn-primary">Enviar Solicitud</button>
+                    <button type="submit" class="btn-primary" style="margin-top: 8px;">
+                        ✓ Enviar Solicitud
+                    </button>
                 </form>
             </div>
         </div>
     </main>
 
     <script src="../Js/main.js"></script>
+    
+    <script>
+        // Mejorar experiencia del formulario con validación visual
+        const formSolicitud = document.getElementById('form-solicitud');
+        if (formSolicitud) {
+            const inputs = formSolicitud.querySelectorAll('.form-input-custom, .form-select-custom, textarea.form-input-custom');
+            
+            inputs.forEach(input => {
+                // Agregar clase cuando hay contenido
+                function updateFilledState() {
+                    const parent = input.closest('.form-grupo-custom');
+                    if (input.value.trim() !== '') {
+                        parent.classList.add('filled');
+                    } else {
+                        parent.classList.remove('filled');
+                    }
+                }
+                
+                input.addEventListener('change', updateFilledState);
+                input.addEventListener('input', updateFilledState);
+                input.addEventListener('blur', updateFilledState);
+                
+                // Validar al cargar
+                updateFilledState();
+            });
+            
+            // Mejorar envío del formulario
+            formSolicitud.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('.btn-primary');
+                btn.textContent = '⏳ Enviando...';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    btn.textContent = '✓ ¡Solicitud enviada!';
+                    btn.style.background = 'var(--teal2)';
+                    setTimeout(() => {
+                        btn.textContent = '✓ Enviar Solicitud';
+                        btn.disabled = false;
+                        btn.style.background = '';
+                    }, 2000);
+                }, 800);
+            });
+        }
+    </script>
 </body>
 
 </html>
