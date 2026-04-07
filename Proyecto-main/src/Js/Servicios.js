@@ -327,6 +327,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
 /* ═══════════════════════════════════════════════════════════════
    JAVASCRIPT - FUNCIONALIDADES INTERACTIVAS
    ═══════════════════════════════════════════════════════════════ */
