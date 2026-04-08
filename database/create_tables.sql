@@ -1,7 +1,7 @@
 -- Tabla de Usuarios
 CREATE TABLE usuarios (
     id_usuario INT IDENTITY(1,1) PRIMARY KEY,
-    telefono NVARCHAR(20) UNIQUE NOT NULL,
+    telefono NVARCHAR(13) UNIQUE NOT NULL,
     password_hash NVARCHAR(255) NOT NULL,
     nombre NVARCHAR(50) NOT NULL,
     descripcion NVARCHAR(MAX),

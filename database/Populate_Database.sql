@@ -3,8 +3,8 @@
 -- =============================================
 INSERT INTO usuarios (telefono, password_hash, nombre, descripcion, correo, universidad)
 VALUES 
-(N'3043307911', N'Pass1_ENCRIPTADA_HASH', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 1),
-(N'3117906271', N'Pass2_ENCRIPTADA_HASH', N'Lenin', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'leninrys1218@gmail.com', 1);
+(N'3043307911', N'Pass1', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 1),
+(N'3117906271', N'Pass2', N'Lenin', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'leninrys1218@gmail.com', 1);
 
 -- =============================================
 -- 2. POBLAR CATEGORÍAS
