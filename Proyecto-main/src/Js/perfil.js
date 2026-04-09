@@ -402,6 +402,27 @@ function cambiarAvatar(url) {
 function subirImagenLocal() {
     const input = document.getElementById('imageInput');
     input.click();
+
+    input.onchange = async () => {
+        const file = input.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Enviar al servidor
+        const response = await fetch("UserPhoto.php", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            cambiarAvatar(result.url); // actualiza la imagen en pantalla
+        } else {
+            alert("❌ Error al subir la imagen: " + result.message);
+        }
+    };
 }
 
 // Generar avatar aleatorio con Dicebear
