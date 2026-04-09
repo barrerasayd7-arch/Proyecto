@@ -22,7 +22,11 @@ if ($method === "POST") {
     $correo        = isset($datos["correo"]) ? $datos["correo"] : null;
     $universidad   = isset($datos["universidad"]) ? $datos["universidad"] : 1;
 
-    $query  = "EXEC sp_CrearUsuario @telefono=?, @password_hash=?, @nombre=?, @correo=?, @universidad=?";
+    // Set QUOTED_IDENTIFIER
+    sqlsrv_query($conexion, "SET QUOTED_IDENTIFIER ON;");
+
+    // Insert directly for testing
+    $query  = "INSERT INTO usuarios (telefono, password_hash, nombre, correo, universidad) VALUES (?, ?, ?, ?, ?)";
     $params = [$telefono, $password_hash, $nombre, $correo, $universidad];
 
     $resultado = sqlsrv_query($conexion, $query, $params);

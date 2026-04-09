@@ -8,7 +8,8 @@ $conexion = sqlsrv_connect($servidor, [
     "Database" => $baseDatos,
     "UID"      => $usuario,
     "PWD"      => $password,
-    "TrustServerCertificate" => true
+    "TrustServerCertificate" => true,
+    "QuotedId" => true
 ]);
 
 if (!$conexion) {
