@@ -96,24 +96,16 @@ document.querySelector("#panel-login .btn-principal").addEventListener("click", 
   .catch(() => alert("❌ Error de conexión con el servidor"));
 });
 
-/* ===== REGISTRO ===== */
+const botonInvitado = document.getElementById("btn-invitado");
+if (botonInvitado) {
+  botonInvitado.addEventListener("click", () => {
+    localStorage.removeItem("logueado");
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("usuarioTelefono");
+    window.location.href = "HomeGuest.html";
+  });
+}
 
-document.getElementById("crear_acc").addEventListener("click", function(e) {
-  e.preventDefault();
-
-  let valid = true;
-
-  if (nombre.value.trim().length < 3)  { setError(nombre, "Mínimo 3 caracteres"); valid = false; }
-  else if (nombre.value.trim().length > 50) { setError(nombre, "Nombre muy largo"); valid = false; }
-
-  if (telefonoReg.value.length !== 10) { setError(telefonoReg, "Número inválido"); valid = false; }
-
-  if (passReg.value.length < 8)        { setError(passReg, "Contraseña muy corta"); valid = false; }
-
-  if (passReg2.value.length < 8) {
-    setError(passReg2, "Confirmar contraseña es requerido"); valid = false;
-  } else if (passReg.value !== passReg2.value) {
-    setError(passReg2, "Las contraseñas no coinciden"); valid = false;
   }
 
   if (!terminos.checked) { alert("❌ Debes aceptar los Términos y Condiciones"); valid = false; }
