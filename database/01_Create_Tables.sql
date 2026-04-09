@@ -21,15 +21,20 @@ CREATE TABLE usuarios (
     avatar NVARCHAR(255) DEFAULT 'default_avatar.png'
 );
 
+SET QUOTED_IDENTIFIER ON;
+GO
+
 CREATE UNIQUE INDEX UQ_usuarios_correo 
 ON usuarios (correo) 
 WHERE correo IS NOT NULL;
+GO
 
 -- 2. TABLA DE CATEGORÍAS
 CREATE TABLE categorias (
     id_categoria INT IDENTITY(1,1) PRIMARY KEY,
     nombre_categoria NVARCHAR(50) NOT NULL
 );
+GO
 
 -- 3. TABLA DE SEGUIDORES (Relación Muchos a Muchos Autorreferenciada)
 CREATE TABLE seguidores (
@@ -44,6 +49,7 @@ CREATE TABLE seguidores (
     CONSTRAINT fk_usuario_seguidor FOREIGN KEY (id_seguidor) REFERENCES usuarios(id_usuario) ON DELETE NO ACTION,
     CONSTRAINT fk_usuario_seguido FOREIGN KEY (id_seguido) REFERENCES usuarios(id_usuario) ON DELETE NO ACTION
 );
+GO
 
 -- 4. TABLA DE SERVICIOS
 CREATE TABLE servicios (
@@ -62,6 +68,7 @@ CREATE TABLE servicios (
     CONSTRAINT fk_servicio_usuario FOREIGN KEY (id_proveedor) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_servicio_categoria FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE SET NULL
 );
+GO
 
 -- 5. TABLA DE SOLICITUDES (Versión Minimalista)
 CREATE TABLE solicitudes (
@@ -78,6 +85,7 @@ CREATE TABLE solicitudes (
     CONSTRAINT fk_sol_proveedor FOREIGN KEY (id_proveedor) REFERENCES usuarios(id_usuario) ON DELETE NO ACTION,
     CONSTRAINT fk_sol_servicio FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio) ON DELETE CASCADE
 );
+GO
 
 -- 6. TABLA DE CALIFICACIONES (image_4.png)
 CREATE TABLE calificaciones (
@@ -99,6 +107,7 @@ CREATE TABLE calificaciones (
     -- REGLA: Un usuario califica solo una vez cada servicio
     CONSTRAINT uq_cliente_servicio UNIQUE (id_cliente, id_servicio)
 );
+GO
 
 -- 7. TABLA DE ASPECTOS DESTACADOS 
 CREATE TABLE aspectos_destacados (
@@ -108,17 +117,15 @@ CREATE TABLE aspectos_destacados (
     PRIMARY KEY (id_calificacion, tipo_aspecto),
     CONSTRAINT fk_aspecto_calificacion FOREIGN KEY (id_calificacion) REFERENCES calificaciones(id_calificacion) ON DELETE CASCADE
 );
-
-
-
+GO
 
 -- =============================================
 -- 1. POBLAR USUARIOS
 -- =============================================
 INSERT INTO usuarios (telefono, password_hash, nombre, descripcion, correo, universidad)
 VALUES 
-(N'3043307911', N'Pass1', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 1),
-(N'3117906271', N'Pass2', N'Lenin', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'leninrys1218@gmail.com', 1);
+(N'3043307911', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 1),
+(N'3117906271', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Lenin', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'leninrys1218@gmail.com', 1);
 
 -- =============================================
 -- 2. POBLAR CATEGORÍAS
