@@ -4,13 +4,18 @@
 function setError(input, message) {
   input.classList.add("error");
   input.classList.remove("success");
-  input.nextElementSibling.textContent = message;
+  
+  // Busca el span en el padre si no lo encuentra como hermano directo
+  const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
+  if (span) span.textContent = message;
 }
 
 function setSuccess(input) {
   input.classList.remove("error");
   input.classList.add("success");
-  input.nextElementSibling.textContent = "";
+
+  const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
+  if (span) span.textContent = "";
 }
 console.log("JS conectado correctamente");
 
@@ -207,38 +212,55 @@ document.getElementById("crear_acc").addEventListener("click", function(e) {
     valid = false;
   }
 
+  // Validar términos
+  if (!terminos.checked) {
+    alert("❌ Debes aceptar los Términos y Condiciones");
+    valid = false;
+  }
+
+  console.log("¿válido?", valid); // ← agregar aquí
+  console.log("nombre:", nombre.value.trim().length);
+  console.log("teléfono:", telefonoReg.value.length);
+  console.log("pass:", passReg.value.length);
+  console.log("pass2:", passReg2.value.length);
+  console.log("términos:", terminos.checked);
+
   if (!valid) return;
 
-  // Si todo es válido, agregar nuevo usuario al array
-  const nuevoUsuario = {
+  // AHORA (API PHP → SQL Server)
+const nuevoUsuario = {
     telefono: telefonoReg.value,
-    pass: passReg.value,
+    password: passReg.value,
     nombre: nombre.value.trim()
-  };
+};
 
-  usuarios.push(nuevoUsuario);
-  
-  // Guardar los usuarios actualizados en localStorage
-  localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
+fetch("http://localhost/api/crud/usuario_crud.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(nuevoUsuario)
+})
+.then(res => res.json())
+.then(data => {
+    if (data.error) {
+        alert("❌ " + data.error);
+    } else {
+        alert("✅ Cuenta creada exitosamente, " + nuevoUsuario.nombre + " ✅\n\nAhora inicia sesión con tu teléfono y contraseña");
 
-  // Mostrar mensaje de éxito
-  alert("✅ Cuenta creada exitosamente, " + nuevoUsuario.nombre + " ✅\n\nAhora inicia sesión con tu teléfono y contraseña");
+        // Limpiar formulario
+        nombre.value = "";
+        telefonoReg.value = "";
+        passReg.value = "";
+        passReg2.value = "";
+        terminos.checked = false;
+        nombre.classList.remove("error", "success");
+        telefonoReg.classList.remove("error", "success");
+        passReg.classList.remove("error", "success");
+        passReg2.classList.remove("error", "success");
 
-  // Limpiar formulario
-  nombre.value = "";
-  telefonoReg.value = "";
-  passReg.value = "";
-  passReg2.value = "";
-  terminos.checked = false;
-
-  // Limpiar estilos de validación
-  nombre.classList.remove("error", "success");
-  telefonoReg.classList.remove("error", "success");
-  passReg.classList.remove("error", "success");
-  passReg2.classList.remove("error", "success");
-
-  // Redirigir a panel de login
-  document.getElementById("r-login").click();
+        document.getElementById("r-login").click();
+    }
+})
+.catch(() => alert("❌ Error de conexión con el servidor"));
 });
 
 /* ===== FUNCIONES PARA VER USUARIOS REGISTRADOS ===== */

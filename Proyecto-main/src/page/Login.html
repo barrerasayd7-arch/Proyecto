@@ -113,6 +113,7 @@
           <div class="campo">
             <label class="campo-label" for="r-nombre">Nombre completo</label>
             <input type="text" id="r-nombre" placeholder="Tu nombre y apellido" required />
+            <span class="error-msg"></span> 
           </div>
 
           <div class="campo">
@@ -125,17 +126,20 @@
               <input type="tel" id="r-telefono" maxlength="10"  pattern="[0-9]{10}" class="con-prefijo"
                 placeholder="300 000 0000" required/>
             </div>
+            <span class="error-msg"></span> 
             <div class="hint">Solo móviles colombianos · 10 dígitos</div>
           </div>
 
           <div class="campo">
             <label class="campo-label" for="r-pass">Contraseña</label>
             <input type="password" id="r-pass" minlength="8" required placeholder="Mínimo 8 caracteres" />
+            <span class="error-msg"></span> 
           </div>
 
           <div class="campo">
             <label class="campo-label" for="r-pass2">Confirmar contraseña</label>
             <input type="password" id="r-pass2" placeholder="Repite tu contraseña" required minlength="8"/>
+            <span class="error-msg"></span> 
           </div>
 
           <div class="terminos">
