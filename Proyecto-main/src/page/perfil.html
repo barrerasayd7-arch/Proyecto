@@ -185,6 +185,37 @@
         </div>
     </main>
 
+    <!-- Modal para cambiar imagen de perfil -->
+    <div class="image-menu-overlay" id="imageMenuOverlay" onclick="closeImageMenu(event)">
+        <div class="image-menu" onclick="event.stopPropagation()">
+            <h3 class="image-menu-title">📸 Cambiar Imagen de Perfil</h3>
+            <div class="image-menu-options">
+                <div class="image-option" onclick="subirImagenLocal()">
+                    <div class="image-option-icon">📤</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Subir Imagen</div>
+                        <div class="image-option-desc">Desde tu dispositivo</div>
+                    </div>
+                </div>
+                <div class="image-option" onclick="cambiarAvatarDicebear()">
+                    <div class="image-option-icon">🎨</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Avatar Aleatorio</div>
+                        <div class="image-option-desc">Generar automáticamente</div>
+                    </div>
+                </div>
+                <div class="image-option" onclick="usarImagenURL()">
+                    <div class="image-option-icon">🔗</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Usar URL</div>
+                        <div class="image-option-desc">Pegar enlace de imagen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+
     <!-- Modal de Actividad -->
     <div class="activity-overlay" id="activityModal" onclick="closeActivityModal(event)">
         <div class="activity-modal" onclick="event.stopPropagation()">

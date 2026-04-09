@@ -343,21 +343,93 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar perfil al iniciar
     cargarPerfil(userData);
 
-    // Animación del avatar al hacer click
+    // Abrir menú de imagen al hacer click en el avatar
     const avatar = document.getElementById('userAvatar');
     if (avatar) {
-        avatar.addEventListener('click', function() {
-            this.style.transform = 'rotate(360deg) scale(1.1)';
-            setTimeout(() => {
-                this.style.transform = 'rotate(0deg) scale(1)';
-            }, 500);
+        avatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            abrirMenuImagen();
+        });
+    }
+
+    // Input de archivo para subir imágenes
+    const imageInput = document.getElementById('imageInput');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    cambiarAvatar(event.target.result);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
         });
     }
 });
 
-// Cerrar modal con tecla Escape
+// ═══════════════════════════════════════════
+// FUNCIONES PARA CAMBIAR IMAGEN DE PERFIL
+// ═══════════════════════════════════════════
+
+// Abrir menú de imagen
+function abrirMenuImagen() {
+    const overlay = document.getElementById('imageMenuOverlay');
+    overlay.classList.add('active');
+}
+
+// Cerrar menú de imagen
+function closeImageMenu(event) {
+    if (event && event.target !== event.currentTarget) return;
+    const overlay = document.getElementById('imageMenuOverlay');
+    overlay.classList.remove('active');
+}
+
+// Cambiar avatar
+function cambiarAvatar(url) {
+    userData.avatar = url;
+    const avatar = document.getElementById('userAvatar');
+    avatar.src = url;
+    avatar.style.transition = 'all 0.3s ease';
+    avatar.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        avatar.style.transform = 'scale(1)';
+    }, 150);
+    closeImageMenu();
+    alert('✨ Imagen de perfil actualizada!');
+}
+
+// Subir imagen local
+function subirImagenLocal() {
+    const input = document.getElementById('imageInput');
+    input.click();
+}
+
+// Generar avatar aleatorio con Dicebear
+function cambiarAvatarDicebear() {
+    const seeds = ['Felix', 'Luna', 'Max', 'Alex', 'Sam', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley'];
+    const randomSeed = seeds[Math.floor(Math.random() * seeds.length)];
+    const newUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${randomSeed}&backgroundColor=b6e3f4`;
+    cambiarAvatar(newUrl);
+}
+
+// Usar imagen desde URL
+function usarImagenURL() {
+    const url = prompt('Ingresa la URL de la imagen:');
+    if (url && url.trim()) {
+        // Validar que sea una URL válida
+        try {
+            new URL(url);
+            cambiarAvatar(url);
+        } catch (e) {
+            alert('❌ URL inválida. Por favor, ingresa una URL válida.');
+        }
+    }
+}
+
+// Cerrar modales con tecla Escape
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeActivityModal();
+        closeImageMenu();
     }
 });
