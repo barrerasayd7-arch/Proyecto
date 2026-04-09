@@ -3,23 +3,17 @@
 function setError(input, message) {
   input.classList.add("error");
   input.classList.remove("success");
-
-  if (input.nextElementSibling) {
-    input.nextElementSibling.textContent = message;
-  }
+  const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
+  if (span) span.textContent = message;
 }
 
 function setSuccess(input) {
   input.classList.remove("error");
   input.classList.add("success");
-
-  if (input.nextElementSibling) {
-    input.nextElementSibling.textContent = "";
-  }
+  const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
+  if (span) span.textContent = "";
 }
-console.log("JS conectado correctamente");
-let numeroVerificado = false;
-let confirmationResultGlobal;
+
 /* ===== ELEMENTOS ===== */
 
 const telefono    = document.getElementById("l-telefono");
@@ -126,12 +120,6 @@ document.getElementById("crear_acc").addEventListener("click", function(e) {
 
   if (!valid) return;
 
-if (!numeroVerificado) {
-  alert("❌ Debes verificar tu número con el código SMS");
-  return;
-}
-
-
   const nuevoUsuario = {
     telefono: telefonoReg.value,
     password: passReg.value,
@@ -172,75 +160,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
-
-
-
-/* ===== FIREBASE SMS ===== */
-
-const firebaseConfig = {
-  apiKey: "AIzaSyATRbNOZfB3ExD8Jwc7jT9V1Aybi216kro",
-  authDomain: "uniservice-9700b.firebaseapp.com",
-  projectId: "uniservice-9700b",
-  storageBucket: "uniservice-9700b.firebasestorage.app",
-  messagingSenderId: "956185176048",
-  appId: "1:956185176048:web:d5dc84e387d2aafa4a5f35"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-// reCAPTCHA
-window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-  'recaptcha-container',
-  { size: 'invisible' }
-);
-
-// ENVIAR CÓDIGO
-function enviarCodigo() {
-  let numero = document.getElementById("r-telefono").value;
-
-  console.log("Número ingresado:", numero);
-
-  if (numero.length !== 10) {
-    alert("Número inválido");
-    return;
-  }
-
-  numero = "+57" + numero;
-
-  console.log("Número enviado a Firebase:", numero);
-
-  auth.signInWithPhoneNumber(numero, window.recaptchaVerifier)
-    .then(function (confirmationResult) {
-      confirmationResultGlobal = confirmationResult;
-      alert("Código enviado ✅");
-    })
-    .catch(function (error) {
-      console.error("ERROR FIREBASE:", error);
-      alert(error.message);
-    });
-}
-// VERIFICAR CÓDIGO
-function verificarCodigo() {
-  const codigo = document.getElementById("codigo").value;
-
-  if (!codigo) {
-    alert("Ingresa el código");
-    return;
-  }
-
-  if (!confirmationResultGlobal) {
-    alert("Primero envía el código");
-    return;
-  }
-
-  confirmationResultGlobal.confirm(codigo)
-    .then(function () {
-      numeroVerificado = true;
-      alert("Número verificado ✅");
-    })
-    .catch(function () {
-      alert("Código incorrecto ❌");
-    });
-}

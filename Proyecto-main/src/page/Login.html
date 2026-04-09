@@ -89,8 +89,6 @@
             </div>
           </div>
 
-
-          
           <div class="campo">
             <label class="campo-label" for="l-pass">Contraseña</label>
             <input type="password" id="l-pass" placeholder="Tu contraseña" minlength="8" required/>
@@ -119,34 +117,17 @@
           </div>
 
           <div class="campo">
-<div class="campo">
-  <label class="campo-label" for="r-telefono">Teléfono</label>
-    <div class="hint">Solo móviles colombianos · 10 dígitos</div>
-  <div class="input-wrap">
-    <div class="prefijo">
-      <span>+57</span>
-    </div>
-    <input type="tel" id="r-telefono" maxlength="10"
-      class="con-prefijo"
-      placeholder="300 000 0000" required/>
-  </div>
-
-  <!-- BOTÓN ENVIAR CÓDIGO -->
-  <button type="button" onclick="enviarCodigo()" class="btn-principal" style="margin-top:10px;">
-    Enviar código 📩
-  </button>
-</div>
-
-<!-- INPUT PARA CÓDIGO -->
-<div class="campo">
-  <label class="campo-label">Código de verificación</label>
-  <input type="text" id="codigo" placeholder="Ingresa el código SMS"/>
-</div>
-
-<button type="button" onclick="verificarCodigo()" class="btn-principal">
-  Verificar código ✔
-</button>
-          
+            <label class="campo-label" for="r-telefono">Teléfono</label>
+            <div class="input-wrap">
+              <div class="prefijo">
+                <i class="icon-flag"></i>
+                <span>+57</span>
+            </div>
+              <input type="tel" id="r-telefono" maxlength="10"  pattern="[0-9]{10}" class="con-prefijo"
+                placeholder="300 000 0000" required/>
+            </div>
+            <span class="error-msg"></span> 
+            <div class="hint">Solo móviles colombianos · 10 dígitos</div>
           </div>
 
           <div class="campo">
@@ -184,9 +165,6 @@
 
     </div>
   </div>
-<div id="recaptcha-container"></div>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
  <script src="../Js/main.js"></script>
 </body>
 </html>
