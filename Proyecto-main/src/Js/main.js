@@ -1,11 +1,8 @@
-
 /* ===== FUNCIONES ===== */
 
 function setError(input, message) {
   input.classList.add("error");
   input.classList.remove("success");
-  
-  // Busca el span en el padre si no lo encuentra como hermano directo
   const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
   if (span) span.textContent = message;
 }
@@ -13,325 +10,153 @@ function setError(input, message) {
 function setSuccess(input) {
   input.classList.remove("error");
   input.classList.add("success");
-
   const span = input.nextElementSibling || input.closest(".campo").querySelector(".error-msg");
   if (span) span.textContent = "";
 }
-console.log("JS conectado correctamente");
+
+/* ===== ELEMENTOS ===== */
+
+const telefono    = document.getElementById("l-telefono");
+const pass        = document.getElementById("l-pass");
+const nombre      = document.getElementById("r-nombre");
+const telefonoReg = document.getElementById("r-telefono");
+const passReg     = document.getElementById("r-pass");
+const passReg2    = document.getElementById("r-pass2");
+const terminos    = document.getElementById("terminos");
 
 /* ===== VALIDACIÓN EN TIEMPO REAL - LOGIN ===== */
-
-const telefono = document.getElementById("l-telefono");
-const pass = document.getElementById("l-pass");
 
 telefono.addEventListener("input", () => {
   const value = telefono.value.replace(/\D/g, "");
   telefono.value = value;
-
-  if (value.length !== 10) {
-    setError(telefono, "Debe tener 10 dígitos");
-  } else {
-    setSuccess(telefono);
-  }
+  value.length !== 10 ? setError(telefono, "Debe tener 10 dígitos") : setSuccess(telefono);
 });
 
 pass.addEventListener("input", () => {
-  if (pass.value.length < 8) {
-    setError(pass, "Mínimo 8 caracteres");
-  } else {
-    setSuccess(pass);
-  }
+  pass.value.length < 8 ? setError(pass, "Mínimo 8 caracteres") : setSuccess(pass);
 });
 
-/* ===== VALIDACIÓN EN TIEMPO REAL - REGISTRAR USUARIO ===== */
+/* ===== VALIDACIÓN EN TIEMPO REAL - REGISTRO ===== */
 
-const nombre = document.getElementById("r-nombre");
-const telefonoReg = document.getElementById("r-telefono");
-const passReg = document.getElementById("r-pass");
-const passReg2 = document.getElementById("r-pass2");
-const terminos = document.getElementById("terminos");
-
-// Validar nombre (mínimo 3 caracteres)
 nombre.addEventListener("input", () => {
-  if (nombre.value.trim().length < 3) {
-    setError(nombre, "Nombre debe tener al menos 3 caracteres");
-  } else if (nombre.value.trim().length > 50) {
-    setError(nombre, "Nombre muy largo");
-  } else {
-    setSuccess(nombre);
-  }
+  const len = nombre.value.trim().length;
+  if (len < 3) setError(nombre, "Mínimo 3 caracteres");
+  else if (len > 50) setError(nombre, "Nombre muy largo");
+  else setSuccess(nombre);
 });
 
-// Validar teléfono de registro
 telefonoReg.addEventListener("input", () => {
   const value = telefonoReg.value.replace(/\D/g, "");
   telefonoReg.value = value;
-
-  if (value.length !== 10) {
-    setError(telefonoReg, "Debe tener 10 dígitos");
-  } else if (usuarios.some(u => u.telefono === value)) {
-    setError(telefonoReg, "Este teléfono ya está registrado");
-  } else {
-    setSuccess(telefonoReg);
-  }
+  value.length !== 10 ? setError(telefonoReg, "Debe tener 10 dígitos") : setSuccess(telefonoReg);
 });
 
-// Validar contraseña de registro
 passReg.addEventListener("input", () => {
   if (passReg.value.length < 8) {
     setError(passReg, "Mínimo 8 caracteres");
   } else {
     setSuccess(passReg);
-    // Validar coincidencia si ya hay valor en confirmar contraseña
     if (passReg2.value.length > 0) {
-      if (passReg.value !== passReg2.value) {
-        setError(passReg2, "Las contraseñas no coinciden");
-      } else {
-        setSuccess(passReg2);
-      }
+      passReg.value !== passReg2.value
+        ? setError(passReg2, "Las contraseñas no coinciden")
+        : setSuccess(passReg2);
     }
   }
 });
 
-// Validar confirmación de contraseña
 passReg2.addEventListener("input", () => {
-  if (passReg2.value.length < 8) {
-    setError(passReg2, "Mínimo 8 caracteres");
-  } else if (passReg.value !== passReg2.value) {
-    setError(passReg2, "Las contraseñas no coinciden");
-  } else {
-    setSuccess(passReg2);
-  }
+  if (passReg2.value.length < 8) setError(passReg2, "Mínimo 8 caracteres");
+  else if (passReg.value !== passReg2.value) setError(passReg2, "Las contraseñas no coinciden");
+  else setSuccess(passReg2);
 });
 
-/* ===== USUARIOS CON PERSISTENCIA EN LOCALSTORAGE ===== */
-
-// Usuarios iniciales
-const usuariosIniciales = [
-  { telefono: "1112223344", pass: "PassTest1", nombre: "Franklin" },
-  { telefono: "7778889944", pass: "PassTest2", nombre: "Lenín" },
-  { telefono: "3332221144", pass: "PassTest2", nombre: "Sayd" },
-  { telefono: "5556667788", pass: "PassTest3", nombre: "Andres" }
-];
-
-// Cargar usuarios del localStorage o usar los iniciales
-let usuarios = JSON.parse(localStorage.getItem("usuariosRegistrados"));
-
-if (!usuarios) {
-  usuarios = usuariosIniciales;
-  localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
-}
-
-/* ===== VALIDACIÓN AL ENVIAR - LOGIN ===== */
+/* ===== LOGIN ===== */
 
 document.querySelector("#panel-login .btn-principal").addEventListener("click", function(e) {
-  e.preventDefault(); // Evita envío real
+  e.preventDefault();
 
   let valid = true;
-
-  if (telefono.value.length !== 10) {
-    setError(telefono, "Número inválido");
-    valid = false;
-  }
-
-  if (pass.value.length < 8) {
-    setError(pass, "Contraseña muy corta");
-    valid = false;
-  }
-
+  if (telefono.value.length !== 10) { setError(telefono, "Número inválido"); valid = false; }
+  if (pass.value.length < 8)        { setError(pass, "Contraseña muy corta"); valid = false; }
   if (!valid) return;
 
-  // Validar contra usuarios temporales
-  const usuario = usuarios.find(u => u.telefono === telefono.value && u.pass === pass.value);
-
-  if (usuario) {
-    alert("✅ Bienvenido " + usuario.nombre + " ✅");
-    window.location.href = "HomePrincipal.html"; // Redirige a página de usuario
-    localStorage.setItem("logueado", "true");             // Marca como logueado
-    localStorage.setItem("usuario", usuario.nombre);      // Guarda nombre para mostrar en Home
-    localStorage.setItem("usuarioTelefono", usuario.telefono); // Guarda teléfono para contactos
-  } else {
-    alert("❌ Teléfono o contraseña incorrectos ❌");
-  }
+  fetch(`http://localhost/api/crud/usuario_crud.php?telefono=${telefono.value}&password=${pass.value}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok) {
+      localStorage.setItem("logueado", "true");
+      localStorage.setItem("usuario", data.nombre);
+      localStorage.setItem("usuarioTelefono", data.telefono);
+      alert("✅ Bienvenido " + data.nombre + " ✅");
+      window.location.href = "HomePrincipal.html";
+    } else {
+      alert("❌ Teléfono o contraseña incorrectos ❌");
+    }
+  })
+  .catch(() => alert("❌ Error de conexión con el servidor"));
 });
 
-// Mostrar opciones al cargar la página
-console.log("💾 Usuarios cargados del localStorage: " + usuarios.length);
-console.log(`
-📋 FUNCIONES DISPONIBLES:
-- verUsuarios() → Ver todos los usuarios
-- eliminarUsuario("telefono") → Eliminar un usuario
-- buscarUsuario("telefono") → Buscar un usuario
-- resetearUsuarios() → Restaurar usuarios iniciales
-....................................................
-`);
-
-/* ===== VALIDACIÓN AL ENVIAR - REGISTRO ===== */
+/* ===== REGISTRO ===== */
 
 document.getElementById("crear_acc").addEventListener("click", function(e) {
-  e.preventDefault(); // Evita envío real
+  e.preventDefault();
 
   let valid = true;
 
-  // Validar nombre
-  if (nombre.value.trim().length < 3) {
-    setError(nombre, "Nombre debe tener al menos 3 caracteres");
-    valid = false;
-  } else if (nombre.value.trim().length > 50) {
-    setError(nombre, "Nombre muy largo");
-    valid = false;
-  }
+  if (nombre.value.trim().length < 3)  { setError(nombre, "Mínimo 3 caracteres"); valid = false; }
+  else if (nombre.value.trim().length > 50) { setError(nombre, "Nombre muy largo"); valid = false; }
 
-  // Validar teléfono
-  if (telefonoReg.value.length !== 10) {
-    setError(telefonoReg, "Número inválido");
-    valid = false;
-  } else if (usuarios.some(u => u.telefono === telefonoReg.value)) {
-    setError(telefonoReg, "Este teléfono ya está registrado");
-    valid = false;
-  }
+  if (telefonoReg.value.length !== 10) { setError(telefonoReg, "Número inválido"); valid = false; }
 
-  // Validar contraseña
-  if (passReg.value.length < 8) {
-    setError(passReg, "Contraseña muy corta");
-    valid = false;
-  }
+  if (passReg.value.length < 8)        { setError(passReg, "Contraseña muy corta"); valid = false; }
 
-  // Validar confirmación de contraseña
   if (passReg2.value.length < 8) {
-    setError(passReg2, "Confirmar contraseña es requerido");
-    valid = false;
+    setError(passReg2, "Confirmar contraseña es requerido"); valid = false;
   } else if (passReg.value !== passReg2.value) {
-    setError(passReg2, "Las contraseñas no coinciden");
-    valid = false;
+    setError(passReg2, "Las contraseñas no coinciden"); valid = false;
   }
 
-  // Validar términos
-  if (!terminos.checked) {
-    alert("❌ Debes aceptar los Términos y Condiciones");
-    valid = false;
-  }
-
-  // Validar términos
-  if (!terminos.checked) {
-    alert("❌ Debes aceptar los Términos y Condiciones");
-    valid = false;
-  }
-
-  console.log("¿válido?", valid); // ← agregar aquí
-  console.log("nombre:", nombre.value.trim().length);
-  console.log("teléfono:", telefonoReg.value.length);
-  console.log("pass:", passReg.value.length);
-  console.log("pass2:", passReg2.value.length);
-  console.log("términos:", terminos.checked);
+  if (!terminos.checked) { alert("❌ Debes aceptar los Términos y Condiciones"); valid = false; }
 
   if (!valid) return;
 
-  // AHORA (API PHP → SQL Server)
-const nuevoUsuario = {
+  const nuevoUsuario = {
     telefono: telefonoReg.value,
     password: passReg.value,
-    nombre: nombre.value.trim()
-};
+    nombre:   nombre.value.trim()
+  };
 
-fetch("http://localhost/api/crud/usuario_crud.php", {
+  fetch("http://localhost/api/crud/usuario_crud.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(nuevoUsuario)
-})
-.then(res => res.json())
-.then(data => {
+  })
+  .then(res => res.json())
+  .then(data => {
     if (data.error) {
-        alert("❌ " + data.error);
+      alert("❌ " + data.error);
     } else {
-        alert("✅ Cuenta creada exitosamente, " + nuevoUsuario.nombre + " ✅\n\nAhora inicia sesión con tu teléfono y contraseña");
-
-        // Limpiar formulario
-        nombre.value = "";
-        telefonoReg.value = "";
-        passReg.value = "";
-        passReg2.value = "";
-        terminos.checked = false;
-        nombre.classList.remove("error", "success");
-        telefonoReg.classList.remove("error", "success");
-        passReg.classList.remove("error", "success");
-        passReg2.classList.remove("error", "success");
-
-        document.getElementById("r-login").click();
+      alert("✅ Cuenta creada exitosamente, " + nuevoUsuario.nombre + " ✅\n\nAhora inicia sesión.");
+      nombre.value = ""; telefonoReg.value = ""; passReg.value = ""; passReg2.value = "";
+      terminos.checked = false;
+      [nombre, telefonoReg, passReg, passReg2].forEach(i => i.classList.remove("error", "success"));
+      document.getElementById("r-login").click();
     }
-})
-.catch(() => alert("❌ Error de conexión con el servidor"));
+  })
+  .catch(() => alert("❌ Error de conexión con el servidor"));
 });
 
-/* ===== FUNCIONES PARA VER USUARIOS REGISTRADOS ===== */
-
-// Función para ver todos los usuarios en la consola
-function verUsuarios() {
-  console.clear();
-  console.log("👥 USUARIOS REGISTRADOS:");
-  console.table(usuarios);
-  console.log("Total de usuarios: " + usuarios.length);
-}
-
-// Función para eliminar un usuario por teléfono
-function eliminarUsuario(telefono) {
-  const indice = usuarios.findIndex(u => u.telefono === telefono);
-  
-  if (indice === -1) {
-    console.log("❌ No se encontró usuario con teléfono: " + telefono);
-    return false;
-  }
-  
-  const usuarioEliminado = usuarios[indice];
-  usuarios.splice(indice, 1);
-  localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
-  
-  console.log("✅ Usuario eliminado: " + usuarioEliminado.nombre + " (" + telefono + ")");
-  console.log("Usuarios restantes: " + usuarios.length);
-  return true;
-}
-
-// Función para eliminar todos los usuarios y volver a los iniciales
-function resetearUsuarios() {
-  usuarios = JSON.parse(JSON.stringify(usuariosIniciales));
-  localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
-  console.log("🔄 Base de datos reseteada. Usuarios iniciales restaurados.");
-  verUsuarios();
-}
-
-// Función para buscar usuario
-function buscarUsuario(telefono) {
-  const usuario = usuarios.find(u => u.telefono === telefono);
-  if (usuario) {
-    console.log("✅ Usuario encontrado:");
-    console.table([usuario]);
-  } else {
-    console.log("❌ No se encontró usuario con teléfono: " + telefono);
-  }
-  return usuario;
-}
-
 /* ===== EFECTO DINÁMICO DE FONDO EN SCROLL ===== */
+
 document.addEventListener('DOMContentLoaded', function() {
   const dynamicBg = document.querySelector('.dynamic-bg');
-  
   if (dynamicBg) {
     window.addEventListener('scroll', function() {
-      // Calcular el progreso del scroll (0 a 1)
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollProgress = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
-      
-      // Efecto 1: Cambiar opacidad de fondo (desvanecerse)
-      const opacity = Math.max(0.3, 1 - scrollProgress * 0.5);
-      dynamicBg.style.opacity = opacity;
-      
-      // Efecto 2: Cambiar escala (zoom leve)
-      const scale = 1 + scrollProgress * 0.1;
-      dynamicBg.style.transform = `scale(${scale})`;
-      
-      // Efecto 3: Cambiar filter blur progresivamente
-      const blur = scrollProgress * 10;
-      dynamicBg.style.filter = `blur(${blur}px)`;
+      dynamicBg.style.opacity   = Math.max(0.3, 1 - scrollProgress * 0.5);
+      dynamicBg.style.transform = `scale(${1 + scrollProgress * 0.1})`;
+      dynamicBg.style.filter    = `blur(${scrollProgress * 10}px)`;
     });
   }
 });

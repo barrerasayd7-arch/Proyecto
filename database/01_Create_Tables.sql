@@ -14,12 +14,16 @@ CREATE TABLE usuarios (
     password_hash NVARCHAR(255) NOT NULL,
     nombre NVARCHAR(50) NOT NULL,
     descripcion NVARCHAR(MAX),
-    correo NVARCHAR(100) UNIQUE,
+    correo NVARCHAR(100) NULL,
     estado BIT DEFAULT 0, -- 1 Activo, 0 Inactivo
     fecha_registro DATETIME2 DEFAULT GETDATE(),
     universidad BIT DEFAULT 0,
     avatar NVARCHAR(255) DEFAULT 'default_avatar.png'
 );
+
+CREATE UNIQUE INDEX UQ_usuarios_correo 
+ON usuarios (correo) 
+WHERE correo IS NOT NULL;
 
 -- 2. TABLA DE CATEGORÍAS
 CREATE TABLE categorias (
