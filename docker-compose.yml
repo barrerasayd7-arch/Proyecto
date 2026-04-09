@@ -14,6 +14,17 @@ services:
       - ./import-data.sh:/import-data.sh
     # Esta línea es la clave: inicia SQL y luego el script de carga
     entrypoint: /bin/bash -c "/import-data.sh & /opt/mssql/bin/sqlservr"
+  php:
+    image: php:8.2-apache
+    ports:
+      - "80:80"
+    volumes:
+      - ./Proyecto-main/src:/var/www/html
+    depends_on:
+      - sqlserver
+    build:
+      context: .
+      dockerfile: Dockerfile
       
 volumes:
   sql_data:
