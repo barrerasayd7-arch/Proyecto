@@ -116,8 +116,14 @@ if (botonInvitado) {
   });
 }
 
-  }
+document.querySelector("#panel-registro .btn-principal").addEventListener("click", function(e) {
+  e.preventDefault();
 
+  let valid = true;
+  if (telefonoReg.value.length !== 10) { setError(telefonoReg, "Número inválido"); valid = false; }
+  if (passReg.value.length < 8)        { setError(passReg, "Contraseña muy corta"); valid = false; }
+  if (passReg2.value.length < 8 || passReg.value !== passReg2.value) { setError(passReg2, "Contraseñas no coinciden"); valid = false; }
+  if (nombre.value.trim().length < 3)   { setError(nombre, "Nombre muy corto"); valid = false; }
   if (!terminos.checked) { alert("❌ Debes aceptar los Términos y Condiciones"); valid = false; }
 
   if (!valid) return;
