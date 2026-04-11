@@ -19,6 +19,5 @@ node_modules/
 .env
 
 # --- (Fotos de perfil en la base de datos) ---
-PHP/UserPerfilFotos/
-PHP/UserPerfilFotos/*
-!PHP/UserPerfilFotos/.gitkeep
+Proyecto-main/src/PHP/UserPerfilFotos/
+Proyecto-main/src/PHP/UserPerfilFotos/*
