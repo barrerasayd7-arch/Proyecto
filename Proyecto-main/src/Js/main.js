@@ -1,5 +1,6 @@
 /* ===== FUNCIONES ===== */
 
+// setError marca un campo de formulario como inválido y muestra el mensaje de error asociado.
 function setError(input, message) {
   input.classList.add("error");
   input.classList.remove("success");
@@ -7,6 +8,7 @@ function setError(input, message) {
   if (span) span.textContent = message;
 }
 
+// setSuccess marca un campo de formulario como válido y borra cualquier mensaje de error.
 function setSuccess(input) {
   input.classList.remove("error");
   input.classList.add("success");
@@ -16,6 +18,7 @@ function setSuccess(input) {
 
 /* ===== ELEMENTOS ===== */
 
+// Referencias a los inputs del formulario de login y registro.
 const telefono    = document.getElementById("l-telefono");
 const pass        = document.getElementById("l-pass");
 const nombre      = document.getElementById("r-nombre");
@@ -26,18 +29,21 @@ const terminos    = document.getElementById("terminos");
 
 /* ===== VALIDACIÓN EN TIEMPO REAL - LOGIN ===== */
 
+// Validación de teléfono en el login: solo números y exactamente 10 dígitos.
 telefono.addEventListener("input", () => {
   const value = telefono.value.replace(/\D/g, "");
   telefono.value = value;
   value.length !== 10 ? setError(telefono, "Debe tener 10 dígitos") : setSuccess(telefono);
 });
 
+// Validación de contraseña en el login: mínimo 8 caracteres.
 pass.addEventListener("input", () => {
   pass.value.length < 8 ? setError(pass, "Mínimo 8 caracteres") : setSuccess(pass);
 });
 
 /* ===== VALIDACIÓN EN TIEMPO REAL - REGISTRO ===== */
 
+// Validación del nombre en el registro: entre 3 y 50 caracteres.
 nombre.addEventListener("input", () => {
   const len = nombre.value.trim().length;
   if (len < 3) setError(nombre, "Mínimo 3 caracteres");
@@ -45,12 +51,14 @@ nombre.addEventListener("input", () => {
   else setSuccess(nombre);
 });
 
+// Validación de teléfono en el registro: solo números y exactamente 10 dígitos.
 telefonoReg.addEventListener("input", () => {
   const value = telefonoReg.value.replace(/\D/g, "");
   telefonoReg.value = value;
   value.length !== 10 ? setError(telefonoReg, "Debe tener 10 dígitos") : setSuccess(telefonoReg);
 });
 
+// Validación de contraseña principal en el registro y comprobación de coincidencia con la segunda contraseña.
 passReg.addEventListener("input", () => {
   if (passReg.value.length < 8) {
     setError(passReg, "Mínimo 8 caracteres");
@@ -64,6 +72,7 @@ passReg.addEventListener("input", () => {
   }
 });
 
+// Validación de confirmación de contraseña en el registro.
 passReg2.addEventListener("input", () => {
   if (passReg2.value.length < 8) setError(passReg2, "Mínimo 8 caracteres");
   else if (passReg.value !== passReg2.value) setError(passReg2, "Las contraseñas no coinciden");
@@ -72,6 +81,7 @@ passReg2.addEventListener("input", () => {
 
 /* ===== LOGIN ===== */
 
+// Envío de login: validación local, petición al servidor y guardado en localStorage.
 document.querySelector("#panel-login .btn-principal").addEventListener("click", function(e) {
   e.preventDefault();
 
@@ -84,12 +94,13 @@ document.querySelector("#panel-login .btn-principal").addEventListener("click", 
   .then(res => res.json())
   .then(data => {
     if (data.ok) {
+      // Si el servidor responde ok, guardamos los datos del usuario en localStorage.
       localStorage.setItem("logueado", "true");
       localStorage.setItem("usuarioId", data.id);
       localStorage.setItem("usuario", data.nombre);
       localStorage.setItem("usuarioTelefono", data.telefono);
 
-      // Marcar como activo en la base
+      // Marcar al usuario como activo en la base de datos.
       fetch("http://localhost/api/crud/usuario_crud.php", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -106,6 +117,7 @@ document.querySelector("#panel-login .btn-principal").addEventListener("click", 
   .catch(() => alert("❌ Error de conexión con el servidor"));
 });
 
+// Botón de invitado: limpia el estado de login y redirige al usuario invitado.
 const botonInvitado = document.getElementById("btn-invitado");
 if (botonInvitado) {
   botonInvitado.addEventListener("click", () => {
@@ -116,6 +128,9 @@ if (botonInvitado) {
   });
 }
 
+/* ===== REGISTRO ===== */
+
+// Envío de registro: validación de campos, petición POST y respuesta del servidor.
 document.querySelector("#panel-registro .btn-principal").addEventListener("click", function(e) {
   e.preventDefault();
 
@@ -156,6 +171,7 @@ document.querySelector("#panel-registro .btn-principal").addEventListener("click
 
 /* ===== EFECTO DINÁMICO DE FONDO EN SCROLL ===== */
 
+// Ajusta el estilo visual del fondo dinámico mientras el usuario hace scroll.
 document.addEventListener('DOMContentLoaded', function() {
   const dynamicBg = document.querySelector('.dynamic-bg');
   if (dynamicBg) {
