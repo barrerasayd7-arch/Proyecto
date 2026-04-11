@@ -48,7 +48,7 @@
                     <div class="avatar-wrapper">
                         <div class="avatar-ring"></div>
                         <img
-                            src=""
+                            src="default_avatar.png"
                             alt="Avatar del usuario"
                             class="avatar"
                             id="userAvatar"
@@ -193,27 +193,49 @@
 
     <!-- Modal para cambiar imagen de perfil -->
     <div class="image-menu-overlay" id="imageMenuOverlay">
-    <div class="image-menu">
-        <h3 class="image-menu-title">📸 Cambiar Imagen de Perfil</h3>
-        <div class="image-menu-options">
-            <div class="image-option" id="btnSubirImagen">
-                <div class="image-option-icon">📤</div>
-                <div class="image-option-text">
-                    <div class="image-option-title">Subir Imagen</div>
-                    <div class="image-option-desc">Desde tu dispositivo</div>
+        <div class="image-menu">
+            <h3 class="image-menu-title">📸 Cambiar Imagen de Perfil</h3>
+            <div class="image-menu-options">
+                <div class="image-option" id="btnSubirImagen">
+                    <div class="image-option-icon">📤</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Subir Imagen</div>
+                        <div class="image-option-desc">Desde tu dispositivo</div>
+                    </div>
                 </div>
-            </div>
-            <div class="image-option" id="btnUsarURL">
-                <div class="image-option-icon">🔗</div>
-                <div class="image-option-text">
-                    <div class="image-option-title">Usar URL</div>
-                    <div class="image-option-desc">Pegar enlace de imagen</div>
+                <div class="image-option" id="btnUsarURL">
+                    <div class="image-option-icon">🔗</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Usar URL</div>
+                        <div class="image-option-desc">Pegar enlace de imagen</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
     <input type="file" id="imageInput" accept="image/*" style="display: none;">
+
+    <!-- Modal para cambiar información de perfil -->
+    <div class="image-menu-overlay" id="infoMenuOverlay">
+        <div class="image-menu">
+            <h3 class="image-menu-title">✍️ Cambiar información del perfil</h3>
+            <div class="image-menu-options">
+                <div class="image-option" id="btnCambiarUsername">
+                    <div class="image-option-icon">✏️</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Cambiar Username</div>
+                    </div>
+                </div>
+                <div class="image-option" id="btnCambiarDescripcion">
+                    <div class="image-option-icon">📖</div>
+                    <div class="image-option-text">
+                        <div class="image-option-title">Cambiar Descripción</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal de Actividad -->
     <div class="activity-overlay" id="activityModal" onclick="closeActivityModal(event)">

@@ -112,12 +112,16 @@ async function usarImagenURL() {
 // FUNCIONES DE PERFIL
 // ═══════════════════════════════════════════
 
+function abrirMenuEditar() {
+    document.getElementById('infoMenuOverlay').classList.add('active');
+}
+
+function cerrarMenuEditar() {
+    document.getElementById('infoMenuOverlay').classList.remove('active');
+}
+
 function editarPerfil() {
-    const nuevoNombre = prompt('Nuevo nombre:', userData.name);
-    if (nuevoNombre) {
-        userData.name = nuevoNombre;
-        document.getElementById('userName').textContent = nuevoNombre;
-    }
+    abrirMenuEditar();
 }
 
 function compartirPerfil() {
@@ -316,9 +320,35 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === this) closeImageMenu();
     });
 
+    // Cerrar modal editar información al hacer click fuera
+    document.getElementById('infoMenuOverlay').addEventListener('click', function(e) {
+        if (e.target === this) cerrarMenuEditar();
+    });
+
     // Botones modal imagen
-    document.getElementById('btnSubirImagen').addEventListener('click', subirImagenLocal);
-    document.getElementById('btnUsarURL').addEventListener('click', usarImagenURL);
+    const btnSubirImagenImg = document.querySelector('#imageMenuOverlay #btnSubirImagen');
+    const btnUsarURLImg = document.querySelector('#imageMenuOverlay #btnUsarURL');
+    if (btnSubirImagenImg) btnSubirImagenImg.addEventListener('click', subirImagenLocal);
+    if (btnUsarURLImg) btnUsarURLImg.addEventListener('click', usarImagenURL);
+
+    // Botones modal editar información
+    const btnCambiarUsername = document.getElementById('btnCambiarUsername');
+    const btnCambiarDescripcion = document.getElementById('btnCambiarDescripcion');
+    if (btnCambiarUsername) btnCambiarUsername.addEventListener('click', () => {
+        const nuevoUsername = prompt('Nuevo username:', userData.name);
+        if (nuevoUsername) {
+            userData.name = nuevoUsername;
+            document.getElementById('userName').textContent = nuevoUsername;
+            cerrarMenuEditar();
+        }
+    });
+    if (btnCambiarDescripcion) btnCambiarDescripcion.addEventListener('click', () => {
+        const nuevaDescripcion = prompt('Nueva descripción:', document.getElementById('userBio').textContent);
+        if (nuevaDescripcion) {
+            document.getElementById('userBio').textContent = nuevaDescripcion;
+            cerrarMenuEditar();
+        }
+    });
 
     // Input archivo
     document.getElementById('imageInput').addEventListener('change', function(e) {
@@ -332,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Escape cierra modales
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeActivityModal(); closeImageMenu(); }
+    if (e.key === 'Escape') { closeActivityModal(); closeImageMenu(); cerrarMenuEditar(); }
 });
 
 // ═══════════════════════════════════════════
