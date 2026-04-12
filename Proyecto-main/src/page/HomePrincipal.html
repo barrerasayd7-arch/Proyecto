@@ -204,33 +204,20 @@
             <div class="sort-bar">
                 <p class="texto-muted">Mostrando <strong class="texto-claro">x resultados</strong> ordenados por
                     calificación</p>
-                <select class="form-select select-ordenar">
+                <select class="form-select select-ordenar" id="ordenar-servicios">
                     <option>Mejor calificados primero</option>
                     <option>Más recientes</option>
                     <option>Precio: menor a mayor</option>
                     <option>Precio: mayor a menor</option>
                 </select>
             </div>
+            Mostrando <strong class="texto-claro" id="total-resultados">0</strong> resultados
 
-            <div class="cards-grid">
-                <div class="card-servicio">
-                    <div class="card-body-custom">
-                        <div class="card-top-header">
-                            <span class="etiqueta et-verde">Tutoría</span>
-                            <div class="card-emoji">📚</div>
-                        </div>
-                        <h5>Física mecánica y termodinámica</h5>
-                        <p class="texto-muted">U. Nacional · Resolución de problemas con enfoque en exámenes finales.
-                        </p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="estrellas">★★★★★</div>
-                                <div class="texto-muted">4.8 (19)</div>
-                            </div>
-                            <div class="precio">$28.000/h</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="cards-grid" id="contenedor-servicios">
+              
+            </div>
+            <div id="btn-mostrar-mas" style="text-align:center; margin-top:30px;">
+                <button class="btn btn-verde">Mostrar más servicios</button>
             </div>
         </div>
     </section>
@@ -637,7 +624,8 @@
 
     <script src="../Js/servicios/PublicarServicios.js"></script>
     <script src="../Js/calificacion.js"></script>
-    <script src="../Js/servicios/CargarServicios.js"></script>
+    <script src="../Js/servicios/LoadService.js"></script>
+    <script src="../Js/servicios/LoadAllService.js"></script>
 
 </body>
 
