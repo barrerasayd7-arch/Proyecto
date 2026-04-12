@@ -131,7 +131,7 @@ if (botonInvitado) {
 /* ===== REGISTRO ===== */
 
 // Envío de registro: validación de campos, petición POST y respuesta del servidor.
-document.querySelector("#panel-registro .btn-principal").addEventListener("click", function(e) {
+document.querySelector("#panel-reg .btn-principal").addEventListener("click", function(e) {
   e.preventDefault();
 
   let valid = true;
