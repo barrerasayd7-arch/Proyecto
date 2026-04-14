@@ -11,6 +11,7 @@ CREATE OR ALTER PROCEDURE sp_CrearUsuario
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET QUOTED_IDENTIFIER ON;
     IF EXISTS (SELECT 1 FROM usuarios WHERE telefono = @telefono)
     BEGIN
         RAISERROR ('Este número de teléfono ya se encuentra registrado.', 16, 1);
