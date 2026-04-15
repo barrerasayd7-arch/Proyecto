@@ -57,8 +57,6 @@
    <!-- ── BUSCAR ── -->
      <section class="section" id="buscar">
 
-
-
     <header class="seccion" style="padding-bottom: 0;">
         <div class="container text-center">
             <p class="label-seccion">Marketplace  Universitario</p>
@@ -88,6 +86,28 @@
         <div class="container">
             <div class="sort-bar">
                 <p class="texto-muted">Resultados: <strong id="total-resultados" class="texto-claro">0</strong></p>
+                    <div class="container">
+
+        <div class="sort-bar">
+            <!-- COMBO BOX DE ORDEN -->
+            <select 
+                id="orden-servicios"
+                class="form-input"
+                onchange="ordenarServicios()"
+                style="max-width: 280px; padding: 10px; border-radius: 10px; margin-left: 20px;"
+            >
+                <option value="recientes">🕒 Más recientes</option>
+                <option value="antiguos">📅 Más antiguos</option>
+                <option value="precio-menor">💲 Menor precio</option>
+                <option value="precio-mayor">💰 Mayor precio</option>
+                <option value="rating-mayor">⭐ Mejor calificación</option>
+                <option value="rating-menor">⭐ Peor calificación</option>
+            </select>
+        </div>
+
+        <div class="cards-grid" id="contenedor-explorar"></div>
+
+    </div>
             </div>
 
             <div class="cards-grid" id="contenedor-explorar">
@@ -116,9 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
-
-        
      </section>
     
     

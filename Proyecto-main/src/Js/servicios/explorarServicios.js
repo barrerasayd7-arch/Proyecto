@@ -1,26 +1,36 @@
-/////hacer codigo para buscar servicios por filtro de categoria, nombre o descripcion. El resultado se muestra en la consola.
 console.log("explorarServicios cargado");
-// explorarServicios.js
 
 let serviciosTotales = [];
 let serviciosFiltrados = [];
 let categoriaActual = "todos";
 
 /* =========================
-   CARGAR SERVICIOS AL ENTRAR
+   NORMALIZAR TEXTO
+========================= */
+function normalizarTexto(texto) {
+    return (texto || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // quitar tildes
+        .trim();
+}
+
+/* =========================
+   CARGAR AL ENTRAR
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
     cargarServiciosExplorar();
 });
 
 /* =========================
-   TRAER SERVICIOS DESDE API
+   TRAER SERVICIOS
 ========================= */
 function cargarServiciosExplorar() {
     fetch("http://localhost/api/crud/Servicios_Crud.php")
         .then(response => response.json())
         .then(data => {
-            serviciosTotales = data.reverse(); // más recientes primero
+            serviciosTotales = data.reverse();
             serviciosFiltrados = [...serviciosTotales];
 
             renderizarServicios(serviciosFiltrados);
@@ -38,7 +48,7 @@ function cargarServiciosExplorar() {
 }
 
 /* =========================
-   RENDERIZAR TARJETAS
+   RENDERIZAR
 ========================= */
 function renderizarServicios(lista) {
     const contenedor = document.getElementById("contenedor-explorar");
@@ -84,20 +94,15 @@ function renderizarServicios(lista) {
                 </div>
 
                 <div class="card-body-custom">
-
                     <span class="etiqueta et-azul">
                         ${servicio.nombre_categoria || "Categoría no especificada"}
                     </span>
 
-                    <p class="card-meta">
-                        ${universidadTexto}
-                    </p>
+                    <p class="card-meta">${universidadTexto}</p>
 
                     <h5>${servicio.titulo || "Sin título"}</h5>
 
-                    <p class="texto-muted">
-                        ${descripcion}
-                    </p>
+                    <p class="texto-muted">${descripcion}</p>
 
                     <div class="card-autor">
                         <div class="avatar avatar-azul">👤</div>
@@ -121,7 +126,6 @@ function renderizarServicios(lista) {
                             $${servicio.precio_hora || 0}
                         </div>
                     </div>
-
                 </div>
             </a>
         `;
@@ -131,20 +135,18 @@ function renderizarServicios(lista) {
 }
 
 /* =========================
-   FILTRO GLOBAL EN TIEMPO REAL
+   FILTRO GLOBAL
 ========================= */
 function ejecutarFiltro() {
-    const textoBusqueda = document
-        .getElementById("input-busqueda-global")
-        .value
-        .toLowerCase()
-        .trim();
+    const textoBusqueda = normalizarTexto(
+        document.getElementById("input-busqueda-global").value
+    );
 
     serviciosFiltrados = serviciosTotales.filter(servicio => {
-        const titulo = (servicio.titulo || "").toLowerCase();
-        const descripcion = (servicio.descripcion || "").toLowerCase();
-        const categoria = (servicio.nombre_categoria || "").toLowerCase();
-        const proveedor = (servicio.proveedor || "").toLowerCase();
+        const titulo = normalizarTexto(servicio.titulo);
+        const descripcion = normalizarTexto(servicio.descripcion);
+        const categoria = normalizarTexto(servicio.nombre_categoria);
+        const proveedor = normalizarTexto(servicio.proveedor);
 
         const coincideTexto =
             titulo.includes(textoBusqueda) ||
@@ -154,34 +156,31 @@ function ejecutarFiltro() {
 
         const coincideCategoria =
             categoriaActual === "todos" ||
-            (servicio.nombre_categoria || "").toLowerCase().includes(categoriaActual);
+            categoria.includes(categoriaActual);
 
         return coincideTexto && coincideCategoria;
     });
 
-    renderizarServicios(serviciosFiltrados);
+    ordenarServicios();
 }
 
 /* =========================
-   FILTRO POR CATEGORÍA
+   FILTRO CATEGORÍA
 ========================= */
 function filtrarPorCategoria(categoria, botonSeleccionado) {
-    categoriaActual = categoria.toLowerCase();
+    categoriaActual = normalizarTexto(categoria);
 
-    // quitar clase activo de todos los botones
     document.querySelectorAll("#filtros-categorias .chip").forEach(btn => {
         btn.classList.remove("activo");
     });
 
-    // activar botón clickeado
     botonSeleccionado.classList.add("activo");
 
     ejecutarFiltro();
 }
 
 /* =========================
-   OPCIONAL: función estrellas
-   (por si no tienes calificacion.js)
+   ESTRELLAS
 ========================= */
 function calcularEstrellas(estrellas) {
     if (!Array.isArray(estrellas) || estrellas.length === 0) {
@@ -192,5 +191,55 @@ function calcularEstrellas(estrellas) {
         estrellas.reduce((acc, num) => acc + Number(num), 0) / estrellas.length;
 
     const completas = Math.round(promedio);
+
     return "★".repeat(completas) + "☆".repeat(5 - completas);
+}
+function obtenerPromedioEstrellas(estrellas) {
+    if (!Array.isArray(estrellas) || estrellas.length === 0) {
+        return 0;
+    }
+
+    const suma = estrellas.reduce((acc, num) => acc + Number(num), 0);
+    return suma / estrellas.length;
+}
+
+/* =========================
+   ORDENAR SERVICIOS
+========================= */
+function ordenarServicios() {
+    const selectOrden = document.getElementById("orden-servicios");
+
+    // seguridad: si no existe el select, no rompe
+    if (!selectOrden) {
+        renderizarServicios(serviciosFiltrados);
+        return;
+    }
+
+    const criterio = selectOrden.value;
+
+    serviciosFiltrados.sort((a, b) => {
+        switch (criterio) {
+
+            case "precio-menor":
+                return Number(a.precio_hora || 0) - Number(b.precio_hora || 0);
+
+            case "precio-mayor":
+                return Number(b.precio_hora || 0) - Number(a.precio_hora || 0);
+
+            case "rating-mayor":
+                return obtenerPromedioEstrellas(b.estrellas) - obtenerPromedioEstrellas(a.estrellas);
+
+            case "rating-menor":
+                return obtenerPromedioEstrellas(a.estrellas) - obtenerPromedioEstrellas(b.estrellas);
+
+            case "antiguos":
+                return new Date(a.fecha_publicacion || 0) - new Date(b.fecha_publicacion || 0);
+
+            case "recientes":
+            default:
+                return new Date(b.fecha_publicacion || 0) - new Date(a.fecha_publicacion || 0);
+        }
+    });
+
+    renderizarServicios(serviciosFiltrados);
 }
