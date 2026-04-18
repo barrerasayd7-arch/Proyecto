@@ -1,69 +1,91 @@
 <p align="center">
-  <img src="https://social-badges.netlify.app/assets/images/logo.png" alt="UniService Logo" width="120">
+  <img src="../Proyecto/frontend/src/img/Logo+name_color_git.png" alt="UniServices Logo" width="350">
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square" alt="version"></a>
-  <a href="#"><img src="https://img.shields.io/badge/database-SQL_Server_2025-red.svg?style=flat-square" alt="SQL Server"></a>
-  <a href="#"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
-  <a href="#"><img src="https://img.shields.io/badge/status-active-brightgreen.svg?style=flat-square" alt="Status"></a>
+  <a href="#-sobre-uniservices"><img src="[https://img.shields.io/badge/version-1.2.5-blue.svg?style=flat-square](https://img.shields.io/badge/version-1.2.5-blue.svg?style=flat-square)" alt="version"></a>
+  <a href="#-estructura-del-repositorio"><img src="[https://img.shields.io/badge/Frontend-React_JSX-cyan.svg?style=flat-square](https://img.shields.io/badge/Frontend-React_JSX-cyan.svg?style=flat-square)" alt="React"></a>
+  <a href="#-tecnologías"><img src="[https://img.shields.io/badge/Database-SQL_Server_2025-red.svg?style=flat-square](https://img.shields.io/badge/Database-SQL_Server_2025-red.svg?style=flat-square)" alt="SQL Server"></a>
+  <a href="#-instalación-y-uso"><img src="[https://img.shields.io/badge/Infrastructure-Docker-2496ED.svg?style=flat-square](https://img.shields.io/badge/Infrastructure-Docker-2496ED.svg?style=flat-square)" alt="Docker"></a>
 </p>
 
 <p align="center"><b>Convierte tu conocimiento en oportunidades. La plataforma segura para el intercambio estudiantil.</b></p>
 
 <p align="center">
-  <img src="https://img.freepik.com/free-vector/connected-world-concept-illustration_114360-3027.jpg" alt="UniService Banner" width="600">
+  <img src="./frontend/src/img/Img_Read_me.png" alt="UniService Banner" width="750" style="border-radius: 10px;">
 </p>
 
 ---
 
-## 🎓 ¿Qué es UniService?
+<h2 id="-sobre-uniservices">🎓 ¿Qué es UniServices?</h2>
 
-**UniService** es una plataforma diseñada para profesionalizar el intercambio de servicios académicos y profesionales entre estudiantes universitarios. 
+**UniServices** es una plataforma institucional diseñada para profesionalizar el intercambio de servicios académicos y profesionales entre estudiantes universitarios. 
 
-A diferencia de los grupos informales de redes sociales, UniService ofrece un entorno **institucional, seguro y organizado**. Aquí, los estudiantes pueden ofrecer tutorías, proyectos y asesorías con perfiles verificados y un sistema de calificaciones transparente.
+A diferencia de los grupos informales en redes sociales, ofrece un entorno **seguro y organizado** donde los estudiantes pueden publicar tutorías, proyectos y asesorías con perfiles verificados y un sistema de calificaciones transparente.
 
 ### ✨ Características principales
 - **Perfiles Verificados:** Seguridad y confianza para la comunidad.
 - **Repositorio Académico:** Acceso a material y guías actualizadas.
-- **Sistema de Calificaciones:** Retroalimentación real de usuarios.
-- **Interfaz Moderna:** Diseñada específicamente para jóvenes universitarios.
+- **Sistema de Calificaciones:** Retroalimentación real entre usuarios.
+- **Interfaz Moderna:** Experiencia optimizada para jóvenes universitarios.
 
 ---
 
-## 🚀 Inicio Rápido
-
-### Requisitos previos
-- **Docker** (para contenedores) o **SQL Server 2025** instalado localmente.
-- Cliente SQL (Azure Data Studio, SSMS).
-
-### Configuración de la Base de Datos
-Los scripts deben ejecutarse en orden alfabético desde la carpeta `./database`:
-
-1.  `01_Create_Tables.sql`: Genera el esquema principal de la base de datos.
-2.  `02_Procedures_Create.sql`: Implementa la lógica de negocio y procedimientos almacenados.
-
----
-
-## 🔑 Credenciales de Conexión
-
-Si estás configurando el entorno de desarrollo, utiliza los siguientes datos:
-
-| Parámetro | Valor |
-| :--- | :--- |
-| **Motor** | SQL Server 2025 |
-| **Host** | `localhost` (externo) / `sqlserver` (Docker) |
-| **Puerto** | `1433` |
-| **Usuario** | `sa` |
-| **Password** | `Uniservicio58414555` |
-| **Base de Datos** | `UniService` |
-
----
-
-## 🗄️ Estructura del Proyecto
+<h2 id="-estructura-del-repositorio">📂 Estructura del Repositorio</h2>
 
 ```bash
-├── database/            # Scripts SQL (Tablas y Procedimientos)
-├── src/                 # Código fuente de la aplicación
-├── docs/                # Documentación técnica y diagramas
-└── public/              # Assets, logos e imágenes
+├── database/               # Scripts SQL (Tablas y Procedimientos)
+├── frontend/
+│   ├── dist/               # Build optimizado para producción
+│   ├── src/
+│   │   ├── Pages/          # Vistas principales (Login, Home)
+│   │   ├── Templetes/      # Componentes reutilizables
+│   │   ├── api/            # Configuración de servicios y conexión
+│   │   ├── img/            # Assets, logos e ilustraciones
+│   │   ├── styles/         # Hojas de estilo CSS (Modular)
+│   │   ├── App.jsx         # Router y lógica raíz
+│   │   └── main.jsx        # Punto de entrada de la aplicación
+│   ├── Dockerfile          # Configuración de imagen para el frontend
+│   ├── vite.config.js      # Configuración de Vite
+│   └── package.json        # Dependencias de Node
+├── docker-compose.yml      # Orquestación de contenedores (App + DB)
+├── import-data.sh          # Script de automatización de carga de datos
+└── README.md               # Documentación del proyecto
+```
+
+<h2 id="-tecnologías">🛠️ Tecnologías</h2>
+
+Base de Datos: SQL Server 2025
+
+Frontend: React / JSX + Vite
+
+Arquitectura: Contenedores con Docker & Docker Compose
+
+<h2 id="-instalación-y-uso">🚀 Instalación y Uso</h2>
+
+1. Clonar el repositorio
+
+git clone https://github.com/tu-usuario/UniServices.git
+cd UniServices
+
+2. Despliegue con Docker
+
+docker-compose up --build
+
+<h2 id="-contribuir">🤝 Contribuir</h2>
+
+Si quieres ayudar a mejorar UniService:
+
+Haz un Fork del proyecto.
+
+Crea una rama para tu mejora (git checkout -b feature/MejoraIncreible).
+
+Haz un commit de tus cambios (git commit -m 'Add some MejoraIncreible').
+
+Haz un Push a la rama (git push origin feature/MejoraIncreible).
+
+Abre un Pull Request.
+
+<p align="center">
+Hecho con ❤️ por y para estudiantes 🎓
+</p>
