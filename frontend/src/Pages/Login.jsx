@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import "../styles/StylePage/StyleLogin.css";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Login() {
+  const navigate = useNavigate();
+   const handleInvitado = () => {
+    localStorage.removeItem("logueado");
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("usuarioTelefono");
+    navigate("/home-guest");
+  };
   // ===== STATES =====
   const [telefono, setTelefono] = useState("");
   const [pass, setPass] = useState("");
@@ -327,13 +335,13 @@ export default function Login() {
                   type="button"
                   onClick={handleLogin}>Entrar →
                 </button>
-                <a
-                  className="btn-secundario"
-                  id="btn-invitado"
-                  href="HomeGuest.html"
-                >
-                  Entrar como invitado
-                </a>
+               <button
+  className="btn-secundario"
+  id="btn-invitado"
+  onClick={handleInvitado}
+>
+  Entrar como invitado
+</button>
               </div>
 
               <p className="pie">
