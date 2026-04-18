@@ -1,23 +1,69 @@
-este es nuestro proyecto: UNISERVICE
+<p align="center">
+  <img src="https://social-badges.netlify.app/assets/images/logo.png" alt="UniService Logo" width="120">
+</p>
 
-UniService es una plataforma pensada para transformar la manera en que los estudiantes universitarios ofrecen y acceden a servicios académicos y profesionales. Hoy en día, estas ofertas suelen circular en grupos informales de Facebook o WhatsApp, donde se mezclan con memes y publicaciones de entretenimiento, lo que genera desconfianza y dificulta encontrar soluciones confiables. UniServicios propone un espacio institucional seguro y organizado, donde los estudiantes puedan publicar sus servicios con perfiles verificados, recibir calificaciones reales y acceder a un repositorio académico actualizado. Con una interfaz atractiva para jóvenes universitarios y mecanismos de seguridad que garantizan el cumplimiento de la normativa legal, la aplicación busca consolidar un entorno serio y eficiente que dignifique el intercambio de conocimientos y habilidades dentro de la comunidad universitaria.
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square" alt="version"></a>
+  <a href="#"><img src="https://img.shields.io/badge/database-SQL_Server_2025-red.svg?style=flat-square" alt="SQL Server"></a>
+  <a href="#"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
+  <a href="#"><img src="https://img.shields.io/badge/status-active-brightgreen.svg?style=flat-square" alt="Status"></a>
+</p>
 
-🔑Credenciales de Conexión
-Motor: SQL Server 2025
+<p align="center"><b>Convierte tu conocimiento en oportunidades. La plataforma segura para el intercambio estudiantil.</b></p>
 
-Host: localhost (para herramientas externas) o sqlserver (para el código en contenedores).
+<p align="center">
+  <img src="https://img.freepik.com/free-vector/connected-world-concept-illustration_114360-3027.jpg" alt="UniService Banner" width="600">
+</p>
 
-Puerto: 1433
+---
 
-Usuario: sa
+## 🎓 ¿Qué es UniService?
 
-Password: Uniservicio58414555
+**UniService** es una plataforma diseñada para profesionalizar el intercambio de servicios académicos y profesionales entre estudiantes universitarios. 
 
-Base de Datos: UniService
+A diferencia de los grupos informales de redes sociales, UniService ofrece un entorno **institucional, seguro y organizado**. Aquí, los estudiantes pueden ofrecer tutorías, proyectos y asesorías con perfiles verificados y un sistema de calificaciones transparente.
 
-🗄️ Estructura de Scripts
-Los archivos en ./database se ejecutan en orden alfabético:
+### ✨ Características principales
+- **Perfiles Verificados:** Seguridad y confianza para la comunidad.
+- **Repositorio Académico:** Acceso a material y guías actualizadas.
+- **Sistema de Calificaciones:** Retroalimentación real de usuarios.
+- **Interfaz Moderna:** Diseñada específicamente para jóvenes universitarios.
 
-01_Create_Tables.sql: Esquema principal.
+---
 
-02_Procedures_Create.sql: Lógica de negocio y procedimientos.
+## 🚀 Inicio Rápido
+
+### Requisitos previos
+- **Docker** (para contenedores) o **SQL Server 2025** instalado localmente.
+- Cliente SQL (Azure Data Studio, SSMS).
+
+### Configuración de la Base de Datos
+Los scripts deben ejecutarse en orden alfabético desde la carpeta `./database`:
+
+1.  `01_Create_Tables.sql`: Genera el esquema principal de la base de datos.
+2.  `02_Procedures_Create.sql`: Implementa la lógica de negocio y procedimientos almacenados.
+
+---
+
+## 🔑 Credenciales de Conexión
+
+Si estás configurando el entorno de desarrollo, utiliza los siguientes datos:
+
+| Parámetro | Valor |
+| :--- | :--- |
+| **Motor** | SQL Server 2025 |
+| **Host** | `localhost` (externo) / `sqlserver` (Docker) |
+| **Puerto** | `1433` |
+| **Usuario** | `sa` |
+| **Password** | `Uniservicio58414555` |
+| **Base de Datos** | `UniService` |
+
+---
+
+## 🗄️ Estructura del Proyecto
+
+```bash
+├── database/            # Scripts SQL (Tablas y Procedimientos)
+├── src/                 # Código fuente de la aplicación
+├── docs/                # Documentación técnica y diagramas
+└── public/              # Assets, logos e imágenes
