@@ -30,13 +30,22 @@
 /* ── Base ── */
 html { scroll-behavior: smooth; }
 
-body {
+body.home-guest-page {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg);
   color: var(--texto);
   line-height: 1.6;
   overflow-x: hidden;
   font-size: 16px;
+  min-height: 100vh;
+  display: block;
+  padding: 0;
+  position: static;
+}
+
+#root,
+.home-guest-page-root {
+  width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {

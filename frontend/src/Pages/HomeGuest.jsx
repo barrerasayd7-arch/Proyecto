@@ -532,6 +532,15 @@ export default function HomeGuest() {
 
   // Cargar servicios del localStorage al montar
   useEffect(() => {
+    document.body.classList.remove("login-page");
+    document.body.classList.add("home-guest-page");
+
+    return () => {
+      document.body.classList.remove("home-guest-page");
+    };
+  }, []);
+
+  useEffect(() => {
     const data = JSON.parse(localStorage.getItem("logstore_servicios") || "[]");
     const recientes = [...data].reverse().slice(0, 8);
     setServicios(recientes);
@@ -639,7 +648,7 @@ export default function HomeGuest() {
   };
 
   return (
-    <>
+    <main className="home-guest-page-root">
       <Navbar scrolled={scrolled} />
       <Hero />
       <ChipsBar chipActivo={chipActivo} onChipClick={handleChipClick} />
@@ -669,6 +678,6 @@ export default function HomeGuest() {
           </div>
         </div>
       )}
-    </>
+    </main>
   );
 }

@@ -30,7 +30,7 @@
 .tab-radio { display: none; }
 
 /* ── Body ── */
-body {
+body.login-page {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg);
   color: var(--texto);
@@ -44,7 +44,7 @@ body {
 }
 
 /* Imagen de fondo del body */
-body::before {
+body.login-page::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -55,7 +55,7 @@ body::before {
   z-index: 0;
 }
 
-body::after {
+body.login-page::after {
   content: '';
   position: absolute;
   inset: 0;

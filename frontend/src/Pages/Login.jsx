@@ -210,6 +210,15 @@ export default function Login() {
   };
   // ===== SCROLL EFFECT =====
   useEffect(() => {
+    document.body.classList.remove("home-guest-page");
+    document.body.classList.add("login-page");
+
+    return () => {
+      document.body.classList.remove("login-page");
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       const bg = document.querySelector(".dynamic-bg");
       if (!bg) return;
