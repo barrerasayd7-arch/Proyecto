@@ -1,9 +1,9 @@
 USE UniService;
 GO
 
--- ========================================
--- REGLA DE NEGOCIO: Solo calificar si solicitud está aceptada (fue_aceptada = 1)
--- ========================================
+-- ============================================================
+-- Solo calificar si solicitud está aceptada (fue_aceptada = 1)
+-- ============================================================
 
 -- Mostrar TODAS las calificaciones y su estado de solicitud
 SELECT 
