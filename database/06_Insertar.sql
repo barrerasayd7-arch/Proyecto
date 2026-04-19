@@ -1,5 +1,10 @@
 USE UniService;
 GO
+
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+GO
+
 -- =============================================
 -- 1. POBLAR USUARIOS
 -- =============================================
