@@ -6,12 +6,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Aquí puedes agregar rutas para otras páginas */}
-        <Route path="/"             element={<Navigate to="/home-guest" />} />
-        <Route path="/login"        element={<Login />} />
-        <Route path="/home-guest"   element={<HomeGuest />} />
-        <Route path="/perfil"       element={<Perfil />} />
-        <Route path="/servicios"    element={<Servicios />} />
+        <Route path="/"           element={<Navigate to="/home-guest" />} />
+        <Route path="/login"      element={<Login />} />
+        <Route path="/home-guest" element={<HomeGuest />} />
       </Routes>
     </BrowserRouter>
   );
