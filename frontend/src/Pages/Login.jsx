@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/StylePage/StyleLogin.css";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../lib/authApi.js";
+import logoIcon from '../img/logo_color_noBG.png';
 
 
 export default function Login() {
@@ -250,10 +251,10 @@ export default function Login() {
           <div className="auth-lateral">
             <div className="lateral-contenido">
 
-              <div className="lateral-icono">🤝</div>
+              <div className="lateral-icono"><img src={logoIcon} alt="UniServices Logo" style={{ width: '100%', height: 'auto' }} /></div>
 
-              <h2 className="lateral-titulo">
-                Uni<span>Service</span>
+              <h2>
+                Uni<span style={{ color: '#ffdd57', fontWeight: 'bold' }}>Service</span>
               </h2>
 
               <p className="lateral-desc">
