@@ -2,7 +2,7 @@
 
 # Esperar a que SQL Server termine de arrancar
 echo "Esperando a que SQL Server inicie..."
-sleep 100s
+sleep 30s
 
 # 1. Crear la Base de Datos y las Tablas 
 # Nota: Usamos la ruta tools18 y el parámetro -C

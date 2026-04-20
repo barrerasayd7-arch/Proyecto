@@ -14,10 +14,11 @@ $conexion = sqlsrv_connect($servidor, [
 ]);
 
 if (!$conexion) {
-    $errores = sqlsrv_errors();
-    die(json_encode([
-        "error" => "No se pudo conectar a la base de datos",
-        "detalle" => $errores
-    ]));
+    http_response_code(500); // Dile a React que algo salió mal en el server
+    echo json_encode([
+        "error" => "Error de conexión a la base de datos",
+        "detalles" => sqlsrv_errors()
+    ]);
+    exit; // Usa exit en lugar de die
 }
 ?>

@@ -24,7 +24,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./Proyecto-main/src:/var/www/html
+      - ./frontend/src:/var/www/html
     depends_on:
       - sqlserver
     build:
