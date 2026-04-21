@@ -5,6 +5,8 @@ GO
 -- Solo calificar si solicitud está aceptada (fue_aceptada = 1)
 -- ============================================================
 
+DROP INDEX UQ_usuarios_correo ON usuarios;
+
 -- Mostrar TODAS las calificaciones y su estado de solicitud
 SELECT 
     cal.id_calificacion AS 'ID Calificación',

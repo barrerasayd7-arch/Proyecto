@@ -5,6 +5,17 @@ END
 GO
 USE UniService;
 GO
+
+-- ESTO ES LO MÁS IMPORTANTE: 
+-- Estas opciones deben estar ON antes de crear tablas o índices
+SET ANSI_NULLS ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET ARITHABORT ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET QUOTED_IDENTIFIER ON;
+SET NUMERIC_ROUNDABORT OFF;
+GO
 -- Aquí sigue tu código de CREATE TABLE...
 
 -- Tabla de Usuarios
@@ -21,7 +32,6 @@ CREATE TABLE usuarios (
     avatar NVARCHAR(255) DEFAULT 'img/default_avatar.png'
 );
 
-SET QUOTED_IDENTIFIER ON;
 GO
 
 CREATE UNIQUE INDEX UQ_usuarios_correo 

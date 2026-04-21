@@ -2,6 +2,11 @@
 USE UniService;
 GO
 
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
 CREATE OR ALTER PROCEDURE sp_CrearUsuario
     @telefono NVARCHAR(20),
     @password_hash NVARCHAR(255),
@@ -12,6 +17,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET QUOTED_IDENTIFIER ON;
+    SET ANSI_NULLS ON;
+    SET ANSI_PADDING ON;
+    SET ANSI_WARNINGS ON;
+    SET ARITHABORT ON;
+    SET CONCAT_NULL_YIELDS_NULL ON;
+    SET NUMERIC_ROUNDABORT OFF;
     IF EXISTS (SELECT 1 FROM usuarios WHERE telefono = @telefono)
     BEGIN
         RAISERROR ('Este número de teléfono ya se encuentra registrado.', 16, 1);

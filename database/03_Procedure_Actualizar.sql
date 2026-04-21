@@ -2,6 +2,11 @@
 USE UniService;
 GO
 
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
 -- Eliminar si existe
 IF OBJECT_ID('sp_ActualizarUsuario', 'P') IS NOT NULL
     DROP PROCEDURE sp_ActualizarUsuario;
@@ -21,7 +26,13 @@ CREATE PROCEDURE sp_ActualizarUsuario
 AS
 BEGIN
     SET NOCOUNT ON;
-    SET QUOTED_IDENTIFIER ON;       
+    SET QUOTED_IDENTIFIER ON;
+    SET ANSI_NULLS ON;
+    SET ANSI_PADDING ON;
+    SET ANSI_WARNINGS ON;
+    SET ARITHABORT ON;
+    SET CONCAT_NULL_YIELDS_NULL ON;
+    SET NUMERIC_ROUNDABORT OFF;   
     -- Validar si el usuario existe antes de intentar actualizar
     IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = @id_usuario)
     BEGIN
