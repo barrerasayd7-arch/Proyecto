@@ -123,6 +123,43 @@ const Perfil = () => {
         }
     };
 
+    // ═══════════════════════════════════════════
+    // HANDLERS PARA IMAGEN DE PERFIL
+    // ═══════════════════════════════════════════
+
+    /**
+     * FUNCIÓN: handleSubirImagenLocal
+     * Se activa cuando el usuario selecciona un archivo desde su PC.
+     * Envía el archivo físico a través de FormData mediante POST.
+     */
+    const handleSubirImagenLocal = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // FormData es necesario para enviar archivos binarios al PHP
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("id_usuario", id_usuario);
+
+        try {
+            const response = await fetch("http://localhost/api/crud/usuario_crud.php", {
+                method: "POST", // Importante: Las subidas de archivos en PHP suelen ir por POST
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.ok) {
+                alert("✨ ¡Imagen de perfil actualizada!");
+                // Recargamos para que el servidor sirva la nueva imagen física
+                window.location.reload(); 
+            } else {
+                alert("❌ Error al subir: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error en la subida local:", error);
+        }
+    };
+
     // ... Continúa el return (JSX)
     return (
         <>
