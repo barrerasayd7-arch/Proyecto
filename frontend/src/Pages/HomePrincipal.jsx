@@ -238,7 +238,7 @@ function SeccionTop({ top3 }) {
                 </div>
                 <div className="top-card-footer">
                   <div className="author">
-                    <div className="avatar avatar-verde">👤</div>
+                    <div className="top3 top3-verde">👤</div>
                     <span>{s.proveedor || "Anónimo"}</span>
                   </div>
                   <span className="price">${s.precio_hora || 0}</span>
@@ -330,23 +330,8 @@ function SeccionBuscar({ serviciosTotales }) {
   return (
     <section className="seccion seccion-oscura" id="buscar">
 
-      {/* Chips de categoría */}
-      <div className="container chips-container" id="filtros-categorias"
-           style={{ marginBottom: "24px" }}>
-        {CHIPS_CATEGORIA.map(chip => (
-          <button
-            key={chip.valor}
-            className={`chip${categoriaActual === chip.valor ? " activo" : ""}`}
-            onClick={(e) => handleCategoria(chip.valor, e)}
-            type="button"
-          >
-            {chip.label}
-          </button>
-        ))}
-      </div>
-
       {/* Header búsqueda */}
-      <header className="seccion" style={{ paddingBottom: 0, background: "transparent" }}>
+      <header className="seccion" style={{ paddingBottom: 0,paddingTop: 0, background: "transparent" }}>
         <div className="container" style={{ textAlign: "center" }}>
           <p className="label-seccion">Marketplace Universitario</p>
           <h1 style={{ fontSize: "2.5rem" }}>
@@ -363,6 +348,21 @@ function SeccionBuscar({ serviciosTotales }) {
           </div>
         </div>
       </header>
+      
+      {/* Chips de categoría */}
+      <div className="container chips-container" id="filtros-categorias"
+           style={{ marginBottom: "24px" }}>
+        {CHIPS_CATEGORIA.map(chip => (
+          <button
+            key={chip.valor}
+            className={`chip${categoriaActual === chip.valor ? " activo" : ""}`}
+            onClick={(e) => handleCategoria(chip.valor, e)}
+            type="button"
+          >
+            {chip.label}
+          </button>
+        ))}
+      </div>
 
       <div className="container">
         <div className="sort-bar">

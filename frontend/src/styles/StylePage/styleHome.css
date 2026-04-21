@@ -22,6 +22,7 @@
   --texto2:       #8fa3bf;
   --texto3:       #4a6080;
   --trans:        all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --top3-size:    50px;
 }
 
 /* ── Reset ── */
@@ -612,6 +613,23 @@ fieldset { border: none; padding: 0; }
 /* ══════════════════════════════
    AVATARES
 ══════════════════════════════ */
+.top3 {
+  width: var(--top3-size);
+  height: var(--top3-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--top3-size) * 0.21); /* Escala proporcional */
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Verde */
+.top3-verde {
+  background: linear-gradient(135deg, #0ea5a0, #14c7c1);
+}
+
 .avatar {
   width: 34px; height: 34px;
   border-radius: 50%;
