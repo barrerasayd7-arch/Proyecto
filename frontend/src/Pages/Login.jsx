@@ -141,6 +141,7 @@ export default function Login() {
           mensaje: "✅ Bienvenido " + data.nombre,
           tipo: "info",
         });
+         setTimeout(() => navigate("/home"), 1500);
       } else {
         alert("❌ Credenciales incorrectas");
       }
