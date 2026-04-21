@@ -91,17 +91,18 @@ function Navbar({ scrolled, onCerrarSesion }) {
 
         <div className={`navbar-links${menuAbierto ? " active" : ""}`}>
           {[
-            ["#inicio",        "Inicio"],
-            ["#buscar",        "Buscar servicios"],
-            ["#publicar",      "Publicar servicio"],
-            ["#mis-servicios", "Mis servicios"],
-            ["#solicitudes",   "Mis solicitudes"],
-            ["#soporte",       "Soporte"],
+            ["#inicio",             "Inicio"],
+            ["#buscar",             "Buscar servicios"],
+            ["#mejor-calificados",  "Top⭐"],
+            ["#publicar",           "Publicar servicio"],
+            
+            ["#solicitudes",        "Mis solicitudes"],
+            ["#soporte",            "Soporte"],
           ].map(([href, label]) => (
             <a key={href} href={href} className="nav-link-custom"
                onClick={() => setMenuAbierto(false)}>{label}</a>
           ))}
-          <a href="/profile" className="nav-link-custom nav-iniciar">
+          <a href="/perfil" className="nav-link-custom nav-iniciar">
             👤 {nombreUsuario}
           </a>
           <button

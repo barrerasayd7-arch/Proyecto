@@ -6,6 +6,7 @@ import Servicio from "./Pages/Servicio.jsx";
 import PrivacyPage from "./Pages/Privacy.jsx";
 import TermsPage from "./Pages/Terms.jsx";
 import PerfilExterno from "./Pages/PerfilExterno.jsx";
+import Perfil from "./Pages/Perfil.jsx";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/privacidad"  element={<PrivacyPage />} />
         <Route path="/terminos"    element={<TermsPage />} />
         <Route path="/perfil/:id"  element={<PerfilExterno />} />
+        <Route path="/perfil"      element={<Perfil />} />
       </Routes>
     </BrowserRouter>
   );

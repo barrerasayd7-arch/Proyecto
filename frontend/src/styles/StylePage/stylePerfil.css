@@ -196,7 +196,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 40px 20px 80px;
+            padding: 19px 20px 0px;
             min-height: calc(100vh - 60px);
         }
 
@@ -435,6 +435,8 @@
             background: transparent;
             color: var(--texto);
             border: 1px solid var(--borde2);
+            max-height: 46px;
+
         }
 
         .btn-secondary:hover {
@@ -554,7 +556,7 @@
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 41px
         }
 
         .info-item {
@@ -1070,7 +1072,7 @@
         .image-menu {
             background: var(--card);
             border: 1px solid var(--borde);
-            border-radius: 20px;
+            border-radius: 10px;
             padding: 25px;
             max-width: 400px;
             width: 100%;
@@ -1133,6 +1135,9 @@
 
         .image-option-text {
             flex: 1;
+            color: var(--texto);
+            justify-content: flex-start;
+            text-align: left;
         }
 
         .image-option-title {
@@ -1164,8 +1169,75 @@
 
             .image-option-icon {
                 width: 45px;
-                height: 45px;
-                font-size: 1.5rem;
+                height: 100px;
+                font-size: 1rem;
             }
         }
     
+.activity-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden; transition: var(--trans);
+}
+.activity-overlay.active { opacity: 1; visibility: visible; }
+
+.activity-modal {
+    background: var(--bg);
+    width: 90%; max-width: 600px;
+    max-height: 85vh;
+    border-radius: 24px;
+    border: 1px solid var(--borde);
+    overflow-y: auto;
+    position: relative;
+    padding: 30px;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Header */
+.activity-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 25px;
+}
+.activity-close {
+    background: var(--bg3); border: none; color: var(--texto);
+    width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+}
+
+/* Stats Cards */
+.quick-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px; margin-bottom: 30px;
+}
+.quick-stat-card {
+    background: var(--bg2); padding: 15px; border-radius: 16px;
+    text-align: center; border: 1px solid var(--borde);
+}
+.quick-stat-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.quick-stat-value { font-size: 1.2rem; font-weight: 700; color: var(--teal); }
+.quick-stat-label { font-size: 0.75rem; color: var(--texto3); text-transform: uppercase; }
+
+/* Progress Bars */
+.progress-item { margin-bottom: 15px; }
+.progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+.progress-bar { height: 8px; background: var(--bg3); border-radius: 10px; overflow: hidden; }
+.progress-fill { height: 100%; transition: width 1s ease-in-out; }
+.progress-fill.teal { background: var(--teal); }
+.progress-fill.green { background: #2ecc71; }
+.progress-fill.yellow { background: var(--amarillo); }
+
+/* Activity List */
+.activity-item {
+    display: flex; align-items: center; gap: 15px;
+    padding: 12px; background: var(--bg2);
+    border-radius: 12px; margin-bottom: 10px;
+}
+.activity-content { flex: 1; }
+.activity-text { font-size: 0.85rem; color: var(--texto); }
+.activity-time { font-size: 0.75rem; color: var(--texto3); }
+.activity-badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+.activity-badge.success { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+.activity-badge.info { background: var(--teal-dim); color: var(--teal); }
