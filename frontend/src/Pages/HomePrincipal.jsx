@@ -157,8 +157,14 @@ function TarjetaServicio({ servicio }) {
         <h5>{servicio.titulo || "Sin título"}</h5>
         <p className="texto-muted">{truncar(servicio.descripcion)}</p>
         <div className="card-autor">
-          <div className="avatar avatar-azul">👤</div>
-          <span className="texto-muted">{servicio.proveedor || "Proveedor anónimo"}</span>
+          <div className="avatar avatar-azul" style={{
+  display: "flex", alignItems: "center", justifyContent: "center",
+  width: "32px", height: "32px", borderRadius: "50%",
+  fontSize: "0.75rem", fontWeight: "700", flexShrink: 0
+}}>
+  {(servicio.proveedor || "?").charAt(0).toUpperCase()}
+</div>
+<span className="texto-muted">{servicio.proveedor || "Proveedor anónimo"}</span>
         </div>
         <div className="texto-fecha">{servicio.fecha_publicacion || ""}</div>
         <div className="card-footer">

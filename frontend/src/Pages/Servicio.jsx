@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import "../styles/StylePage/styleHome.css";
 import "../styles/StylePage/StyleServicio.css";
 
@@ -407,30 +407,54 @@ export default function Servicio() {
           {/* ── COLUMNA DERECHA ── */}
           <div>
             {/* Tarjeta proveedor */}
-            <div className="card-proveedor">
-              <div className={`avatar-grande ${colorAvatar(servicio.proveedor)}`}>
-                {iniciales(servicio.proveedor)}
-              </div>
-              <div className="nombre-proveedor">{servicio.proveedor || "Proveedor anónimo"}</div>
-              <div className="ubicacion-proveedor">
-                🏫 {universidad}
-              </div>
-              {servicio.contacto && (
-                <a
-                  href={
-                    servicio.contacto.includes("@")
-                      ? `mailto:${servicio.contacto}`
-                      : `https://wa.me/57${servicio.contacto.replace(/\D/g, "")}`
-                  }
-                  className="btn-primary"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ display: "block", textAlign: "center", marginBottom: "12px" }}
+            <Link 
+              to={`/perfil/${servicio.id_proveedor}`} 
+              state={{
+                proveedorData: {
+                  id: servicio.id_proveedor,
+                  nombre: servicio.proveedor,
+                  universidad: universidad,
+                  contacto: servicio.contacto,
+                  estrellas: servicio.estrellas,
+                  resenas: servicio.resenas
+                }
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="card-proveedor" style={{ cursor: "pointer" }}>
+                <div className={`avatar-grande ${colorAvatar(servicio.proveedor)}`}>
+                  {iniciales(servicio.proveedor)}
+                </div>
+
+                <div 
+                  className="nombre-proveedor" 
+                  style={{ transition: "color 0.2s" }}
+                  onMouseEnter={e => e.target.style.color = "var(--teal)"}
+                  onMouseLeave={e => e.target.style.color = ""}
                 >
-                  Contactar Proveedor
-                </a>
-              )}
-            </div>
+                  {servicio.proveedor || "Proveedor anónimo"}
+                </div>
+                <div className="ubicacion-proveedor">
+                  🏫 {universidad}
+                </div>
+                {servicio.contacto && (
+                  <a
+                    href={
+                      servicio.contacto.includes("@")
+                        ? `mailto:${servicio.contacto}`
+                        : `https://wa.me/57${servicio.contacto.replace(/\D/g, "")}`
+                    }
+                    className="btn-primary"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ display: "block", textAlign: "center", marginBottom: "12px" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Contactar Proveedor
+                  </a>
+                )}
+              </div>
+            </Link>
 
             {/* Info proveedor */}
             <div className="seccion-info">
