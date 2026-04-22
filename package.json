@@ -28,10 +28,14 @@
     "mime-types": "^2.1.35",
     "proxy-from-env": "^2.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "wait-on": "^9.0.5"
+  },
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "docker-compose up -d && npx wait-on tcp:1433 --delay 90000 && npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "stop": "docker-compose -f docker-compose.yml stop",
+    "clean": "docker-compose -f docker-compose.yml down"
   },
   "repository": {
     "type": "git",
@@ -46,4 +50,3 @@
   },
   "homepage": "https://github.com/barrerasayd7-arch/Proyecto#readme"
 }
-
