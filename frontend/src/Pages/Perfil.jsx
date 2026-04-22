@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar_Perfil'; 
 import '../styles/StylePage/styleHome.css';
@@ -7,6 +7,7 @@ import '../styles/StylePage/stylePerfil.css';
 const Perfil = () => {
     // Hook para redireccionar a otras rutas (como el home-guest al cerrar sesión)
     const navigate = useNavigate();
+    const FileInputRef = useRef(null);
 
     // Estado principal que almacena toda la información del usuario
     // Se inicializa con valores por defecto para evitar errores de "undefined" mientras carga la API
