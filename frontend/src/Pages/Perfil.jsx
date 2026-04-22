@@ -1,165 +1,437 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/StylePage/StylePerfil.css"; // Ajusta la ruta según tu carpeta styles
-import logoIcon from "../img/logo_color_noBG.png";
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/Navbar_Perfil'; 
+import '../styles/StylePage/styleHome.css';
+import '../styles/StylePage/stylePerfil.css';
 
-export default function Perfil() {
-  const navigate = useNavigate();
+const Perfil = () => {
+    // Hook para redireccionar a otras rutas (como el home-guest al cerrar sesión)
+    const navigate = useNavigate();
+    const FileInputRef = useRef(null);
 
-  // ===== ESTADOS PARA MENÚS =====
-  const [menuOpcionesVisible, setMenuOpcionesVisible] = useState(false);
-  const [menuConfigVisible, setMenuConfigVisible] = useState(false);
-  const [menuActividadVisible, setMenuActividadVisible] = useState(false);
+    // Estado principal que almacena toda la información del usuario
+    // Se inicializa con valores por defecto para evitar errores de "undefined" mientras carga la API
+    const [userData, setUserData] = useState({
+        nombre: 'Cargando...',
+        avatar: '../src/img/default-avatar.png',
+        descripcion: 'Cargando información...',
+        correo: 'usuario@ejemplo.com',
+        fecha_registro: '2024-01-01',
+        estado: 1,
+        total_publicaciones: 0,
+        total_seguidores: 0,
+        total_siguiendo: 0,
+        reputacion: '4.9'
+    });
 
-  // ===== LÓGICA DE INTERACCIÓN =====
-  const toggleMenuOpciones = () => {
-    setMenuOpcionesVisible(!menuOpcionesVisible);
-    // Cerramos los otros por si acaso
-    setMenuConfigVisible(false);
-    setMenuActividadVisible(false);
-  };
+    // Estado para controlar qué modal está abierto (ej: 'info', 'imagen', 'actividad' o null)
+    const [activeModal, setActiveModal] = useState(null);
 
-  const toggleMenuConfig = () => setMenuConfigVisible(!menuConfigVisible);
-  const toggleMenuActividad = () => setMenuActividadVisible(!menuActividadVisible);
+    // Obtención del ID del usuario desde el almacenamiento local del navegador
+    const id_usuario = localStorage.getItem("usuarioId");
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Perfil UniServices',
-        url: window.location.href,
-      }).catch(console.error);
-    } else {
-      alert("Enlace copiado al portapapeles");
-    }
-  };
+    /**
+     * EFECTO SECUNDARIO (useEffect):
+     * 1. Carga los datos del perfil desde el servidor al entrar a la página.
+     * 2. Escucha la tecla 'Escape' para cerrar cualquier modal abierto.
+     */
+    useEffect(() => {
+        // Petición GET al script de PHP para obtener los datos del usuario por ID
+        if (id_usuario) {
+            fetch(`http://localhost/api/crud/UserPerfil.php?id=${id_usuario}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.error) setUserData(data);
+                })
+                .catch(err => console.error("Error al cargar perfil:", err));
+        }
 
-  // ===== EFECTO DE CLASE EN BODY =====
-  useEffect(() => {
-    document.body.classList.add("perfil-page");
-    return () => {
-      document.body.classList.remove("perfil-page");
+        // Manejador de eventos para cerrar modales con la tecla ESC
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') setActiveModal(null);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // Limpieza del evento cuando el componente se desmonta para evitar fugas de memoria
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [id_usuario]);
+
+    /**
+     * FUNCIÓN: handleUpdate
+     * Actualiza un campo específico (nombre, correo, etc.) en la base de datos
+     * mediante el método PUT y actualiza el estado local para reflejar los cambios.
+     */
+    const handleUpdate = async (campo, valor) => {
+        try {
+            const res = await fetch("http://localhost/api/crud/usuario_crud.php", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_usuario, [campo]: valor })
+            });
+            const result = await res.json();
+            if (result.ok) {
+                // Actualiza solo el campo modificado en el estado local
+                setUserData(prev => ({ ...prev, [campo]: valor }));
+                setActiveModal(null);
+            }
+        } catch (error) {
+            alert("Error al actualizar");
+        }
     };
-  }, []);
 
-  return (
-    <div className="perfil-container">
-      {/* HEADER / PORTADA */}
-      <header className="perfil-header">
-        <div className="portada-container">
-          <img 
-            src="https://images.unsplash.com/photo-1557683316-973673baf926" 
-            alt="Portada" 
-            className="portada-img" 
-          />
-          <button className="btn-edit-portada" title="Cambiar portada">📷</button>
-        </div>
+    /**
+     * FUNCIÓN: handleCerrarSesion
+     * Cambia el estado del usuario a offline en la DB, limpia el localStorage
+     * y redirige al usuario a la página de bienvenida.
+     */
+    const handleCerrarSesion = async () => {
+        const id = localStorage.getItem("usuarioId");
+        try {
+            await fetch("http://localhost/api/crud/usuario_crud.php", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_usuario: id, estado: 0 }) // estado 0 = Desconectado
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        } finally {
+            localStorage.clear();      // Borra datos de sesión
+            navigate("/home-guest");   // Salida forzada a la página de invitados
+        }
+    };
 
-        <div className="perfil-info-principal">
-          <div className="foto-perfil-wrapper">
-            <img 
-              src="https://via.placeholder.com/150" 
-              alt="Foto de Perfil" 
-              className="foto-perfil-img" 
-              onClick={toggleMenuOpciones} // Abrir menú al tocar foto
-            />
-            <button className="btn-change-photo" onClick={toggleMenuOpciones}>+</button>
-          </div>
+    /**
+     * FUNCIÓN: handleShare
+     * Utiliza la API nativa de los navegadores para compartir el enlace del perfil.
+     * Si el navegador no soporta el menú de compartir, copia el link al portapapeles.
+     */
+    const handleShare = async () => {
+        const shareData = {
+            title: 'UniServices - Perfil de ' + userData.nombre,
+            text: '¡Mira mi perfil en UniServices!',
+            url: window.location.href, 
+        };
 
-          <div className="info-texto">
-            <h1 className="usuario-nombre">Nombre del Estudiante</h1>
-            <p className="usuario-tag">@usuario_universitario</p>
-            <div className="usuario-stats">
-              <span><b>12</b> Servicios</span>
-              <span><b>4.8</b> ⭐</span>
-              <span><b>150</b> Ventas</span>
-            </div>
-          </div>
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData); // Abre menú en móviles/tablets
+            } else {
+                await navigator.clipboard.writeText(window.location.href); // Fallback para PC
+                alert('¡Enlace de perfil copiado al portapapeles!');
+            }
+        } catch (err) {
+            console.error('Error al compartir:', err);
+        }
+    };
 
-          <div className="perfil-acciones">
-            <button className="btn-principal" onClick={toggleMenuOpciones}>
-              Editar perfil
-            </button>
-            <button className="btn-secundario" onClick={handleShare}>
-              Compartir
-            </button>
-          </div>
-        </div>
-      </header>
+    // ═══════════════════════════════════════════
+    // HANDLERS PARA IMAGEN DE PERFIL
+    // ═══════════════════════════════════════════
 
-      <main className="perfil-contenido">
-        {/* BARRA DE ACCIONES RÁPIDAS (Se eliminará, solo estructura) */}
-        <section className="acciones-rapidas-disabled">
-          {/* Aquí iría la barra que mencionaste eliminar */}
-        </section>
+    /**
+     * FUNCIÓN: handleSubirImagenLocal
+     * Se activa cuando el usuario selecciona un archivo desde su PC.
+     * Envía el archivo físico a través de FormData mediante POST.
+     */
+    const handleSubirImagenLocal = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
 
-        <div className="perfil-grid">
-          {/* COLUMNA IZQUIERDA: INFORMACIÓN */}
-          <aside className="perfil-sidebar">
-            <div className="card">
-              <h3>Sobre mí</h3>
-              <p>Estudiante de Ingeniería de Sistemas apasionado por el desarrollo web y las bases de datos. Ofrezco tutorías de SQL y Java.</p>
-            </div>
+        // FormData es necesario para enviar archivos binarios al PHP
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("id_usuario", id_usuario);
 
-            <div className="card">
-              <h3>Configuración</h3>
-              <div className="config-buttons">
-                <button className="btn-item" onClick={toggleMenuConfig}>Ajustes de cuenta</button>
-                <button className="btn-item" onClick={toggleMenuActividad}>Mi Actividad</button>
-              </div>
-            </div>
-          </aside>
+        try {
+            const response = await fetch("http://localhost/api/crud/usuario_crud.php", {
+                method: "POST", // Importante: Las subidas de archivos en PHP suelen ir por POST
+                body: formData
+            });
 
-          {/* COLUMNA DERECHA: SERVICIOS */}
-          <section className="perfil-main">
-            <div className="tabs-perfil">
-              <button className="tab-active">Mis Servicios</button>
-              <button>Reseñas</button>
-              <button>Favoritos</button>
-            </div>
+            const result = await response.json();
+            if (result.ok) {
+                setUserData(prev => ({ ...prev, avatar: result.avatarUrl }));
+                setActiveModal(null);
+            } else {
+                alert("❌ Error al subir: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error en la subida local:", error);
+        }
+    };
 
-            <div className="servicios-lista">
-              {/* Ejemplo de un servicio */}
-              <div className="servicio-card">
-                <div className="servicio-img-placeholder"></div>
-                <div className="servicio-info">
-                  <h4>Tutoría SQL Avanzado</h4>
-                  <p>Ayuda con triggers y procedimientos...</p>
-                  <span className="precio">$25.000 / hora</span>
+    /**
+     * FUNCIÓN: handleUsarImagenURL
+     * Solicita una URL al usuario y la guarda en la base de datos.
+     * Reutiliza handleUpdate ya que es un cambio de texto en la DB (PUT).
+     */
+
+    const handleUsarImagenURL = async () => {
+        const url = prompt('Ingresa la URL directa de la imagen (.jpg, .png, .webp):');
+        
+        // Validación básica
+        if (!url || !url.trim()) return;
+
+        try {
+            // Validamos que el formato de URL sea correcto
+            new URL(url); 
+            
+            // Llamamos a la función genérica para actualizar el campo 'avatar'
+            await handleUpdate('avatar', url.trim());
+            alert('✨ ¡Avatar actualizado con éxito!');
+        } catch (e) {
+            alert('❌ Por favor, ingresa una URL válida y completa (incluyendo http/https).');
+        }
+    };
+
+    // ... Continúa el return (JSX)
+    return (
+        <>
+            <Navbar onCerrarSesion={handleCerrarSesion} />
+
+            <div className="profile-page-wrapper">
+                {/* Fondo dinámico */}
+                <div className="dynamic-bg">
+                    <div className="floating-shapes">
+                        <div className="shape shape-1"></div>
+                        <div className="shape shape-2"></div>
+                        <div className="shape shape-3"></div>
+                    </div>
                 </div>
-              </div>
+
+                <main className="main-container">
+                    <div className="profile-wrapper">
+                        {/* Tarjeta de perfil */}
+                        <div className="profile-card">
+                            <div className="profile-header">
+                                <div className="avatar-wrapper" onClick={() => setActiveModal('imagen')}>
+                                    <div className="avatar-ring"></div>
+                                    <img src={userData.avatar} alt="Avatar" className="avatar" />
+                                    <div className={`status-badge ${userData.estado === 1 ? 'online' : 'busy'}`}></div>
+                                </div>
+                                <h1 className="profile-name">{userData.nombre}</h1>
+                                <p className="profile-username">@{userData.nombre.toLowerCase().replace(/\s/g, '')}</p>
+                            </div>
+
+                            <div className="profile-body">
+                                <p className="profile-bio">{userData.descripcion}</p>
+                                <div className="stats-grid">
+                                    <StatItem value={userData.total_publicaciones} label="Publicaciones" />
+                                    <StatItem value={userData.total_seguidores} label="Seguidores" />
+                                    <StatItem value={userData.total_siguiendo} label="Siguiendo" />
+                                </div>
+                                <div className="action-buttons">
+                                    <button className="btn btn-primary" onClick={() => setActiveModal('info')}>✏️ Editar Perfil</button>
+                                    <button className="btn btn-secondary" onClick={handleShare}>🔗 Compartir</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Panel Derecho */}
+                        <div className="right-panel">
+                            <section className="menu-section">
+                                <div className="section-title">📊 Estado y Actividad</div>
+                                <div className="menu-list">
+                                    <MenuItem icon="🟢" title="Estado actual" desc="Cambia tu disponibilidad" tag={userData.estado === 1 ? "En línea" : "Ocupado"} />
+                                    <MenuItem icon="📈" title="Mi Actividad" onClick={() => setActiveModal('actividad')} />
+                                </div>
+                            </section>
+
+                            <section className="menu-section">
+                                <div className="section-title">📋 Información</div>
+                                <div className="info-grid">
+                                    <InfoItem label="📧 Correo" value={userData.correo} />
+                                    <InfoItem label="🏫 Universidad" value="U. Nacional" />
+                                    <InfoItem label="⭐ Reputación" value={`${userData.reputacion}/5.0`} />
+                                    <InfoItem label="📅 Miembro desde" value={`${userData.reputacion}/5.0`} />
+                                    <InfoItem label="⭐ Reputación" value={`${userData.reputacion}/5.0`} />
+                                    <InfoItem label="⭐ Reputación" value={`${userData.reputacion}/5.0`} />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </main>
+
+                {/* Modales */}
+                {activeModal === 'info' && (
+                    <div className="image-menu-overlay active" onClick={() => setActiveModal(null)}>
+                        <div className="image-menu" onClick={e => e.stopPropagation()}>
+                            <h3 className="image-menu-title">✍️ Editar Perfil</h3>
+                            <div className="image-menu-options">
+
+                                <button className="image-option" onClick={() => {
+                                    const n = prompt("Nuevo nombre:", userData.nombre);
+                                    if (n) handleUpdate('nombre', n);
+                                }}>
+                                    <span className="image-option-icon">✏️</span>
+                                    <div className="image-option-text"><b>Cambiar Username</b></div>
+                                </button>
+
+                                <button className="image-option" onClick={() => {
+                                    const d = prompt("Nueva descripción:", userData.descripcion);
+                                    if (d) handleUpdate('descripcion', d);
+                                }}>
+                                    <span className="image-option-icon">📖</span>
+                                    <div className="image-option-text"><b>Cambiar Descripción</b></div>
+                                </button>
+
+                                <button className="image-option" onClick={() => {
+                                    const c = prompt("Nuevo correo:", userData.correo);
+                                    if (c) handleUpdate('correo', c);
+                                }}> {/* <-- Aquí estaba el error, sobraba un ")" */}
+                                    <span className="image-option-icon">📧</span>
+                                    <div className="image-option-text"><b>Cambiar Correo electrónico</b></div>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeModal === 'imagen' && (
+                    <div className="image-menu-overlay active" onClick={() => setActiveModal(null)}>
+                        <div className="image-menu" onClick={e => e.stopPropagation()}>
+                            <h3 className="image-menu-title">📸 Cambiar Avatar</h3>
+
+                            {/* El input se coloca dentro del modal (esto recibe la imagen del usuario)*/}
+                            <input 
+                                type="file" 
+                                ref={FileInputRef}
+                                accept="image/*"
+                                style={{display: 'none'}}
+                                onChange={handleSubirImagenLocal}
+                            />
+
+                            {/*opciones visibles en el html*/}
+
+                            <div className="image-menu-options">
+                                <button className="image-option" onClick={() => {
+                                    const url = prompt("URL de la nueva imagen:");
+                                    if (url) handleUpdate('avatar', url);
+                                }}>
+                                    <span className="image-option-icon">🌐</span>
+                                    <div className="image-option-text"><b>Usar URL</b></div>
+                                </button>
+                                <button className="image-option" onClick={() => FileInputRef.current?.click()}>
+                                    <span className="image-option-icon">📁</span>
+                                    <div className="image-option-text"><b>Subir Imagen</b></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Modal de Actividad */}
+                {activeModal === 'actividad' && (
+                    <div className="activity-overlay active" onClick={() => setActiveModal(null)}>
+                        <div className="activity-modal" onClick={e => e.stopPropagation()}>
+                            <div className="activity-header">
+                                <h2 className="activity-title">📊 Mi Actividad</h2>
+                                <button className="activity-close" onClick={() => setActiveModal(null)}>✕</button>
+                            </div>
+
+                            <div className="activity-body">
+                                {/* Stats rápidas */}
+                                <div className="quick-stats">
+                                    <QuickStatCard icon="📝" value="12" label="Este Mes" />
+                                    <QuickStatCard icon="✅" value="45" label="Completados" />
+                                    <QuickStatCard icon="⭐" value="4.9" label="Calificación" />
+                                    <QuickStatCard icon="⏱️" value="45h" label="Tiempo Activo" />
+                                </div>
+                
+                                {/* Sección de Progreso */}
+                                <div className="progress-section">
+                                    <div className="progress-title">🏆 Logros y Metas</div>
+                                    <ProgressBar label="🎯 Meta de publicaciones" value="80%" color="teal" />
+                                    <ProgressBar label="⭐ Satisfacción del cliente" value="98%" color="green" />
+                                    <ProgressBar label="📩 Tasa de respuesta" value="95%" color="yellow" />
+                                </div>
+                
+                                {/* Actividad reciente */}
+                                <div className="recent-activity">
+                                    <div className="recent-title">🕐 Actividad Reciente</div>
+                                    <div className="activity-list">
+                                        <ActivityItem 
+                                            icon="✅" 
+                                            text="Completaste el servicio 'Diseño de logo'" 
+                                            time="Hace 2 horas" 
+                                            badge="+5★" 
+                                            type="success" 
+                                        />
+                                        <ActivityItem 
+                                            icon="💬" 
+                                            text="Nuevo mensaje de María García" 
+                                            time="Hace 5 horas" 
+                                            badge="Nuevo" 
+                                            type="info" 
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-          </section>
-        </div>
-      </main>
+        </>
+    );
+};
 
-      {/* ===== MENÚS DESPLEGABLES (MODALES/OVERLAYS) ===== */}
-      
-      {/* Menú de Opciones (Editar/Foto) */}
-      {menuOpcionesVisible && (
-        <div className="modal-overlay" onClick={toggleMenuOpciones}>
-          <div className="menu-opciones" onClick={(e) => e.stopPropagation()}>
-            <button className="menu-item">Ver foto de perfil</button>
-            <button className="menu-item">Cambiar foto</button>
-            <button className="menu-item">Editar información básica</button>
-            <button className="menu-item">Privacidad de perfil</button>
-            <hr />
-            <button className="menu-item close" onClick={toggleMenuOpciones}>Cancelar</button>
-          </div>
-        </div>
-      )}
-
-      {/* Menú de Actividad */}
-      {menuActividadVisible && (
-        <div className="modal-overlay" onClick={toggleMenuActividad}>
-          <div className="menu-opciones" onClick={(e) => e.stopPropagation()}>
-            <h3>Historial de Actividad</h3>
-            <button className="menu-item">Servicios contratados</button>
-            <button className="menu-item">Servicios publicados</button>
-            <button className="menu-item">Pagos realizados</button>
-            <button className="menu-item close" onClick={toggleMenuActividad}>Cerrar</button>
-          </div>
-        </div>
-      )}
+// Sub-componentesdel Modal Información y Actividad
+const StatItem = ({ value, label }) => (
+    <div className="stat-item">
+        <div className="stat-value">{value}</div>
+        <div className="stat-label">{label}</div>
     </div>
-  );
-}
+);
+
+const MenuItem = ({ icon, title, desc, tag, onClick }) => (
+    <div className="menu-item" onClick={onClick}>
+        <div className="menu-icon">{icon}</div>
+        <div className="menu-text">
+            <div className="menu-title">{title}</div>
+            {desc && <div className="menu-desc">{desc}</div>}
+        </div>
+        {tag && <span className="status-tag online">{tag}</span>}
+        <span className="menu-arrow">→</span>
+    </div>
+);
+
+const InfoItem = ({ label, value }) => (
+    <div className="info-item">
+        <div className="info-label">{label}</div>
+        <div className="info-value">{value}</div>
+    </div>
+);
+
+const QuickStatCard = ({ icon, value, label }) => (
+    <div className="quick-stat-card">
+        <div className="quick-stat-icon">{icon}</div>
+        <div className="quick-stat-value">{value}</div>
+        <div className="quick-stat-label">{label}</div>
+    </div>
+);
+
+const ProgressBar = ({ label, value, color }) => (
+    <div className="progress-item">
+        <div className="progress-header">
+            <span className="progress-label">{label}</span>
+            <span className="progress-value">{value}</span>
+        </div>
+        <div className="progress-bar">
+            <div className={`progress-fill ${color}`} style={{ width: value }}></div>
+        </div>
+    </div>
+);
+
+const ActivityItem = ({ icon, text, time, badge, type }) => (
+    <div className="activity-item">
+        <div className="activity-icon">{icon}</div>
+        <div className="activity-content">
+            <div className="activity-text">{text}</div>
+            <div className="activity-time">{time}</div>
+        </div>
+        <span className={`activity-badge ${type}`}>{badge}</span>
+    </div>
+);
+
+export default Perfil;
