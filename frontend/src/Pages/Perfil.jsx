@@ -160,6 +160,8 @@ const Perfil = () => {
         }
     };
 
+    
+
     // ... Continúa el return (JSX)
     return (
         <>
@@ -268,6 +270,18 @@ const Perfil = () => {
                     <div className="image-menu-overlay active" onClick={() => setActiveModal(null)}>
                         <div className="image-menu" onClick={e => e.stopPropagation()}>
                             <h3 className="image-menu-title">📸 Cambiar Avatar</h3>
+
+                            {/* El input se coloca dentro del modal (esto recibe la imagen del usuario)*/}
+                            <input 
+                                type="file" 
+                                ref={FileInputRef}
+                                accept="image/*"
+                                style={{display: 'none'}}
+                                onChange={handleSubirImagenLocal}
+                            />
+
+                            {/*opciones visibles en el html*/}
+
                             <div className="image-menu-options">
                                 <button className="image-option" onClick={() => {
                                     const url = prompt("URL de la nueva imagen:");
@@ -276,7 +290,7 @@ const Perfil = () => {
                                     <span className="image-option-icon">🌐</span>
                                     <div className="image-option-text"><b>Usar URL</b></div>
                                 </button>
-                                <button className="image-option" onClick={() => alert("Función de subir imagen no implementada")}>
+                                <button className="image-option" onClick={() => FileInputRef.current?.click()}>
                                     <span className="image-option-icon">📁</span>
                                     <div className="image-option-text"><b>Subir Imagen</b></div>
                                 </button>
