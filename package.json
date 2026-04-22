@@ -1,0 +1,49 @@
+{
+  "name": "proyecto",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">\r   <img src=\"./frontend/src/img/Logo+name_color_git.png\" alt=\"Logo UniService\" width=\"450\">\r </p>",
+  "main": "index.js",
+  "dependencies": {
+    "asynckit": "^0.4.0",
+    "axios": "^1.15.1",
+    "call-bind-apply-helpers": "^1.0.2",
+    "combined-stream": "^1.0.8",
+    "delayed-stream": "^1.0.0",
+    "dunder-proto": "^1.0.1",
+    "es-define-property": "^1.0.1",
+    "es-errors": "^1.3.0",
+    "es-object-atoms": "^1.1.1",
+    "es-set-tostringtag": "^2.1.0",
+    "follow-redirects": "^1.16.0",
+    "form-data": "^4.0.5",
+    "function-bind": "^1.1.2",
+    "get-intrinsic": "^1.3.0",
+    "get-proto": "^1.0.1",
+    "gopd": "^1.2.0",
+    "has-symbols": "^1.1.0",
+    "has-tostringtag": "^1.0.2",
+    "hasown": "^2.0.3",
+    "math-intrinsics": "^1.1.0",
+    "mime-db": "^1.52.0",
+    "mime-types": "^2.1.35",
+    "proxy-from-env": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barrerasayd7-arch/Proyecto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/barrerasayd7-arch/Proyecto/issues"
+  },
+  "homepage": "https://github.com/barrerasayd7-arch/Proyecto#readme"
+}
+
