@@ -33,7 +33,7 @@
     "wait-on": "^9.0.5"
   },
   "scripts": {
-    "dev": "docker-compose up -d && npx wait-on tcp:1433 --delay 90000 && npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev": "docker-compose up -d && npx wait-on tcp:1433 --delay 20000 && npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "stop": "docker-compose -f docker-compose.yml stop",
     "clean": "docker-compose -f docker-compose.yml down"
   },
