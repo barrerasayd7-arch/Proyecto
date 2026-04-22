@@ -4,7 +4,7 @@ import { pool } from "../config/db.js";
 // 🔹 OBTENER SERVICIO (UNO O TODOS)
 export const getServices = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
 
     if (id) {
       const result = await pool.request()

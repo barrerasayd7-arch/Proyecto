@@ -1,4 +1,5 @@
 import { Router } from "express";
+import sql from "mssql";
 import { pool } from "../config/db.js";
 
 const router = Router();
@@ -23,14 +24,15 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 🔹 SERVICIO POR ID (CON RESEÑAS)
+
+// 🔹 SERVICIO POR ID (CON RESEÑAS REALES)
 router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
 
     // 🔥 SERVICIO
-    const result = await pool.request()
-      .input("id", id)
+    const servicioResult = await pool.request()
+      .input("id", sql.Int, id)
       .query(`
         SELECT 
           s.*,
@@ -42,32 +44,33 @@ router.get("/:id", async (req, res) => {
         WHERE s.id_servicio = @id
       `);
 
-    const servicio = result.recordset[0];
+    const servicio = servicioResult.recordset[0];
 
     if (!servicio) {
       return res.status(404).json({ error: "Servicio no encontrado" });
     }
 
-    // 🔥 RESEÑAS (CORREGIDO)
+    // 🔥 RESEÑAS (CALIFICACIONES REALMENTE CORRECTAS)
     const resenasResult = await pool.request()
-      .input("id", id)
+      .input("id", sql.Int, id)
       .query(`
         SELECT 
-          c.puntuacion AS estrellas,
+          c.puntuacion,
           c.comentario,
           c.fecha_calificacion AS fecha,
           u.nombre AS autor
         FROM calificaciones c
-        JOIN usuarios u ON c.id_cliente = u.id_usuario
+        INNER JOIN usuarios u ON u.id_usuario = c.id_cliente
         WHERE c.id_servicio = @id
       `);
 
-    servicio.resenas = resenasResult.recordset;
+    const resenas = resenasResult.recordset;
 
-    // 🔥 estrellas array para tu frontend
-    servicio.estrellas = resenasResult.recordset.map(r => r.estrellas);
-
-    res.json(servicio);
+    res.json({
+      ...servicio,
+      resenas,
+      estrellas: resenas.map(r => r.puntuacion)
+    });
 
   } catch (error) {
     res.status(500).json({ error: error.message });

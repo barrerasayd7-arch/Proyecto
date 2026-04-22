@@ -7,10 +7,15 @@ import solicitudRoutes from "./routes/solicitud.routes.js";
 
 const app = express();
 
-app.use(cors());
+// ✅ CORS configurado
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
-// 👇 ESTA ES LA SOLUCIÓN
 app.get("/", (req, res) => {
   res.send("🚀 Backend UniService funcionando");
 });

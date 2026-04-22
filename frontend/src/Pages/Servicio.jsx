@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { formatearFecha, calcularEstrellas, iniciales } from "../utils/helpers";
 import "../styles/StylePage/styleHome.css";
 import "../styles/StylePage/StyleServicio.css";
+
 
 const API = "http://localhost:3000/api/services";
 const API_USUARIO = "http://localhost:3000/api/users";
@@ -10,21 +12,6 @@ const API_SOLICITUD = "http://localhost:3000/api/solicitudes";
 const MODALIDAD_MAP    = { 0: "Presencial", 1: "Virtual", 2: "Mixta" };
 const DISPONIBILIDAD_MAP = { 0: "Entre semana", 1: "Fines de semana", 2: "Siempre disponible" };
 
-function calcularEstrellas(estrellas) {
-  if (!Array.isArray(estrellas) || estrellas.length === 0) return { texto: "☆☆☆☆☆", prom: 0, num: 0 };
-  const prom = estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
-  const llenas = Math.round(prom);
-  return {
-    texto: "★".repeat(llenas) + "☆".repeat(5 - llenas),
-    prom:  prom.toFixed(1),
-    num:   estrellas.length,
-  };
-}
-
-function iniciales(nombre) {
-  if (!nombre) return "?";
-  return nombre.split(" ").map(p => p[0]).join("").toUpperCase().slice(0, 2);
-}
 
 const COLORES_AVATAR = ["ag-azul", "ag-morado", "ag-verde", "ag-naranja"];
 function colorAvatar(nombre) {
@@ -64,7 +51,7 @@ function Skeleton() {
 }
 
 // ── Formulario de solicitud ──
-function FormSolicitud({ servicioId, proveedorNombre }) {
+function FormSolicitud({ servicioId, proveedorId, proveedorNombre }) {
   const [form, setForm] = useState({
     tipo: "", fecha: "", hora: "", duracion: "", mensaje: "",
   });
@@ -90,10 +77,15 @@ function FormSolicitud({ servicioId, proveedorNombre }) {
     setEstado("enviando");
 
     const payload = {
-      id_cliente: Number(solicitanteId),
-      id_proveedor: servicio.id_proveedor,
-      id_servicio: servicioId
-    };  
+        id_cliente: Number(solicitanteId),
+        id_proveedor: proveedorId,
+        id_servicio: Number(servicioId),
+        tipo_solicitud: form.tipo,
+        fecha_preferida: form.fecha,
+        hora_preferida: form.hora,
+        duracion: form.duracion,
+        mensaje: form.mensaje
+      };
 
     try {
       const res  = await fetch(API_SOLICITUD, {
@@ -243,6 +235,13 @@ export default function Servicio() {
     </>
   );
 
+  function formatearFecha(fechaISO) {
+  if (!fechaISO) return "—";
+  return new Date(fechaISO).toLocaleDateString("es-CO", {
+    year: "numeric", month: "long", day: "numeric"
+  });
+  }
+
   if (error || !servicio) return (
     <>
       <Navbar onCerrarSesion={handleCerrarSesion} />
@@ -362,7 +361,7 @@ export default function Servicio() {
               </div>
               <div className="info-row">
                 <span className="info-label">Publicado</span>
-                <span className="info-valor">{servicio.fecha_publicacion || "—"}</span>
+                <span className="info-valor">{formatearFecha(services.fecha_publicacion) || "—"}</span>
               </div>
               {servicio.contacto && (
                 <div className="info-row">
@@ -475,6 +474,7 @@ export default function Servicio() {
             {/* Formulario solicitud */}
             <FormSolicitud
               servicioId={idServicio}
+              proveedorId={servicio.id_proveedor}
               proveedorNombre={servicio.proveedor}
             />
           </div>

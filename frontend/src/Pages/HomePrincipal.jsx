@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/StylePage/styleHome.css";
+import { formatearFecha } from "../utils/helpers";
 
 
 // ── Constantes ──
-const API = "http://localhost/api/crud/Servicios_Crud.php";
-const API_USUARIO = "http://localhost/api/crud/usuario_crud.php";
+const API = "http://localhost:3000/api/services";
+const API_USUARIO = "http://localhost:3000/api/users"
 const CANTIDAD_POR_PAGINA = 8;
 
 const CATEGORIAS = [
@@ -158,15 +159,15 @@ function TarjetaServicio({ servicio }) {
         <p className="texto-muted">{truncar(servicio.descripcion)}</p>
         <div className="card-autor">
           <div className="avatar avatar-azul" style={{
-  display: "flex", alignItems: "center", justifyContent: "center",
-  width: "32px", height: "32px", borderRadius: "50%",
-  fontSize: "0.75rem", fontWeight: "700", flexShrink: 0
-}}>
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: "32px", height: "32px", borderRadius: "50%",
+            fontSize: "0.75rem", fontWeight: "700", flexShrink: 0
+          }}>
   {(servicio.proveedor || "?").charAt(0).toUpperCase()}
 </div>
 <span className="texto-muted">{servicio.proveedor || "Proveedor anónimo"}</span>
         </div>
-        <div className="texto-fecha">{servicio.fecha_publicacion || ""}</div>
+        <div className="texto-fecha">{formatearFecha(servicio.fecha_publicacion) || ""}</div>
         <div className="card-footer">
           <div>
             <hr className="card-divider" />
