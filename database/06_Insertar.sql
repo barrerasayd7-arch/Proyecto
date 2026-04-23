@@ -6,30 +6,34 @@ SET ANSI_NULLS ON;
 GO
 
 -- =============================================
--- 1. POBLAR USUARIOS
+-- 1. POBLAR USUARIOS Y ROLES
 -- =============================================
-INSERT INTO usuarios (telefono, password_hash, nombre, descripcion, correo, universidad)
+
+INSERT INTO rol_usuarios (nombre_rol)
+VALUES
+(N'Administrador'),
+(N'Usuario común');
+
+INSERT INTO usuarios (telefono, password_hash, nombre, descripcion, correo, id_rol, universidad)
 VALUES 
-(N'3043307911', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 'Universidad Popular del Cesar'),
-(N'3117906271', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Lenin', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'leninrys1218@gmail.com', 'Universidad Popular del Cesar'),
-(N'3001234567', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Camilo', N'Estudiante de Ingeniería de Sistemas UPC', N'camilo.sist@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3012345678', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Valentina', N'Estudiante de Derecho - Séptimo Semestre', N'valen_upc@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3109876543', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Andrés', N'Monitor de Matemáticas y Física', N'andres_monitor@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3156789012', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Mariana', N'Apasionada por la programación en Python y React', N'mariana_dev@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3204567890', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Mateo', N'Estudiante de Contaduría Pública', N'mateo.contable@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3009998877', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Daniela', N'Líder del grupo de investigación de software', N'daniela_inv@gmail.com', 'Sin universidad'),
-(N'3112223344', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sebastian', N'Estudiante de Ing. Electrónica', N'sebas_elec@gmail.com', 'Sin universidad'),
-(N'3183334455', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Paula', N'Estudiante de Psicología UPC', N'paula.psi@gmail.com', 'Sin universidad'),
-(N'3045556677', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Santiago', N'Interesado en redes y ciberseguridad', N'santiago_net@gmail.com', 'Sin universidad'),
-(N'3127778899', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Gabriela', N'Estudiante de Licenciatura en Idiomas', N'gabi.languages@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3210001122', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Nicolas', N'Freelance dev y estudiante de sistemas', N'nico_dev_upc@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3051112233', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Isabella', N'Estudiante de Administración de Empresas', N'isabella_admin@gmail.com', 'Sin universidad'),
-(N'3162223344', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Julian', N'Especialista en bases de datos SQL', N'julian.sql@gmail.com', 'Sin universidad'),
-(N'3174445566', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Elena', N'Estudiante de Ingeniería Ambiental', N'elena_ambiental@gmail.com', 'Sin universidad'),
-(N'3028889900', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Diego', N'Entusiasta de la IA y el Machine Learning', N'diego_ia@gmail.com', 'Sin universidad'),
-(N'3136667788', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sara', N'Estudiante de Economía', N'sara_econ@gmail.com', 'Sin universidad'),
-(N'3005554433', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Felipe', N'Desarrollador backend junior', N'felipe_back@gmail.com', 'Universidad Pontificia Comillas'),
-(N'3141110099', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Lucía', N'Estudiante de Sociología', N'lucia_soc@gmail.com', 'Sin universidad');
+(N'3117906271', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'UniService', N'Administrador del sistema', N'uniservice.soporte@gmail.com', 1, 'Sin universidad'),
+(N'3043307911', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sayd', N'Estudiante de Ingenieria de sistemas Universidad Popular del Cesar', N'barrerasayd7@gmail.com', 2, 'Universidad Popular del Cesar'),
+(N'3001234567', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Camilo', N'Estudiante de Ingeniería de Sistemas UPC', N'camilo.sist@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3012345678', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Valentina', N'Estudiante de Derecho - Séptimo Semestre', N'valen_upc@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3109876543', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Andrés', N'Monitor de Matemáticas y Física', N'andres_monitor@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3156789012', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Mariana', N'Apasionada por la programación en Python y React', N'mariana_dev@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3204567890', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Mateo', N'Estudiante de Contaduría Pública', N'mateo.contable@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3009998877', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Daniela', N'Líder del grupo de investigación de software', N'daniela_inv@gmail.com', 2, 'Sin universidad'),
+(N'3112223344', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sebastian', N'Estudiante de Ing. Electrónica', N'sebas_elec@gmail.com', 2, 'Sin universidad'),
+(N'3183334455', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Paula', N'Estudiante de Psicología UPC', N'paula.psi@gmail.com', 2, 'Sin universidad'),
+(N'3045556677', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Santiago', N'Interesado en redes y ciberseguridad', N'santiago_net@gmail.com', 2, 'Sin universidad'),
+(N'3127778899', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Gabriela', N'Estudiante de Licenciatura en Idiomas',N'gabi.languages@gmail.com', 2, 'Sin universidad'),
+(N'3162223344', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Julian', N'Especialista en bases de datos SQL', N'julian.sql@gmail.com', 2, 'Sin universidad'),
+(N'3174445566', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Elena', N'Estudiante de Ingeniería Ambiental', N'elena_ambiental@gmail.com', 2, 'Sin universidad'),
+(N'3028889900', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Diego', N'Entusiasta de la IA y el Machine Learning', N'diego_ia@gmail.com', 2, 'Sin universidad'),
+(N'3136667788', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Sara', N'Estudiante de Economía', N'sara_econ@gmail.com', 2, 'Sin universidad'),
+(N'3005554433', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Felipe', N'Desarrollador backend junior', N'felipe_back@gmail.com', 2, 'Universidad Pontificia Comillas'),
+(N'3141110099', N'$2y$10$n.QB9K1ni2zC/zjJGKcfaufpqQjeAE8Nx.gbW/U36aRyjFqecG7RO', N'Lucía', N'Estudiante de Sociología', N'lucia_soc@gmail.com', 2, 'Sin universidad');
 
 -- =============================================
 -- 2. POBLAR CATEGORÍAS

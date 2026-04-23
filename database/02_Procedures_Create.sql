@@ -31,8 +31,8 @@ BEGIN
     END
 
     BEGIN TRY
-        INSERT INTO usuarios (telefono, password_hash, nombre, correo, universidad)
-        VALUES (@telefono, @password_hash, @nombre, @correo, @universidad);
+        INSERT INTO usuarios (telefono, password_hash, nombre, correo, id_rol, universidad)
+        VALUES (@telefono, @password_hash, @nombre, @correo, 2, @universidad);
         SELECT SCOPE_IDENTITY() AS NewUserID;
     END TRY
     BEGIN CATCH

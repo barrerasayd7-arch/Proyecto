@@ -16,7 +16,13 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER ON;
 SET NUMERIC_ROUNDABORT OFF;
 GO
--- Aquí sigue tu código de CREATE TABLE...
+
+CREATE TABLE rol_usuarios (
+    id_rol INT IDENTITY(1,1) PRIMARY KEY,
+    nombre_rol NVARCHAR(50) NOT NULL
+);
+
+GO
 
 -- Tabla de Usuarios
 CREATE TABLE usuarios (
@@ -29,8 +35,10 @@ CREATE TABLE usuarios (
     estado BIT DEFAULT 0, -- 1 Activo, 0 Inactivo
     bloqueado BIT DEFAULT 0, -- 1 Bloqueado, 0 No bloqueado
     fecha_registro DATETIME2 DEFAULT GETDATE(),
+    id_rol INT NOT NULL DEFAULT 2, -- 1 Admin, 2 Usuario común
     universidad NVARCHAR(50) DEFAULT 'Sin universidad',
     avatar NVARCHAR(255) DEFAULT 'img/default_avatar.png'
+    CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol) REFERENCES rol_usuarios(id_rol) ON DELETE NO ACTION
 );
 
 GO
