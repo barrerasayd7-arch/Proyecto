@@ -8,10 +8,10 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 CREATE OR ALTER PROCEDURE sp_CrearUsuario
-    @correo NVARCHAR(20),
+    @correo NVARCHAR(100),
     @password_hash NVARCHAR(255),
     @nombre NVARCHAR(50),
-    @telefono NVARCHAR(100) = NULL,
+    @telefono NVARCHAR(20) = NULL,
     @universidad NVARCHAR(50) = 'Sin universidad'
 AS
 BEGIN

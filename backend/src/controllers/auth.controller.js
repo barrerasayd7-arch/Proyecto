@@ -13,6 +13,15 @@ export const enviarCodigo = async (req, res) => {
   // Guardar código en memoria por 5 minutos
   codigosTemporales[correo] = codigo;
 
+
+  
+  setTimeout(() => {
+    if (codigosTemporales[correo] === codigo) {
+      delete codigosTemporales[correo];
+      console.log(`Código para ${correo} expirado y eliminado.`);
+    }
+  }, 300000); // 300,000 ms = 5 minutos
+
   try {
     await transporter.sendMail({
       from: '"UniServices UPC 🎓" <' + process.env.EMAIL_USER + '>',

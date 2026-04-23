@@ -74,18 +74,18 @@ export const register = async (req, res) => {
    LOGIN
 ========================= */
 export const login = async (req, res) => {
-  const { telefono, password } = req.body;
+  const { correo, password } = req.body;
 
-  if (!telefono || !password) {
-    return res.status(400).json({ error: "Teléfono y contraseña son obligatorios" });
+  if (!correo || !password) {
+    return res.status(400).json({ error: "Correo y contraseña son obligatorios" });
   }
 
   try {
     const conn = await pool;
 
     const result = await conn.request()
-      .input("telefono", sql.VarChar, telefono)
-      .query("SELECT * FROM usuarios WHERE telefono = @telefono");
+      .input("correo", sql.VarChar, correo)
+      .query("SELECT * FROM usuarios WHERE correo = @correo");
 
     const user = result.recordset[0];
 
