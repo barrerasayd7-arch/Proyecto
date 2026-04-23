@@ -51,7 +51,7 @@ export const enviarCodigo = async (req, res) => {
               </h2>
 
               <p style="color: #ffffff; font-size: 16px; line-height: 1.6; margin-bottom: 35px; opacity: 0.9;">
-                ¡Gracias por unirte a <strong style="color: #4ac7b6;">Uni</strong><strong style="color: #ffdd57;">Service</strong>! Para completar tu proceso deregistro de forma segura, por favor introduce el siguiente código en la página web:
+                ¡Gracias por unirte a <strong style="color: #4ac7b6;">Uni</strong><strong style="color: #ffdd57;">Service</strong>! Para completar tu proceso de registro de forma segura, por favor introduce el siguiente código en la página web:
               </p>
 
               <div style="background-color: #031424; border-radius: 12px; padding: 30px; margin-bottom: 35px; border: 2px solid #10304a; display: inline-block;">
