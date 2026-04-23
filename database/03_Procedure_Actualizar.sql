@@ -21,7 +21,8 @@ CREATE PROCEDURE sp_ActualizarUsuario
     @descripcion NVARCHAR(MAX) = NULL,
     @correo NVARCHAR(100) = NULL,
     @estado BIT = NULL,
-    @universidad BIT = NULL,
+    @bloqueado BIT = NULL,
+    @universidad NVARCHAR(50) = NULL,
     @avatar NVARCHAR(255) = NULL
 AS
 BEGIN
@@ -40,10 +41,10 @@ BEGIN
         RETURN;
     END
 
-    -- Validar duplicidad de teléfono solo si se está intentando cambiar
-    IF @telefono IS NOT NULL AND EXISTS (SELECT 1 FROM usuarios WHERE telefono = @telefono AND id_usuario <> @id_usuario)
+    -- Validar duplicidad de correo solo si se está intentando cambiar
+    IF @correo IS NOT NULL AND EXISTS (SELECT 1 FROM usuarios WHERE correo = @correo AND id_usuario <> @id_usuario)
     BEGIN
-        RAISERROR ('El nuevo número de teléfono ya está registrado por otro usuario.', 16, 1);
+        RAISERROR ('El nuevo correo electrónico ya está registrado por otro usuario.', 16, 1);
         RETURN;
     END
 
@@ -56,6 +57,7 @@ BEGIN
             descripcion   = COALESCE(@descripcion, descripcion),
             correo        = COALESCE(@correo, correo),
             estado        = COALESCE(@estado, estado),
+            bloqueado     = COALESCE(@bloqueado, bloqueado),
             universidad   = COALESCE(@universidad, universidad),
             avatar        = COALESCE(@avatar, avatar)
         WHERE id_usuario = @id_usuario;

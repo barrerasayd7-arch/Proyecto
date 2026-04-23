@@ -34,35 +34,34 @@ export const getUsuarios = async (req, res) => {
    REGISTER
 ========================= */
 export const register = async (req, res) => {
-  const { telefono, password, nombre } = req.body;
+  const { correo, password, nombre, telefono } = req.body;
 
-  if (!telefono || !password || !nombre) {
-    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  if (!correo || !password || !nombre) {
+    return res.status(400).json({ error: "Correo, contraseña y nombre son obligatorios" });
   }
 
   try {
     const conn = await pool;
 
-    // 🔎 Verificar si ya existe
+    // 🔎 Verificar si el correo ya existe
     const existing = await conn.request()
-      .input("telefono", sql.VarChar, telefono)
-      .query("SELECT id_usuario FROM usuarios WHERE telefono = @telefono");
+      .input("correo", sql.NVarChar, correo)
+      .query("SELECT id_usuario FROM usuarios WHERE correo = @correo");
 
     if (existing.recordset.length > 0) {
-      return res.status(400).json({ error: "El usuario ya existe" });
+      return res.status(400).json({ error: "El correo ya está registrado" });
     }
 
     // 🔐 Hash password
     const hash = await bcrypt.hash(password, 10);
 
+    // Usamos el Store Procedure que acabas de actualizar
     await conn.request()
-      .input("telefono", sql.VarChar, telefono)
-      .input("password_hash", sql.VarChar, hash)
+      .input("correo", sql.NVarChar, correo)
+      .input("password_hash", sql.NVarChar, hash)
       .input("nombre", sql.NVarChar, nombre)
-      .query(`
-        INSERT INTO usuarios (telefono, password_hash, nombre)
-        VALUES (@telefono, @password_hash, @nombre)
-      `);
+      .input("telefono", sql.NVarChar, telefono || null)
+      .execute("sp_CrearUsuario"); // Usar .execute para Procedures
 
     res.status(201).json({ message: "Usuario creado correctamente" });
 

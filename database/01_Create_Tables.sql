@@ -29,7 +29,7 @@ CREATE TABLE usuarios (
     estado BIT DEFAULT 0, -- 1 Activo, 0 Inactivo
     bloqueado BIT DEFAULT 0, -- 1 Bloqueado, 0 No bloqueado
     fecha_registro DATETIME2 DEFAULT GETDATE(),
-    universidad BIT DEFAULT 0,
+    universidad NVARCHAR(50) DEFAULT 'Sin universidad',
     avatar NVARCHAR(255) DEFAULT 'img/default_avatar.png'
 );
 

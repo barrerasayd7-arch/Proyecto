@@ -8,11 +8,11 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 CREATE OR ALTER PROCEDURE sp_CrearUsuario
-    @telefono NVARCHAR(20),
+    @correo NVARCHAR(20),
     @password_hash NVARCHAR(255),
     @nombre NVARCHAR(50),
-    @correo NVARCHAR(100) = NULL,
-    @universidad BIT = 1 
+    @telefono NVARCHAR(100) = NULL,
+    @universidad NVARCHAR(50) = 'Sin universidad'
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -23,15 +23,10 @@ BEGIN
     SET ARITHABORT ON;
     SET CONCAT_NULL_YIELDS_NULL ON;
     SET NUMERIC_ROUNDABORT OFF;
-    IF EXISTS (SELECT 1 FROM usuarios WHERE telefono = @telefono)
+    -- Validar solo el correo
+    IF EXISTS (SELECT 1 FROM usuarios WHERE correo = @correo)
     BEGIN
-        RAISERROR ('Este número de teléfono ya se encuentra registrado.', 16, 1);
-        RETURN;
-    END
-
-    IF @correo IS NOT NULL AND EXISTS (SELECT 1 FROM usuarios WHERE correo = @correo)
-    BEGIN
-        RAISERROR ('Este correo electrónico ya está en uso.', 16, 1);
+        RAISERROR ('Este correo electrónico ya se encuentra registrado.', 16, 1);
         RETURN;
     END
 
