@@ -21,22 +21,18 @@ GO
 -- Tabla de Usuarios
 CREATE TABLE usuarios (
     id_usuario INT IDENTITY(1,1) PRIMARY KEY,
-    telefono NVARCHAR(13) UNIQUE NOT NULL,
+    telefono NVARCHAR(13) NULL,
     password_hash NVARCHAR(255) NOT NULL,
     nombre NVARCHAR(50) NOT NULL,
     descripcion NVARCHAR(MAX),
-    correo NVARCHAR(100) NULL,
+    correo NVARCHAR(100) UNIQUE NOT NULL,
     estado BIT DEFAULT 0, -- 1 Activo, 0 Inactivo
+    bloqueado BIT DEFAULT 0, -- 1 Bloqueado, 0 No bloqueado
     fecha_registro DATETIME2 DEFAULT GETDATE(),
     universidad BIT DEFAULT 0,
     avatar NVARCHAR(255) DEFAULT 'img/default_avatar.png'
 );
 
-GO
-
-CREATE UNIQUE INDEX UQ_usuarios_correo 
-ON usuarios (correo) 
-WHERE correo IS NOT NULL;
 GO
 
 -- 2. TABLA DE CATEGORÍAS

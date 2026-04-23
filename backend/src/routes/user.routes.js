@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { register, login, getUsuarios, getUsuarioById, updateUsuario, verifyToken } from "../controllers/user.controller.js";
 import { seguirUsuario, dejarDeSeguir, estadoSeguimiento } from "../controllers/seguidor.controller.js";
+import { enviarCodigo, verificarCodigo } from "../controllers/auth.controller.js";
 const router = Router();
 
 router.get("/", verifyToken, getUsuarios);
@@ -15,5 +16,9 @@ router.put("/:id", verifyToken, updateUsuario);
 router.post("/seguir",         seguirUsuario);
 router.delete("/dejar-seguir", dejarDeSeguir);
 
+
+//Verificación de correo
+router.post("/send-code", enviarCodigo);
+router.post("/verify-code", verificarCodigo);
 
 export default router;
