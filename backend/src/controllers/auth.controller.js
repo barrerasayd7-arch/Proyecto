@@ -24,15 +24,58 @@ export const enviarCodigo = async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: '"UniServices UPC 🎓" <' + process.env.EMAIL_USER + '>',
+
+      //===================================================================================================
+      // Aquí va el contenido HTML del correo, con estilos mejorados y el código de verificación destacado.
+      //===================================================================================================
+
+    from: '"UniService Plattform 🎓" <' + process.env.EMAIL_USER + '>',
       to: correo,
-      subject: "Tu código de verificación - UniServices",
+      subject: "Tu código de Autentificación Único - UniService",
       html: `
-        <div style="font-family: sans-serif; text-align: center;">
-          <h2>¡Hola! Confirma tu correo</h2>
-          <p>Usa el siguiente código para completar tu registro en la plataforma:</p>
-          <h1 style="color: #ffdd57; background: #000; display: inline-block; padding: 10px 20px;">${codigo}</h1>
-          <p>Este código expirará en 5 minutos.</p>
+        <div style="background-color: #031424; padding: 50px 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+          <div style="max-width: 500px; margin: 0 auto; background-color: #051a2d; border-radius: 16px; overflow: hidden; border: 1px solid #10304a; box-shadow: 0 10px 40px rgba(0,0,0,0.25);">
+            <br><br>
+
+            <div style="padding: 10px 0 25px 0;">
+              <img 
+                src="https://i.ibb.co/ZRRsjxKV/Logo-name-color-gno-BG-email.png" 
+                alt="UniService Logo" 
+                style="width: 400px; height: auto; display: block; margin: 0 auto;"
+              >
+            </div>
+
+            <div style="padding: 0 40px 20px 40px;">
+              <h2 style="color: #4ac7b6; font-size: 26px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px;">
+                Verifica tu cuenta
+              </h2>
+
+              <p style="color: #ffffff; font-size: 16px; line-height: 1.6; margin-bottom: 35px; opacity: 0.9;">
+                ¡Gracias por unirte a <strong style="color: #4ac7b6;">Uni</strong><strong style="color: #ffdd57;">Service</strong>! Para completar tu proceso deregistro de forma segura, por favor introduce el siguiente código en la página web:
+              </p>
+
+              <div style="background-color: #031424; border-radius: 12px; padding: 30px; margin-bottom: 35px; border: 2px solid #10304a; display: inline-block;">
+                <span style="font-family: 'Monaco', 'Consolas', monospace; font-size: 40px; font-weight: bold; color: #4ac7b6; letter-spacing: 8px;">
+                  ${codigo}
+                </span>
+              </div>
+
+              <br>
+              <div style="background-color: #10304a; border-radius: 8px; padding: 12px; margin-bottom: 0;">
+                <p style="color: #ffffff; font-size: 13px; margin: 0; opacity: 0.8;">
+                  Este código es privado y expirará automáticamente en
+                  <strong style="color: #ffc125;">5 minutos</strong>.
+                </p>
+              </div>
+              <br>
+            </div>
+
+            <div style="padding: 20px; background-color: #031424; text-align: center; border-top: 1px solid #10304a;">
+              <p style="color: #4ac7b6; font-size: 12px; margin: 0; font-weight: 600;">
+                © 2026 UniService. Tu socio de confianza.
+              </p>
+            </div>
+          </div>
         </div>
       `,
     });
