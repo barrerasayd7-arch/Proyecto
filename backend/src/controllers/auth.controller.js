@@ -39,7 +39,7 @@ export const enviarCodigo = async (req, res) => {
 
             <div style="padding: 10px 0 25px 0;">
               <img 
-                src="https://i.ibb.co/ZRRsjxKV/Logo-name-color-gno-BG-email.png" 
+                src="https://i.postimg.cc/5NDfZyCv/Logo-name-color-gno-BG-email.png" 
                 alt="UniService Logo" 
                 style="width: 400px; height: auto; display: block; margin: 0 auto;"
               >
