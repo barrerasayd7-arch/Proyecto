@@ -98,3 +98,83 @@ export const createService = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// EDITAR SERVICIO
+export const editarServicio = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { titulo, descripcion, id_categoria, precio_hora, contacto, modalidad, icono, disponibilidad, id_proveedor } = req.body;
+
+    const conn = await pool;
+
+    const check = await conn.request()
+      .input("id",           sql.Int, parseInt(id))
+      .input("id_proveedor", sql.Int, id_proveedor)
+      .query("SELECT id_servicio FROM servicios WHERE id_servicio = @id AND id_proveedor = @id_proveedor");
+
+    if (check.recordset.length === 0)
+      return res.status(403).json({ error: "No tienes permiso para editar este servicio." });
+
+    await conn.request()
+      .input("id",             sql.Int,           parseInt(id))
+      .input("titulo",         sql.NVarChar,      titulo)
+      .input("descripcion",    sql.NVarChar,      descripcion)
+      .input("id_categoria",   sql.Int,           id_categoria)
+      .input("precio_hora",    sql.Decimal(10,2), precio_hora)
+      .input("contacto",       sql.NVarChar,      contacto)
+      .input("modalidad",      sql.Int,           modalidad)
+      .input("icono",          sql.NVarChar,      icono)
+      .input("disponibilidad", sql.Int,           disponibilidad)
+      .query(`
+        UPDATE servicios SET
+          titulo         = @titulo,
+          descripcion    = @descripcion,
+          id_categoria   = @id_categoria,
+          precio_hora    = @precio_hora,
+          contacto       = @contacto,
+          modalidad      = @modalidad,
+          icono          = @icono,
+          disponibilidad = @disponibilidad
+        WHERE id_servicio = @id
+      `);
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ELIMINAR SERVICIO
+export const eliminarServicio = async (req, res) => {
+  
+  try {
+    const { id }           = req.params;
+    const { id_proveedor } = req.body;
+
+    const conn = await pool;
+
+    const check = await conn.request()
+      .input("id",           sql.Int, parseInt(id))
+      .input("id_proveedor", sql.Int, id_proveedor)
+      .query("SELECT id_servicio FROM servicios WHERE id_servicio = @id AND id_proveedor = @id_proveedor");
+
+    if (check.recordset.length === 0)
+      return res.status(403).json({ error: "No tienes permiso para eliminar este servicio." });
+
+     // Primero elimina las solicitudes asociadas
+    await conn.request()
+      .input("id", sql.Int, parseInt(id))
+      .query("DELETE FROM solicitudes WHERE id_servicio = @id");
+
+    // Luego elimina el servicio
+    await conn.request()
+      .input("id", sql.Int, parseInt(id))
+      .query("DELETE FROM servicios WHERE id_servicio = @id");
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
