@@ -43,41 +43,6 @@ CREATE TABLE usuarios (
 
 GO
 
-CREATE TABLE solicitudes (
-    id_solicitud INT IDENTITY(1,1) PRIMARY KEY,
-    id_cliente INT NOT NULL,
-    id_proveedor INT NOT NULL,
-    id_servicio INT NOT NULL,
-    fue_aceptada BIT DEFAULT 0,
-
-    tipo_servicio NVARCHAR(100),
-    tema NVARCHAR(150),
-    descripcion NVARCHAR(MAX),
-    fecha_deseada DATE,
-    hora_deseada TIME,
-    duracion NVARCHAR(50),
-    modalidad NVARCHAR(50),
-    metodo_pago NVARCHAR(50),
-    presupuesto DECIMAL(10,2),
-    pago_anticipado BIT DEFAULT 0,
-    urgencia NVARCHAR(20),
-    archivo NVARCHAR(255),
-    estado NVARCHAR(20) DEFAULT 'Pendiente',
-    motivo_rechazo NVARCHAR(MAX),
-    contraoferta DECIMAL(10,2),
-
-    CONSTRAINT fk_solicitud_cliente FOREIGN KEY (id_cliente)
-        REFERENCES usuarios(id_usuario),
-
-    CONSTRAINT fk_solicitud_proveedor FOREIGN KEY (id_proveedor)
-        REFERENCES usuarios(id_usuario),
-
-    CONSTRAINT fk_solicitud_servicio FOREIGN KEY (id_servicio)
-        REFERENCES servicios(id_servicio)
-);
-
-GO
-
 -- 2. TABLA DE CATEGORÍAS
 CREATE TABLE categorias (
     id_categoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -131,6 +96,44 @@ CREATE TABLE servicios_imagenes (
         CONSTRAINT fk_imagen_servicio FOREIGN KEY (id_servicio) 
             REFERENCES servicios(id_servicio) ON DELETE CASCADE
     );
+
+GO
+
+
+-- 5. TABLA DE SOLICITUDES
+
+CREATE TABLE solicitudes (
+    id_solicitud INT IDENTITY(1,1) PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_proveedor INT NOT NULL,
+    id_servicio INT NOT NULL,
+    fue_aceptada BIT DEFAULT 0,
+
+    tipo_servicio NVARCHAR(100),
+    tema NVARCHAR(150),
+    descripcion NVARCHAR(MAX),
+    fecha_deseada DATE,
+    hora_deseada TIME,
+    duracion NVARCHAR(50),
+    modalidad NVARCHAR(50),
+    metodo_pago NVARCHAR(50),
+    presupuesto DECIMAL(10,2),
+    pago_anticipado BIT DEFAULT 0,
+    urgencia NVARCHAR(20),
+    archivo NVARCHAR(255),
+    estado NVARCHAR(20) DEFAULT 'Pendiente',
+    motivo_rechazo NVARCHAR(MAX),
+    contraoferta DECIMAL(10,2),
+
+    CONSTRAINT fk_solicitud_cliente FOREIGN KEY (id_cliente)
+        REFERENCES usuarios(id_usuario),
+
+    CONSTRAINT fk_solicitud_proveedor FOREIGN KEY (id_proveedor)
+        REFERENCES usuarios(id_usuario),
+
+    CONSTRAINT fk_solicitud_servicio FOREIGN KEY (id_servicio)
+        REFERENCES servicios(id_servicio)
+);
 
 GO
 
