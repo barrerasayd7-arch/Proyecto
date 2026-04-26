@@ -419,130 +419,143 @@ const confirmarEliminar = async () => {
                                 </section>
                             )}
                             {/* ══ MIS SERVICIOS ══ */}
-{!esPerfilExterno && (
-  <section className="menu-section">
-    <div className="section-title">📦 Mis servicios ({misServicios.length})</div>
-
-    {misServicios.length === 0 ? (
-      <p style={{ opacity: 0.5, fontSize: "0.85rem", padding: "12px 0" }}>
-        Aún no has publicado ningún servicio.
-      </p>
-    ) : (
-      <div className="menu-list">
-        {misServicios.map(s => (
-          <div key={s.id_servicio} className="menu-item" style={{ cursor: "default" }}>
-            <div className="menu-icon">{s.icono || "📌"}</div>
-            <div className="menu-text" style={{ flex: 1, minWidth: 0 }}>
-              <div className="menu-title" style={{
-                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
-              }}>
-                {s.titulo}
-              </div>
-              <div className="menu-desc">${s.precio_hora}/hr · {s.nombre_categoria || "Sin categoría"}</div>
-            </div>
-            <div style={{ display: "flex", gap: "6px", flexShrink: 0, alignItems: "center" }}>
-  <button
-    className="btn btn-primary"
-    style={{ fontSize: "0.75rem", padding: "6px 10px", lineHeight: 1 }}
-    onClick={() => setEditando({ ...s })}>
-    ✏️
-  </button>
-  <button
-    className="btn btn-primary"
-    style={{ fontSize: "0.75rem", padding: "6px 10px", lineHeight: 1, background: "transparent", borderColor: "rgba(177, 52, 52, 0.4)", color: "#f87171" }}
-    onClick={() => setConfirmEliminar(s.id_servicio)}>
-    🗑️
-  </button>
-</div>
-          </div>
-        ))}
-      </div>
-    )}
-  </section>
-)}
-
-{/* ══ MODAL: Confirmar eliminar ══ */}
-{confirmEliminar && (
-  <div className="image-menu-overlay active" onClick={() => setConfirmEliminar(null)}>
-    <div className="image-menu" onClick={e => e.stopPropagation()}>
-      <h3 className="image-menu-title">🗑️ Eliminar servicio</h3>
-      <p style={{ opacity: 0.7, fontSize: "0.88rem", margin: "0 0 20px" }}>
-        ¿Estás seguro? Esto eliminará también todas las solicitudes asociadas y no se puede deshacer.
-      </p>
-      <div className="image-menu-options">
-        <button className="image-option" onClick={() => setConfirmEliminar(null)}>
-          <span className="image-option-icon">↩️</span>
-          <div className="image-option-text"><b>Cancelar</b></div>
-        </button>
-        <button className="image-option" onClick={confirmarEliminar}
-          style={{ borderColor: "rgba(239,68,68,0.3)" }}>
-          <span className="image-option-icon">🗑️</span>
-          <div className="image-option-text" style={{ color: "#f87171" }}><b>Sí, eliminar</b></div>
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-{/* ══ MODAL: Editar servicio ══ */}
-{editando && (
-  <div className="image-menu-overlay active" onClick={() => setEditando(null)}>
-    <div className="image-menu" onClick={e => e.stopPropagation()}
-      style={{ maxWidth: "500px", maxHeight: "85vh", overflowY: "auto" }}>
-      <h3 className="image-menu-title">✏️ Editar servicio</h3>
-
-      {[
-        ["Título",       "titulo",      "text"],
-        ["Precio/hora",  "precio_hora", "number"],
-        ["Contacto",     "contacto",    "text"],
-        ["Ícono",        "icono",       "text"],
-      ].map(([label, field, type]) => (
-        <div key={field} style={{ marginBottom: "14px" }}>
-          <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
-            {label}
-          </label>
-          <input type={type} value={editando[field] || ""}
-            onChange={e => setEditando({ ...editando, [field]: e.target.value })}
-            style={{
-              width: "100%", boxSizing: "border-box",
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: "8px", padding: "10px 12px",
-              color: "inherit", fontSize: "0.9rem"
-            }}
-          />
-        </div>
-      ))}
-
-      <div style={{ marginBottom: "14px" }}>
-        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
-          Descripción
-        </label>
-        <textarea rows={4} value={editando.descripcion || ""}
-          onChange={e => setEditando({ ...editando, descripcion: e.target.value })}
-          style={{
-            width: "100%", boxSizing: "border-box", resize: "vertical",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "8px", padding: "10px 12px",
-            color: "inherit", fontSize: "0.9rem"
-          }}
-        />
-      </div>
-
-      <div className="image-menu-options">
-        <button className="image-option" onClick={() => setEditando(null)}>
-          <span className="image-option-icon">↩️</span>
-          <div className="image-option-text"><b>Cancelar</b></div>
-        </button>
-        <button className="image-option" onClick={() => guardarEdicion(editando)}>
-          <span className="image-option-icon">💾</span>
-          <div className="image-option-text"><b>Guardar cambios</b></div>
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+                            {!esPerfilExterno && (
+                              <section className="menu-section">
+                                <div className="section-title">📦 Mis servicios ({misServicios.length})</div>
+                            
+                                {misServicios.length === 0 ? (
+                                  <p style={{ opacity: 0.5, fontSize: "0.85rem", padding: "12px 0" }}>
+                                    Aún no has publicado ningún servicio.
+                                  </p>
+                                ) : (
+                                  <div className="menu-list">
+                                    {misServicios.map(s => (
+                                      <div key={s.id_servicio} className="menu-item" style={{ cursor: "default", display: "flex", alignItems: "center", padding: "10px" }}>
+                                        <div className="menu-icon">{s.icono || "📌"}</div>
+                                        <div className="menu-text" style={{ flex: 1, minWidth: 0, marginLeft: "10px" }}>
+                                          <div className="menu-title" style={{
+                                            whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: "bold"
+                                          }}>
+                                            {s.titulo}
+                                          </div>
+                                          <div className="menu-desc" style={{ fontSize: "0.85rem", opacity: 0.8 }}>
+                                            ${s.precio_hora}/hr · {s.nombre_categoria || "Sin categoría"}
+                                          </div>
+                                        </div>
+                                    
+                                        {/* Contenedor de botones ajustado */}
+                                        <div style={{ display: "flex", gap: "8px", flexShrink: 0, alignItems: "center" }}>
+                                          <button
+                                            className="btn btn-primary"
+                                            style={{ 
+                                              width: "36px", height: "36px", // Tamaño fijo cuadrado
+                                              display: "flex", alignItems: "center", justifyContent: "center",
+                                              fontSize: "0.85rem", padding: 0, margin: 0, lineHeight: 1 
+                                            }}
+                                            onClick={() => setEditando({ ...s })}>
+                                            ✏️
+                                          </button>
+                                          <button
+                                            className="btn btn-primary"
+                                            style={{ 
+                                              width: "36px", height: "36px", // Tamaño fijo cuadrado
+                                              display: "flex", alignItems: "center", justifyContent: "center",
+                                              fontSize: "0.85rem", padding: 0, margin: 0, lineHeight: 1,
+                                              background: "transparent", borderColor: "rgba(177, 52, 52, 0.4)", color: "#f87171" 
+                                            }}
+                                            onClick={() => setConfirmEliminar(s.id_servicio)}>
+                                            🗑️
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </section>
+                            )}
+                            
+                            {/* ══ MODAL: Confirmar eliminar ══ */}
+                            {confirmEliminar && (
+                              <div className="image-menu-overlay active" onClick={() => setConfirmEliminar(null)}>
+                                <div className="image-menu" onClick={e => e.stopPropagation()}>
+                                  <h3 className="image-menu-title">🗑️ Eliminar servicio</h3>
+                                  <p style={{ opacity: 0.7, fontSize: "0.88rem", margin: "0 0 20px" }}>
+                                    ¿Estás seguro? Esto eliminará también todas las solicitudes asociadas y no se puede deshacer.
+                                  </p>
+                                  <div className="image-menu-options">
+                                    <button className="image-option" onClick={() => setConfirmEliminar(null)}>
+                                      <span className="image-option-icon">↩️</span>
+                                      <div className="image-option-text"><b>Cancelar</b></div>
+                                    </button>
+                                    <button className="image-option" onClick={confirmarEliminar}
+                                      style={{ borderColor: "rgba(239,68,68,0.3)" }}>
+                                      <span className="image-option-icon">🗑️</span>
+                                      <div className="image-option-text" style={{ color: "#f87171" }}><b>Sí, eliminar</b></div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* ══ MODAL: Editar servicio ══ */}
+                            {editando && (
+                              <div className="image-menu-overlay active" onClick={() => setEditando(null)}>
+                                <div className="image-menu" onClick={e => e.stopPropagation()}
+                                  style={{ maxWidth: "500px", maxHeight: "85vh", overflowY: "auto" }}>
+                                  <h3 className="image-menu-title">✏️ Editar servicio</h3>
+                            
+                                  {[
+                                    ["Título",       "titulo",      "text"],
+                                    ["Precio/hora",  "precio_hora", "number"],
+                                    ["Contacto",     "contacto",    "text"],
+                                    ["Ícono",        "icono",       "text"],
+                                  ].map(([label, field, type]) => (
+                                    <div key={field} style={{ marginBottom: "14px" }}>
+                                      <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
+                                        {label}
+                                      </label>
+                                      <input type={type} value={editando[field] || ""}
+                                        onChange={e => setEditando({ ...editando, [field]: e.target.value })}
+                                        style={{
+                                          width: "100%", boxSizing: "border-box",
+                                          background: "rgba(255,255,255,0.05)",
+                                          border: "1px solid rgba(255,255,255,0.15)",
+                                          borderRadius: "8px", padding: "10px 12px",
+                                          color: "inherit", fontSize: "0.9rem"
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                            
+                                  <div style={{ marginBottom: "14px" }}>
+                                    <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
+                                      Descripción
+                                    </label>
+                                    <textarea rows={4} value={editando.descripcion || ""}
+                                      onChange={e => setEditando({ ...editando, descripcion: e.target.value })}
+                                      style={{
+                                        width: "100%", boxSizing: "border-box", resize: "vertical",
+                                        background: "rgba(255,255,255,0.05)",
+                                        border: "1px solid rgba(255,255,255,0.15)",
+                                        borderRadius: "8px", padding: "10px 12px",
+                                        color: "inherit", fontSize: "0.9rem"
+                                      }}
+                                    />
+                                  </div>
+                                
+                                  <div className="image-menu-options">
+                                    <button className="image-option" onClick={() => setEditando(null)}>
+                                      <span className="image-option-icon">↩️</span>
+                                      <div className="image-option-text"><b>Cancelar</b></div>
+                                    </button>
+                                    <button className="image-option" onClick={() => guardarEdicion(editando)}>
+                                      <span className="image-option-icon">💾</span>
+                                      <div className="image-option-text"><b>Guardar cambios</b></div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                         </div>
                     </div>
                 </main>
