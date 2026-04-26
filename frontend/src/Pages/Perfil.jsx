@@ -440,18 +440,20 @@ const confirmarEliminar = async () => {
               </div>
               <div className="menu-desc">${s.precio_hora}/hr · {s.nombre_categoria || "Sin categoría"}</div>
             </div>
-            <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
-              <button className="btn btn-primary"
-                style={{ fontSize: "0.75rem", padding: "5px 10px" }}
-                onClick={() => setEditando({ ...s })}>
-                ✏️
-              </button>
-              <button className="btn btn-secondary"
-                style={{ fontSize: "0.75rem", padding: "5px 10px", color: "#f87171", borderColor: "rgba(239,68,68,0.4)" }}
-                onClick={() => setConfirmEliminar(s.id_servicio)}>
-                🗑️
-              </button>
-            </div>
+            <div style={{ display: "flex", gap: "6px", flexShrink: 0, alignItems: "center" }}>
+  <button
+    className="btn btn-primary"
+    style={{ fontSize: "0.75rem", padding: "6px 10px", lineHeight: 1 }}
+    onClick={() => setEditando({ ...s })}>
+    ✏️
+  </button>
+  <button
+    className="btn btn-primary"
+    style={{ fontSize: "0.75rem", padding: "6px 10px", lineHeight: 1, background: "transparent", borderColor: "rgba(177, 52, 52, 0.4)", color: "#f87171" }}
+    onClick={() => setConfirmEliminar(s.id_servicio)}>
+    🗑️
+  </button>
+</div>
           </div>
         ))}
       </div>
