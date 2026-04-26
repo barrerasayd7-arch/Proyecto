@@ -935,6 +935,7 @@ export default function HomePrincipal() {
       <SeccionRecientes servicios={recientes} cargando={cargando} />
       <SeccionTop top3={top3} />
       <SeccionPublicar />
+       <SeccionSolicitudes />
       <NotificacionesFlotantes />
       <Footer />
     </>
