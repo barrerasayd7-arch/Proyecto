@@ -584,28 +584,240 @@ function SeccionPublicar() {
   );
 }
 
-function SeccionSolicitudes() {
-  // Sección estática por ahora — la lógica dinámica se puede agregar después
+const BADGE = {
+  Pendiente:  { bg: "#FFF3CD", color: "#856404", texto: "⏳ Pendiente"  },
+  Aceptada:   { bg: "#D1E7DD", color: "#0A5C36", texto: "✅ Aceptada"   },
+  Rechazada:  { bg: "#F8D7DA", color: "#721C24", texto: "❌ Rechazada"  },
+};
+
+function ModalRechazo({ onConfirmar, onCancelar }) {
+  const [motivo, setMotivo] = useState("");
+
   return (
-    <section className="seccion section-dynamic" id="solicitudes">
-      <div className="floating-shapes-small">
-        <div className="shape-sm shape-sm-1" />
-        <div className="shape-sm shape-sm-2" />
-      </div>
-      <div className="container">
-        <p className="label-seccion">🔔 Bandeja</p>
-        <h2>Mis solicitudes</h2>
-        <p className="texto-muted" style={{ marginBottom: "24px" }}>
-          Personas interesadas en tus servicios
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 1000,
+      background: "rgba(0,0,0,0.6)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      padding: "20px",
+    }}
+      onClick={onCancelar}
+    >
+      <div style={{
+        background: "#051a2d",
+        border: "1px solid #10304a",
+        borderRadius: "16px",
+        padding: "28px",
+        width: "100%",
+        maxWidth: "440px",
+      }}
+        onClick={e => e.stopPropagation()}
+      >
+        <h3 style={{ margin: "0 0 6px", fontSize: "1.1rem" }}>❌ Rechazar solicitud</h3>
+        <p style={{ margin: "0 0 18px", opacity: 0.6, fontSize: "0.85rem" }}>
+          Puedes explicarle al cliente por qué no puedes aceptar su solicitud.
         </p>
-        <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
-          Aún no tienes solicitudes.
-        </p>
+
+        <label style={{ display: "block", fontSize: "0.85rem", marginBottom: "8px", opacity: 0.8 }}>
+          Motivo del rechazo <span style={{ opacity: 0.5 }}>(opcional)</span>
+        </label>
+        <textarea
+          rows={4}
+          autoFocus
+          placeholder="Ej: No tengo disponibilidad en esa fecha..."
+          value={motivo}
+          onChange={e => setMotivo(e.target.value)}
+          style={{
+            width: "100%",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid #10304a",
+            borderRadius: "10px",
+            padding: "12px",
+            color: "inherit",
+            fontSize: "0.9rem",
+            resize: "vertical",
+            boxSizing: "border-box",
+          }}
+        />
+
+        <div style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
+          <button
+            type="button"
+            className="btn btn-borde"
+            style={{ flex: 1 }}
+            onClick={onCancelar}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="btn btn-verde"
+            style={{ flex: 1, background: "#dc2626", borderColor: "#dc2626" }}
+            onClick={() => onConfirmar(motivo)}
+          >
+            Confirmar rechazo
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
+
+
+function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
+  const badge  = BADGE[sol.estado] || BADGE.Pendiente;
+  const nombre = tipo === "enviada" ? sol.nombre_proveedor : sol.nombre_cliente;
+  const subtitulo = tipo === "enviada" ? "Proveedor" : "Cliente";
+
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(255,255,255,0.1)",
+      borderRadius: "14px",
+      padding: "18px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "10px",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <span style={{ fontSize: "1.6rem" }}>{sol.icono || "📌"}</span>
+          <div>
+            <p style={{ margin: 0, fontWeight: 600, fontSize: "0.95rem" }}>
+              {sol.titulo_servicio}
+            </p>
+            <p style={{ margin: 0, fontSize: "0.78rem", opacity: 0.6 }}>
+              {subtitulo}: {nombre}
+            </p>
+          </div>
+        </div>
+        <span style={{
+          background: badge.bg, color: badge.color,
+          padding: "3px 10px", borderRadius: "20px",
+          fontSize: "0.75rem", fontWeight: 600, whiteSpace: "nowrap",
+        }}>
+          {badge.texto}
+        </span>
+      </div>
+
+      {sol.descripcion && (
+        <p style={{ margin: 0, fontSize: "0.82rem", opacity: 0.7, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "8px" }}>
+          {sol.descripcion.length > 120 ? sol.descripcion.slice(0, 120) + "..." : sol.descripcion}
+        </p>
+      )}
+
+      {sol.motivo_rechazo && (
+        <p style={{ margin: 0, fontSize: "0.8rem", color: "#f87171" }}>
+          Motivo: {sol.motivo_rechazo}
+        </p>
+      )}
+
+      {tipo === "recibida" && sol.estado === "Pendiente" && (
+        <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+          <button type="button" className="btn btn-verde"
+            style={{ flex: 1, fontSize: "0.82rem", padding: "8px" }}
+            onClick={() => responder(sol.id_solicitud, "aceptar")}>
+            ✅ Aceptar
+          </button>
+          <button type="button" className="btn btn-borde"
+            style={{ flex: 1, fontSize: "0.82rem", padding: "8px" }}
+           onClick={() => setRechazando(sol.id_solicitud)}>
+            ❌ Rechazar
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SeccionSolicitudes() {
+  const [tab, setTab]         = useState("enviadas");
+  const [enviadas, setEnviadas]   = useState([]);
+  const [recibidas, setRecibidas] = useState([]);
+  const [cargando, setCargando]   = useState(true);
+  const [rechazando, setRechazando] = useState(null);
+
+  const id = localStorage.getItem("usuarioId");
+
+  useEffect(() => {
+    if (!id) return;
+    setCargando(true);
+
+    Promise.all([
+      fetch(`http://localhost:3000/api/solicitudes/enviadas/${id}`).then(r => r.json()),
+      fetch(`http://localhost:3000/api/solicitudes/recibidas/${id}`).then(r => r.json()),
+    ])
+      .then(([env, rec]) => {
+        setEnviadas(Array.isArray(env) ? env : []);
+        setRecibidas(Array.isArray(rec) ? rec : []);
+      })
+      .catch(console.error)
+      .finally(() => setCargando(false));
+  }, [id]);
+
+const responder = async (id_solicitud, accion, motivo_rechazo = "") => {
+  await fetch("http://localhost:3000/api/solicitudes/responder", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_solicitud, accion, motivo_rechazo }),
+  });
+  const res = await fetch(`http://localhost:3000/api/solicitudes/recibidas/${id}`);
+  setRecibidas(await res.json());
+};
+
+  const lista = tab === "enviadas" ? enviadas : recibidas;
+
+  return (
+    <section className="seccion section-dynamic" id="solicitudes">
+      <div className="container">
+        <p className="label-seccion">🔔 Bandeja</p>
+        <h2>Mis solicitudes</h2>
+
+        <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>
+          {[["enviadas", "📤 Enviadas"], ["recibidas", "📥 Recibidas"]].map(([val, label]) => (
+            <button key={val} type="button"
+              onClick={() => setTab(val)}
+              className={tab === val ? "btn btn-verde" : "btn btn-borde"}
+              style={{ fontSize: "0.85rem" }}>
+              {label} ({val === "enviadas" ? enviadas.length : recibidas.length})
+            </button>
+          ))}
+        </div>
+
+        {cargando ? (
+          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
+            Cargando solicitudes...
+          </p>
+        ) : lista.length === 0 ? (
+          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
+            {tab === "enviadas" ? "Aún no has enviado solicitudes." : "Aún no tienes solicitudes recibidas."}
+          </p>
+        ) : (
+          <div style={{ display: "grid", gap: "14px", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
+            {lista.map(sol => (
+              <TarjetaSolicitud
+                key={sol.id_solicitud}
+                sol={sol}
+                tipo={tab === "enviadas" ? "enviada" : "recibida"}
+                responder={responder}
+                 setRechazando={setRechazando} 
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      {rechazando && (
+      <ModalRechazo
+        onConfirmar={(motivo) => {
+          responder(rechazando, "rechazar", motivo);
+          setRechazando(null);
+        }}
+        onCancelar={() => setRechazando(null)}
+      />
+    )}
+    </section>
+  );
+}
 function Footer() {
   return (
     <footer id="soporte">
