@@ -1,4 +1,4 @@
-ALTER TABLE solicitudes
+/* ALTER TABLE solicitudes
 ADD 
     tipo_servicio NVARCHAR(100),
     tema NVARCHAR(150),
@@ -16,3 +16,4 @@ ADD
     motivo_rechazo NVARCHAR(MAX),
     contraoferta DECIMAL(10,2);
 GO
+ */
