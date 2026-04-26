@@ -168,6 +168,74 @@ fieldset { border: none; padding: 0; }
   border-color: #ef4444;
 }
   
+/* ══════════════════════════════
+   NOTIFICACIONES
+══════════════════════════════ */
+
+/* Contenedor principal */
+.contenedor-notificaciones {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+}
+
+/* Botón circular */
+.boton-notificaciones {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #28a745; /* El verde de UniServices */
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.boton-notificaciones:hover {
+  transform: scale(1.1);
+}
+
+/* Punto rojo de aviso */
+.punto-notificacion {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  background-color: #ff4757;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Panel que aparece al presionar */
+.panel-notificaciones {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 300px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  padding: 15px;
+  color: #333;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.item-notificacion {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  list-style: none;
+  font-size: 14px;
+}
 
 /* ══════════════════════════════
    HERO
