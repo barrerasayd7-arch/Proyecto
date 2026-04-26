@@ -34,7 +34,7 @@ export const getUsuarios = async (req, res) => {
    REGISTER
 ========================= */
 export const register = async (req, res) => {
-  const { correo, password, nombre, telefono } = req.body;
+  const { correo, password, nombre, telefono, codigo } = req.body;
 
   if (!correo || !password || !nombre) {
     return res.status(400).json({ error: "Correo, contraseña y nombre son obligatorios" });
@@ -42,6 +42,13 @@ export const register = async (req, res) => {
 
   try {
     const conn = await pool;
+
+    // 2. Importar el diccionario y validar el código
+    const { codigosTemporales } = await import("./auth.controller.js");
+    
+    if (!codigosTemporales[correo] || String(codigosTemporales[correo]) !== String(codigo)) {
+      return res.status(400).json({ error: "Código inválido o expirado. Verifica de nuevo." });
+    }
 
     // 🔎 Verificar si el correo ya existe
     const existing = await conn.request()
@@ -62,6 +69,10 @@ export const register = async (req, res) => {
       .input("nombre", sql.NVarChar, nombre)
       .input("telefono", sql.NVarChar, telefono || null)
       .execute("sp_CrearUsuario"); // Usar .execute para Procedures
+
+
+      // 4. ELIMINACIÓN: Si todo salió bien, borramos el código
+    delete codigosTemporales[correo];
 
     res.status(201).json({ message: "Usuario creado correctamente" });
 
@@ -195,5 +206,69 @@ export const updateUsuario = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+/* =========================
+   SOLICITAR RESET DE CONTRASEÑA
+   Verifica que el correo exista y envía código de verificación
+========================= */
+export const solicitarResetPassword = async (req, res) => {
+  const { correo } = req.body;
+  if (!correo) return res.status(400).json({ error: "Correo requerido" });
+
+  try {
+    const conn = await pool;
+    // Verificar que el correo existe en la base
+    const result = await conn.request()
+      .input("correo", sql.NVarChar, correo)
+      .query("SELECT id_usuario FROM usuarios WHERE correo = @correo");
+
+    if (result.recordset.length === 0) {
+      // Por seguridad respondemos igual aunque no exista
+      return res.json({ message: "Si el correo existe, recibirás un código" });
+    }
+
+    // Reusar el endpoint de envío de código que ya tienes
+    const { enviarCodigo } = await import("./auth.controller.js");
+    return enviarCodigo(req, res);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* =========================
+   CAMBIAR CONTRASEÑA CON CÓDIGO
+========================= */
+export const resetPassword = async (req, res) => {
+  const { correo, codigo, nuevaPassword } = req.body;
+
+  try {
+    // 1. Importamos el diccionario que ahora SÍ está exportado
+    const { codigosTemporales } = await import("./auth.controller.js");
+
+    // 2. Verificamos si existe el diccionario y el código coincide
+    if (!codigosTemporales || codigosTemporales[correo] !== String(codigo)) {
+      return res.status(400).json({ error: "Código incorrecto o expirado" });
+    }
+
+    // 3. Si es válido, procedemos al cambio en SQL Server
+    const hash = await bcrypt.hash(nuevaPassword, 10);
+    const conn = await pool;
+    
+    await conn.request()
+      .input("correo", sql.NVarChar, correo)
+      .input("hash", sql.NVarChar, hash)
+      .query("UPDATE usuarios SET password_hash = @hash WHERE correo = @correo");
+
+    // 4. Borramos el código para que no se use dos veces
+    delete codigosTemporales[correo];
+
+    res.json({ ok: true, message: "Contraseña actualizada" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error interno al resetear password" });
   }
 };

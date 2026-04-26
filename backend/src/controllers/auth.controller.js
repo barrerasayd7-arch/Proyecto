@@ -2,7 +2,7 @@ import { transporter } from "../config/mailer.js";
 
 // Diccionario temporal para guardar códigos (en memoria)
 // NOTA: Para producción usarías Redis, pero para la UPC esto es perfecto.
-const codigosTemporales = {}; 
+export const codigosTemporales = {}; 
 
 export const enviarCodigo = async (req, res) => {
   const { correo } = req.body;
@@ -90,7 +90,6 @@ export const verificarCodigo = (req, res) => {
   const { correo, codigo } = req.body;
   
   if (codigosTemporales[correo] === codigo) {
-    delete codigosTemporales[correo]; // Limpiamos el código una vez usado
     return res.json({ valido: true });
   }
   

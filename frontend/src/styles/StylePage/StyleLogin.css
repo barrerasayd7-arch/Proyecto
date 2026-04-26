@@ -731,3 +731,22 @@ input[type="email"].input-verified {
   border-color: #00c851; 
   color: var(--texto2);
 }
+
+/* ── Botón "¿Olvidaste tu contraseña?" — sin fondo, estilo link ── */
+.btn-olvide {
+  background: none;
+  border: none;
+  color: var(--teal);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.77rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--trans);
+  padding: 0;
+  text-decoration: none;
+}
+
+.btn-olvide:hover {
+  color: var(--teal2);
+  text-decoration: underline;
+}
