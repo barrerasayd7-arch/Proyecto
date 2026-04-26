@@ -818,6 +818,7 @@ const responder = async (id_solicitud, accion, motivo_rechazo = "") => {
     </section>
   );
 }
+
 function Footer() {
   return (
     <footer id="soporte">
@@ -866,36 +867,48 @@ function Footer() {
         <hr />
         <p className="footer-copy">© 2025 UniServicios — Hecho por y para estudiantes 🎓</p>
       </div>
-    </footer>
+    </footer> 
   );
 }
 
-// ── Componente principal ──
+function NotificacionesFlotantes() {
+  const [abierto, setAbierto] = useState(false);
+  const [notificaciones] = useState([
+    { id: 1, texto: "Nueva solicitud en Tutoría", leida: false },
+  ]);
+
+  return (
+    <div className="contenedor-notificaciones">
+      <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
+        🔔
+      </button>
+      {abierto && (
+        <div className="panel-notificaciones">
+          <h3>Notificaciones</h3>
+          <ul>
+            {notificaciones.map(n => <li key={n.id} className="item-notificacion">{n.texto}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HomePrincipal() {
   const navigate = useNavigate();
-
   const [scrolled, setScrolled] = useState(false);
   const [serviciosTotales, setServiciosTotales] = useState([]);
   const [recientes, setRecientes] = useState([]);
   const [top3, setTop3] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-  // Protección de ruta — redirige si no está logueado
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
-
-  // Scroll navbar
-  useEffect(() => {
+    if (!localStorage.getItem("token")) navigate("/login");
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [navigate]);
 
-  // Cargar servicios
   useEffect(() => {
     fetch(API)
       .then(res => res.json())
@@ -903,32 +916,14 @@ export default function HomePrincipal() {
         const ordenados = [...data].reverse();
         setServiciosTotales(ordenados);
         setRecientes(ordenados.slice(0, 4));
-
-        const top = [...data]
-          .sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas))
-          .slice(0, 3);
+        const top = [...data].sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)).slice(0, 3);
         setTop3(top);
       })
-      .catch(err => console.error("Error cargando servicios:", err))
       .finally(() => setCargando(false));
   }, []);
 
-  // Cerrar sesión
-  const handleCerrarSesion = async () => {
-    const id = localStorage.getItem("usuarioId");
-    try {
-      await fetch(API_USUARIO, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_usuario: id, estado: 0 }),
-      });
-    } catch {
-      // si falla igual cerramos sesión
-    }
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuarioId");
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("usuarioTelefono");
+  const handleCerrarSesion = () => {
+    localStorage.clear();
     navigate("/home-guest");
   };
 
@@ -940,7 +935,7 @@ export default function HomePrincipal() {
       <SeccionRecientes servicios={recientes} cargando={cargando} />
       <SeccionTop top3={top3} />
       <SeccionPublicar />
-      <SeccionSolicitudes />
+      <NotificacionesFlotantes />
       <Footer />
     </>
   );
