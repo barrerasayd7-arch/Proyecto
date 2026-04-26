@@ -48,6 +48,10 @@ const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
     // ── Controla qué modal está abierto
     const [activeModal, setActiveModal] = useState(null);
 
+const [misServicios,     setMisServicios]     = useState([]);
+const [editando,         setEditando]         = useState(null);
+const [confirmEliminar,  setConfirmEliminar]  = useState(null);
+
     // ════════════════════════════════
     // CARGAR DATOS DEL USUARIO
     // ════════════════════════════════
@@ -79,13 +83,14 @@ const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
 
 
     //cargar datos de seguimiento para perfil
-    useEffect(() => {
-    if (esPerfilExterno) {
-        fetch(`${API_USUARIO}/seguimiento?seguidor=${id_usuario_logueado}&seguido=${id_a_consultar}`)
-            .then(r => r.json())
-            .then(d => setSiguiendo(d.sigues ?? false))
-            .catch(() => {});
-    }
+useEffect(() => {
+  if (esPerfilExterno || !id_a_consultar) return;
+  fetch(`/api/services`)
+    .then(r => r.json())
+    .then(data => setMisServicios(
+      data.filter(s => s.id_proveedor === parseInt(id_a_consultar))
+    ))
+    .catch(console.error);
 }, [id_a_consultar, esPerfilExterno]);
 
     // ════════════════════════════════
@@ -131,6 +136,33 @@ const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
             navigate("/home-guest");
         }
     };
+    const guardarEdicion = async (s) => {
+  const res = await fetch(`/api/services/${s.id_servicio}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...s, id_proveedor: parseInt(id_usuario_logueado) }),
+  });
+  if (res.ok) {
+    setMisServicios(prev => prev.map(x => x.id_servicio === s.id_servicio ? s : x));
+    setEditando(null);
+  } else {
+    alert("Error al guardar los cambios.");
+  }
+};
+
+const confirmarEliminar = async () => {
+  const res = await fetch(`/api/services/${confirmEliminar}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_proveedor: parseInt(id_usuario_logueado) }),
+  });
+  if (res.ok) {
+    setMisServicios(prev => prev.filter(s => s.id_servicio !== confirmEliminar));
+    setConfirmEliminar(null);
+  } else {
+    alert("Error al eliminar el servicio.");
+  }
+};
 
     // ════════════════════════════════
     // COMPARTIR PERFIL
@@ -386,6 +418,129 @@ const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
                                     </div>
                                 </section>
                             )}
+                            {/* ══ MIS SERVICIOS ══ */}
+{!esPerfilExterno && (
+  <section className="menu-section">
+    <div className="section-title">📦 Mis servicios ({misServicios.length})</div>
+
+    {misServicios.length === 0 ? (
+      <p style={{ opacity: 0.5, fontSize: "0.85rem", padding: "12px 0" }}>
+        Aún no has publicado ningún servicio.
+      </p>
+    ) : (
+      <div className="menu-list">
+        {misServicios.map(s => (
+          <div key={s.id_servicio} className="menu-item" style={{ cursor: "default" }}>
+            <div className="menu-icon">{s.icono || "📌"}</div>
+            <div className="menu-text" style={{ flex: 1, minWidth: 0 }}>
+              <div className="menu-title" style={{
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+              }}>
+                {s.titulo}
+              </div>
+              <div className="menu-desc">${s.precio_hora}/hr · {s.nombre_categoria || "Sin categoría"}</div>
+            </div>
+            <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+              <button className="btn btn-primary"
+                style={{ fontSize: "0.75rem", padding: "5px 10px" }}
+                onClick={() => setEditando({ ...s })}>
+                ✏️
+              </button>
+              <button className="btn btn-secondary"
+                style={{ fontSize: "0.75rem", padding: "5px 10px", color: "#f87171", borderColor: "rgba(239,68,68,0.4)" }}
+                onClick={() => setConfirmEliminar(s.id_servicio)}>
+                🗑️
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+)}
+
+{/* ══ MODAL: Confirmar eliminar ══ */}
+{confirmEliminar && (
+  <div className="image-menu-overlay active" onClick={() => setConfirmEliminar(null)}>
+    <div className="image-menu" onClick={e => e.stopPropagation()}>
+      <h3 className="image-menu-title">🗑️ Eliminar servicio</h3>
+      <p style={{ opacity: 0.7, fontSize: "0.88rem", margin: "0 0 20px" }}>
+        ¿Estás seguro? Esto eliminará también todas las solicitudes asociadas y no se puede deshacer.
+      </p>
+      <div className="image-menu-options">
+        <button className="image-option" onClick={() => setConfirmEliminar(null)}>
+          <span className="image-option-icon">↩️</span>
+          <div className="image-option-text"><b>Cancelar</b></div>
+        </button>
+        <button className="image-option" onClick={confirmarEliminar}
+          style={{ borderColor: "rgba(239,68,68,0.3)" }}>
+          <span className="image-option-icon">🗑️</span>
+          <div className="image-option-text" style={{ color: "#f87171" }}><b>Sí, eliminar</b></div>
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* ══ MODAL: Editar servicio ══ */}
+{editando && (
+  <div className="image-menu-overlay active" onClick={() => setEditando(null)}>
+    <div className="image-menu" onClick={e => e.stopPropagation()}
+      style={{ maxWidth: "500px", maxHeight: "85vh", overflowY: "auto" }}>
+      <h3 className="image-menu-title">✏️ Editar servicio</h3>
+
+      {[
+        ["Título",       "titulo",      "text"],
+        ["Precio/hora",  "precio_hora", "number"],
+        ["Contacto",     "contacto",    "text"],
+        ["Ícono",        "icono",       "text"],
+      ].map(([label, field, type]) => (
+        <div key={field} style={{ marginBottom: "14px" }}>
+          <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
+            {label}
+          </label>
+          <input type={type} value={editando[field] || ""}
+            onChange={e => setEditando({ ...editando, [field]: e.target.value })}
+            style={{
+              width: "100%", boxSizing: "border-box",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: "8px", padding: "10px 12px",
+              color: "inherit", fontSize: "0.9rem"
+            }}
+          />
+        </div>
+      ))}
+
+      <div style={{ marginBottom: "14px" }}>
+        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "5px" }}>
+          Descripción
+        </label>
+        <textarea rows={4} value={editando.descripcion || ""}
+          onChange={e => setEditando({ ...editando, descripcion: e.target.value })}
+          style={{
+            width: "100%", boxSizing: "border-box", resize: "vertical",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "8px", padding: "10px 12px",
+            color: "inherit", fontSize: "0.9rem"
+          }}
+        />
+      </div>
+
+      <div className="image-menu-options">
+        <button className="image-option" onClick={() => setEditando(null)}>
+          <span className="image-option-icon">↩️</span>
+          <div className="image-option-text"><b>Cancelar</b></div>
+        </button>
+        <button className="image-option" onClick={() => guardarEdicion(editando)}>
+          <span className="image-option-icon">💾</span>
+          <div className="image-option-text"><b>Guardar cambios</b></div>
+        </button>
+      </div>
+    </div>
+  </div>
+)}
                         </div>
                     </div>
                 </main>
