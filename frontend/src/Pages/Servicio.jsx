@@ -462,81 +462,6 @@ function FormSolicitud({
   );
 }
 
-// ── Botón Seguir ──
-function BotonSeguir({ idProveedor }) {
-  const [sigues, setSigues] = useState(false);
-  const [cargando, setCargando] = useState(true);
-  const [enviando, setEnviando] = useState(false);
-
-  const miId = Number(localStorage.getItem("usuarioId"));
-
-  useEffect(() => {
-    if (!idProveedor || !miId || miId === Number(idProveedor)) {
-      setCargando(false);
-      return;
-    }
-    fetch(`${API_USUARIO}/seguimiento?seguidor=${miId}&seguido=${idProveedor}`)
-      .then((r) => r.json())
-      .then((d) => setSigues(d.sigues ?? false))
-      .catch(() => {})
-      .finally(() => setCargando(false));
-  }, [idProveedor]);
-
-  if (!miId || miId === Number(idProveedor)) return null;
-
-  const toggleSeguir = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (enviando) return;
-    setEnviando(true);
-    try {
-      if (sigues) {
-        await fetch(`${API_USUARIO}/dejar-seguir`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_seguidor: miId,
-            id_seguido: Number(idProveedor),
-          }),
-        });
-        setSigues(false);
-      } else {
-        await fetch(`${API_USUARIO}/seguir`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_seguidor: miId,
-            id_seguido: Number(idProveedor),
-          }),
-        });
-        setSigues(true);
-      }
-    } catch {
-      alert("Error al procesar la solicitud");
-    } finally {
-      setEnviando(false);
-    }
-  };
-
-  if (cargando)
-    return (
-      <button className="btn-seguir btn-seguir--cargando" disabled>
-        ⏳ Cargando...
-      </button>
-    );
-
-  return (
-    <button
-      type="button"
-      className={`btn-seguir${sigues ? " btn-seguir--siguiendo" : ""}`}
-      onClick={toggleSeguir}
-      disabled={enviando}
-    >
-      {enviando ? "⏳ ..." : sigues ? "✓ Siguiendo" : "+ Seguir"}
-    </button>
-  );
-}
-
 // ── Componente principal ──
 export default function Servicio() {
   const navigate = useNavigate();
@@ -864,8 +789,7 @@ export default function Servicio() {
               )}
             </div>
 
-            {/* Botón seguir */}
-            <BotonSeguir idProveedor={servicio.id_proveedor} />
+            
 
             {/* Info proveedor */}
             <div className="seccion-info">

@@ -4,6 +4,10 @@ import Navbar from '../Components/Navbar_Perfil';
 import '../styles/StylePage/styleHome.css';
 import '../styles/StylePage/stylePerfil.css';
 
+
+const API_USUARIO = "http://localhost:3000/api/users";
+
+
 const Perfil = () => {
     const navigate = useNavigate();
     const FileInputRef = useRef(null);
@@ -39,6 +43,8 @@ const Perfil = () => {
         universidad: 'Sin universidad'
     });
 
+const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
+
     // ── Controla qué modal está abierto
     const [activeModal, setActiveModal] = useState(null);
 
@@ -70,6 +76,17 @@ const Perfil = () => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [id_a_consultar]);
+
+
+    //cargar datos de seguimiento para perfil
+    useEffect(() => {
+    if (esPerfilExterno) {
+        fetch(`${API_USUARIO}/seguimiento?seguidor=${id_usuario_logueado}&seguido=${id_a_consultar}`)
+            .then(r => r.json())
+            .then(d => setSiguiendo(d.sigues ?? false))
+            .catch(() => {});
+    }
+}, [id_a_consultar, esPerfilExterno]);
 
     // ════════════════════════════════
     // ACTUALIZAR CAMPO EN LA BASE
@@ -135,15 +152,6 @@ const Perfil = () => {
     };
 
     // ════════════════════════════════
-    // TOGGLE SEGUIR (solo perfil externo)
-    // ════════════════════════════════
-    const handleSeguir = async () => {
-        // Por ahora solo cambia el estado visual
-        // Aquí irá el fetch al endpoint de seguidores cuando esté listo
-        setSiguiendo(!siguiendo);
-    };
-
-    // ════════════════════════════════
     // SUBIR IMAGEN LOCAL
     // ════════════════════════════════
     const handleSubirImagenLocal = async (event) => {
@@ -186,13 +194,55 @@ const Perfil = () => {
     };
 
     // ── Estado del usuario: verde si estado===1, rojo si no
-    const estaConectado = userData.estado === true || userData.estado === 1 || userData.estado === "1";
 
+    const estaConectado = userData.estado;
+    
     // ── Reputación formateada
     const reputacionTexto = userData.reputacion && userData.reputacion !== "N/A"
         ? parseFloat(userData.reputacion).toFixed(1) + "/5.0"
         : "Sin calificaciones";
 
+
+
+       const toggleSeguir = async () => {
+    if (enviandoSeguimiento) return;
+    setEnviandoSeguimiento(true);
+
+    try {
+        const accionActual = siguiendo; // Guardamos el estado actual
+        const endpoint = accionActual ? 'dejar-seguir' : 'seguir';
+        const metodo = accionActual ? 'DELETE' : 'POST';
+        
+        const response = await fetch(`${API_USUARIO}/${endpoint}`, {
+            method: metodo,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id_seguidor: Number(id_usuario_logueado),
+                id_seguido: Number(id_a_consultar),
+            }),
+        });
+
+        if (response.ok) {
+            // 1. Invertimos el estado del botón
+            setSiguiendo(!accionActual);
+
+            // 2. Actualizamos el contador localmente
+            setUserData(prev => ({
+                ...prev,
+                total_seguidores: accionActual 
+                    ? Math.max(0, prev.total_seguidores - 1) // Restar si estaba siguiendo
+                    : prev.total_seguidores + 1              // Sumar si no estaba siguiendo
+            }));
+        } else {
+            alert("No se pudo actualizar el seguimiento en el servidor.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error de conexión al procesar el seguimiento");
+    } finally {
+        setEnviandoSeguimiento(false);
+    }
+};
     // ════════════════════════════════
     // JSX
     // ════════════════════════════════
@@ -246,8 +296,9 @@ const Perfil = () => {
                                         // ── PERFIL EXTERNO: mostrar Seguir + Compartir ──
                                         <>
                                             <button
-                                                className={`btn ${siguiendo ? "btn-secondary" : "btn-primary"}`}
-                                                onClick={handleSeguir}
+                                                className={`btn-seguir ${siguiendo ? 'btn-siguiendo' : ''}`}
+                                                onClick={toggleSeguir}
+                                                disabled={enviandoSeguimiento}
                                             >
                                                 {siguiendo ? "✓ Siguiendo" : "➕ Seguir"}
                                             </button>
