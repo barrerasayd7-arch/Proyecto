@@ -141,6 +141,7 @@ export const getUsuarioById = async (req, res) => {
           u.id_usuario,
           u.nombre,
           u.descripcion,
+          u.telefono,
           u.correo,
           u.estado,
           u.fecha_registro,

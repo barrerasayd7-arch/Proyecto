@@ -7,7 +7,9 @@ GO
 
 DELETE FROM usuarios WHERE correo LIKE 'luisrizzo2607%';
 
-
+UPDATE usuarios
+SET telefono = '1234567890'
+WHERE id_usuario = 19;
 
 -- Mostrar TODAS las calificaciones y su estado de solicitud
 SELECT 

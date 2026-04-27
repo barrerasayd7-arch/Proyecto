@@ -33,6 +33,7 @@ const Perfil = () => {
         nombre: 'Cargando...',
         avatar: '../src/img/default-avatar.png',
         descripcion: 'Cargando información...',
+        telefono: 'No disponible',
         correo: 'usuario@ejemplo.com',
         fecha_registro: '2024-01-01',
         estado: 0, // 0 = desconectado por defecto mientras carga
@@ -398,26 +399,16 @@ const confirmarEliminar = async () => {
                                     <InfoItem label="🏫 Universidad"    value={userData.universidad || "Sin universidad"} />
                                     {/* Reputación calculada desde calificaciones */}
                                     <InfoItem label="⭐ Reputación"     value={reputacionTexto} />
-                                </div>
-                            </section>
-
-                            {/* Acciones rápidas — solo en perfil propio */}
+                                    <InfoItem label="📱 Teléfono"         value={userData.telefono || "No disponible"} />
+                                    {/* Acciones rápidas — solo en perfil propio */}
                             {!esPerfilExterno && (
-                                <section className="menu-section">
-                                    <div className="section-title">⚡ Acciones Rápidas</div>
                                     <div className="menu-list">
                                         <MenuItem icon="💼" title="Seguridad" desc="Gestiona tu cuenta"
                                             onClick={() => navigate("/home#mis-servicios")} />
-                                        <MenuItem icon="📥" title="Notificaciones" desc="Revisa tus pendientes"
-                                            onClick={() => navigate("/home#solicitudes")} />
-                                        <MenuItem
-                                            icon="🚪" title="Cerrar Sesión" desc="Salir de tu cuenta"
-                                            onClick={handleCerrarSesion}
-                                            danger
-                                        />
                                     </div>
-                                </section>
                             )}
+                                </div>
+                            </section>
                             {/* ══ MIS SERVICIOS ══ */}
                             {!esPerfilExterno && (
                               <section className="menu-section">
