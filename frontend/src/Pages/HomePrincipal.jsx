@@ -592,54 +592,67 @@ const BADGE = {
 
 function ModalRechazo({ onConfirmar, onCancelar }) {
   const [motivo, setMotivo] = useState("");
+  const [contraoferta, setContraoferta] = useState("");
 
   return (
     <div style={{
-      position: "fixed", inset: 0, zIndex: 1000,
-      background: "rgba(0,0,0,0.6)",
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
       display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "20px",
-    }}
-      onClick={onCancelar}
-    >
+      zIndex: 9999, padding: "20px"
+    }}>
       <div style={{
-        background: "#051a2d",
-        border: "1px solid #10304a",
-        borderRadius: "16px",
-        padding: "28px",
-        width: "100%",
-        maxWidth: "440px",
-      }}
-        onClick={e => e.stopPropagation()}
-      >
-        <h3 style={{ margin: "0 0 6px", fontSize: "1.1rem" }}>❌ Rechazar solicitud</h3>
-        <p style={{ margin: "0 0 18px", opacity: 0.6, fontSize: "0.85rem" }}>
-          Puedes explicarle al cliente por qué no puedes aceptar su solicitud.
+        background: "#051a2d", border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: "16px", padding: "28px", maxWidth: "440px", width: "100%"
+      }}>
+        <h3 style={{ margin: "0 0 6px", color: "#fff" }}>❌ Rechazar solicitud</h3>
+        <p style={{ margin: "0 0 20px", opacity: 0.6, fontSize: "0.85rem" }}>
+          Explica el motivo y, si quieres, propón un precio alternativo.
         </p>
 
-        <label style={{ display: "block", fontSize: "0.85rem", marginBottom: "8px", opacity: 0.8 }}>
-          Motivo del rechazo <span style={{ opacity: 0.5 }}>(opcional)</span>
+        {/* Motivo */}
+        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "6px" }}>
+          Motivo del rechazo
         </label>
         <textarea
-          rows={4}
-          autoFocus
-          placeholder="Ej: No tengo disponibilidad en esa fecha..."
           value={motivo}
           onChange={e => setMotivo(e.target.value)}
+          placeholder="Ej: No tengo disponibilidad en esa fecha..."
+          rows={3}
           style={{
-            width: "100%",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid #10304a",
-            borderRadius: "10px",
-            padding: "12px",
-            color: "inherit",
-            fontSize: "0.9rem",
-            resize: "vertical",
-            boxSizing: "border-box",
+            width: "100%", background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
+            color: "#fff", padding: "10px", fontSize: "0.88rem",
+            resize: "vertical", boxSizing: "border-box"
           }}
         />
 
-        <div style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
+        {/* Contraoferta (opcional) */}
+        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, margin: "14px 0 6px" }}>
+          💰 Contraoferta (opcional)
+        </label>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ color: "#4ac7b6", fontWeight: 600 }}>$</span>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={contraoferta}
+            onChange={e => setContraoferta(e.target.value)}
+            placeholder="Ej: 35000"
+            style={{
+              flex: 1, background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
+              color: "#fff", padding: "10px", fontSize: "0.88rem",
+              boxSizing: "border-box"
+            }}
+          />
+        </div>
+        <p style={{ margin: "4px 0 0", fontSize: "0.76rem", opacity: 0.5 }}>
+          Si propones un precio, el cliente lo verá en su solicitud.
+        </p>
+
+        {/* Botones */}
+        <div style={{ display: "flex", gap: "10px", marginTop: "22px" }}>
           <button
             type="button"
             className="btn btn-borde"
@@ -651,8 +664,9 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
           <button
             type="button"
             className="btn btn-verde"
-            style={{ flex: 1, background: "#dc2626", borderColor: "#dc2626" }}
-            onClick={() => onConfirmar(motivo)}
+            style={{ flex: 1 }}
+            disabled={!motivo.trim()}
+            onClick={() => onConfirmar(motivo, contraoferta ? parseFloat(contraoferta) : null)}
           >
             Confirmar rechazo
           </button>
@@ -711,6 +725,27 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
           Motivo: {sol.motivo_rechazo}
         </p>
       )}
+      {sol.contraoferta && (
+  <div style={{
+    background: "rgba(74, 199, 182, 0.1)",
+    border: "1px solid rgba(74, 199, 182, 0.3)",
+    borderRadius: "10px",
+    padding: "10px 14px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px"
+  }}>
+    <span style={{ fontSize: "1.2rem" }}>💰</span>
+    <div>
+      <p style={{ margin: 0, fontSize: "0.75rem", color: "#4ac7b6", fontWeight: 600 }}>
+        El proveedor propone un nuevo precio
+      </p>
+      <p style={{ margin: 0, fontSize: "1rem", color: "#fff", fontWeight: 700 }}>
+        ${Number(sol.contraoferta).toLocaleString("es-CO")}
+      </p>
+    </div>
+  </div>
+)}
 
       {tipo === "recibida" && sol.estado === "Pendiente" && (
         <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
@@ -755,11 +790,11 @@ function SeccionSolicitudes() {
       .finally(() => setCargando(false));
   }, [id]);
 
-const responder = async (id_solicitud, accion, motivo_rechazo = "") => {
+const responder = async (id_solicitud, accion, motivo_rechazo = "", contraoferta = null) => {
   await fetch("http://localhost:3000/api/solicitudes/responder", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_solicitud, accion, motivo_rechazo }),
+    body: JSON.stringify({ id_solicitud, accion, motivo_rechazo, contraoferta }),
   });
   const res = await fetch(`http://localhost:3000/api/solicitudes/recibidas/${id}`);
   setRecibidas(await res.json());
@@ -807,14 +842,14 @@ const responder = async (id_solicitud, accion, motivo_rechazo = "") => {
         )}
       </div>
       {rechazando && (
-      <ModalRechazo
-        onConfirmar={(motivo) => {
-          responder(rechazando, "rechazar", motivo);
+        <ModalRechazo
+          onConfirmar={(motivo, contraoferta) => {
+          responder(rechazando, "rechazar", motivo, contraoferta);
           setRechazando(null);
-        }}
+      }}
         onCancelar={() => setRechazando(null)}
       />
-    )}
+)}
     </section>
   );
 }

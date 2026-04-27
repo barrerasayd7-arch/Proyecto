@@ -267,28 +267,27 @@ export const getSolicitudesRecibidas = async (req, res) => {
 // ACEPTAR O RECHAZAR (como proveedor)
 export const responderSolicitud = async (req, res) => {
   try {
-    const { id_solicitud, accion, motivo_rechazo } = req.body;
+    const { id_solicitud, accion, motivo_rechazo, contraoferta } = req.body;
     // accion: "aceptar" | "rechazar"
     const conn = await pool;
 
-    if (accion === "aceptar") {
-      await conn.request()
-        .input("id", sql.Int, id_solicitud)
-        .query(`
-          UPDATE solicitudes 
-          SET estado = 'Aceptada', fue_aceptada = 1
-          WHERE id_solicitud = @id
-        `);
-    } else {
-      await conn.request()
-        .input("id",     sql.Int,     id_solicitud)
-        .input("motivo", sql.NVarChar, motivo_rechazo || "")
-        .query(`
-          UPDATE solicitudes 
-          SET estado = 'Rechazada', motivo_rechazo = @motivo
-          WHERE id_solicitud = @id
-        `);
-    }
+if (accion === "aceptar") {
+  await conn.request()
+    .input("id", sql.Int, id_solicitud)
+    .query(`UPDATE solicitudes SET estado = 'Aceptada', fue_aceptada = 1 WHERE id_solicitud = @id`);
+} else {
+  await conn.request()
+    .input("id",           sql.Int,           id_solicitud)
+    .input("motivo",       sql.NVarChar,      motivo_rechazo || "")
+    .input("contraoferta", sql.Decimal(10,2), contraoferta || null)
+    .query(`
+      UPDATE solicitudes 
+      SET estado = 'Rechazada', 
+          motivo_rechazo = @motivo,
+          contraoferta   = @contraoferta
+      WHERE id_solicitud = @id
+    `);
+}
 
     res.json({ ok: true });
   } catch (error) {
