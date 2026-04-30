@@ -18,6 +18,7 @@ const CATEGORIAS = [
   { valor: "diseno", label: "🎨 Diseño" },
   { valor: "arriendo", label: "🏠 Arriendo de habitaciones" },
   { valor: "otros", label: "🌐 Otros servicios" },
+  { valor: "Diseño", label: "🖌️ Diseños"}
 ];
 
 const MODALIDADES = ["🏫 Presencial", "💻 Virtual", "🔄 Mixta"];

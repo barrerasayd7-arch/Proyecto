@@ -169,6 +169,3 @@ CREATE TABLE aspectos_destacados (
     CONSTRAINT fk_aspecto_calificacion FOREIGN KEY (id_calificacion) REFERENCES calificaciones(id_calificacion) ON DELETE CASCADE
 );
 GO
-
-
-
