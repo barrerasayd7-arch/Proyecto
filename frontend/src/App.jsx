@@ -6,6 +6,7 @@ import Servicio from "./Pages/Servicio.jsx";
 import PrivacyPage from "./Pages/Privacy.jsx";
 import TermsPage from "./Pages/Terms.jsx";
 import Perfil from "./Pages/Perfil.jsx";
+import HomeAdmin from "./Pages/HomeAdmin.jsx";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/terminos"        element={<TermsPage />} />
         <Route path="/perfil"          element={<Perfil />} />
         <Route path="/perfil/:id"      element={<Perfil />} />
+        <Route path="/home-admin"      element={<HomeAdmin />} />
       </Routes>
     </BrowserRouter>
   );
