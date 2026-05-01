@@ -15,11 +15,14 @@ import logoIcon from '../img/logo_color_noBG.png';
 const ADMIN_CREDENTIALS = [
   { correo: "admin@uniservice.co",   password: "admin123" },
   { correo: "frank@uniservice.co",   password: "frank2026" },
+  { correo: "lenin@uniservice.co",   password: "lenin2026" },
+  { correo: "sayd@uniservice.co",   password: "sayd2026" },
+  { correo: "andres@uniservice.co",   password: "andres2026" },
   // { correo: "otro@uniservice.co", password: "otrapass" }, ← agrega más aquí
 ];
 
 // Contraseña maestra que se pide en el modal de admin
-const ADMIN_MASTER_PASSWORD = "uniservice_admin_2026";
+const ADMIN_MASTER_PASSWORD = "admin_2026";
 
 // ══════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════
