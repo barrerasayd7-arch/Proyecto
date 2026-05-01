@@ -66,4 +66,6 @@ Todas las quejas serán revisadas e investigadas de manera oportuna, justa y con
 
 Este Código de Conducta es una adaptación del [Contributor Covenant](https://www.contributor-covenant.org), versión 2.1, disponible en [esta dirección](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html).
 
-© 2026 UniService - Conectando Estudiantes en Valledupar.
+<p align="center">
+  <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
+</p>

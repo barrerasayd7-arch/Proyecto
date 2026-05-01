@@ -66,3 +66,8 @@
   Hecho por estudiantes, para estudiantes. 🎓<br>
   <sub>Valledupar, Cesar, Colombia.</sub>
 </h2>
+
+
+<p align="center">
+  <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
+</p>

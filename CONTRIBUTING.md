@@ -99,10 +99,6 @@
   <li>Se requiere al menos <strong>una aprobación</strong> de los mantenedores principales.</li>
 </ul>
 
-<p align="center">
-  <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
-</p>
-
 ---
 
 <h2 id="-estructura-del-repositorio">📂 Estructura del Repositorio</h2>
@@ -144,3 +140,9 @@ PROYECTO/
 ├── package.json             # Dependencias de nivel raíz (si existen)
 └── README.md                # Documentación general
 ```
+
+
+
+<p align="center">
+  <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
+</p>

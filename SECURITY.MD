@@ -59,5 +59,5 @@
 <hr />
 
 <p align="center">
-  <sub>Gracias por ayudarnos a mantener UniService como un espacio seguro para todos.</sub>
+  <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
 </p>
