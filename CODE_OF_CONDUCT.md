@@ -1,6 +1,4 @@
-# Código de Conducta de UniService 🎓
-
-# Manifiesto de Compromiso: El Corazón de UniService 🎓
+<h1 align="center">Código de Conducta de UniService 🎓</h1>
 
 ## 🚀 Nuestra Misión
 Más que un repositorio de código, **UniService** es nuestra apuesta por transformar la vida universitaria en Valledupar. Como equipo, no solo "escribimos funciones"; construimos puentes que permiten a nuestros compañeros estudiantes crecer, colaborar y profesionalizarse.
