@@ -135,7 +135,7 @@ export default function Login() {
     }
     setEnviandoCodigo(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/send-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/send-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg }),
@@ -159,7 +159,7 @@ export default function Login() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:3000/api/users/verify-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg, codigo: codigoInput }),
@@ -188,7 +188,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/forgot-password", {
+      const res = await fetch("https://localhost:7237/api/Auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo }),
@@ -208,7 +208,7 @@ export default function Login() {
   const handleResetReenviarCodigo = async () => {
     setResetCargando(true);
     try {
-      await fetch("http://localhost:3000/api/users/forgot-password", {
+      await fetch("https://localhost:7237/api/Auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo }),
@@ -228,7 +228,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/verify-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo, codigo: resetCodigo }),
@@ -257,7 +257,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/reset-password", {
+      const res = await fetch("https://localhost:7237/api/Auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo, codigo: resetCodigo, nuevaPassword: resetPass }),
@@ -291,92 +291,43 @@ const handleLogin = async () => {
   if (!correo || errores.correo) { notificar("❌ Ingresa un correo válido"); return; }
   if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
-  // 1. Verificar si es un Admin definido en el código
-  const adminLocal = ADMIN_CREDENTIALS.find(
-    a => a.correo === correo && a.password === pass
-  );
+    try {
+      const res = await fetch("http://localhost:3000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, password: pass }),
+      });
+      const data = await res.json();
 
-  if (adminLocal) {
-    // Si es admin del código, abrimos el modal directamente sin ir a la DB
-    // Creamos un objeto de sesión falso para que funcione el modal
-    setAdminLoginData({
-      token: "admin-local-token", // Token temporal
-      user: { id_usuario: 0, nombre: adminLocal.correo.split('@')[0], correo: adminLocal.correo }
-    });
-    setModalAdmin(true);
-    setAdminIntentos(3);
-    setAdminBloqueado(false);
-    setAdminMasterInput("");
-    setAdminError("");
-    return; // Detenemos aquí para que no intente buscar en la DB
-  }
+      if (data.token) {
+        localStorage.setItem("token",        data.token);
+        localStorage.setItem("usuarioId",    data.user.id_usuario);
+        localStorage.setItem("usuario",      data.user.nombre);
+        localStorage.setItem("usuarioCorreo",data.user.correo);
+        localStorage.setItem("logueado",     "true");
 
-  // 2. Si no es admin local, procedemos con el login normal de la DB
-  try {
-    const res = await fetch("http://localhost:3000/api/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ correo, password: pass }),
-    });
-    const data = await res.json();
+        // Marcar como conectado en la base
+        try {
+          await fetch(`http://localhost:3000/api/users/${data.user.id_usuario}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${data.token}`
+            },
+            body: JSON.stringify({ estado: 1 })
+          });
+        } catch (e) {
+          console.error("Error silencioso al cambiar estado:", e);
+        }
 
-    if (data.token) {
-      guardarSesion(data, false);
-      notificar("✅ Bienvenido " + data.user.nombre, "success");
-      setTimeout(() => navigate("/home", { replace: true }), 1500);
-    } else {
-      notificar("❌ " + (data.message || "Credenciales incorrectas"));
-    }
-  } catch {
-    notificar("❌ Error de conexión");
-  }
-};
-
-  // Guarda la sesión en localStorage
-  const guardarSesion = (data, esAdmin) => {
-    localStorage.setItem("token",         data.token);
-    localStorage.setItem("usuarioId",     data.user.id_usuario);
-    localStorage.setItem("usuario",       data.user.nombre);
-    localStorage.setItem("usuarioCorreo", data.user.correo);
-    localStorage.setItem("logueado",      "true");
-    localStorage.setItem("rol",           esAdmin ? "admin" : "usuario");
-  };
-
-  // ════════════════════════════════
-  // VALIDAR CONTRASEÑA MAESTRA ADMIN
-  // ════════════════════════════════
-  const handleAdminConfirmar = () => {
-    if (adminBloqueado) return;
-
-    if (adminMasterInput === ADMIN_MASTER_PASSWORD) {
-      // ✅ Contraseña correcta — guardar sesión como admin y navegar
-      guardarSesion(adminLoginData, true);
-      setModalAdmin(false);
-      navigate("/home-admin", { replace: true });
-    } else {
-      // ❌ Incorrecto — restar intento y animar
-      const nuevosIntentos = adminIntentos - 1;
-      setAdminIntentos(nuevosIntentos);
-      setAdminMasterInput("");
-      setAdminShake(true);
-      setTimeout(() => setAdminShake(false), 500);
-
-      if (nuevosIntentos <= 0) {
-        setAdminBloqueado(true);
-        setAdminError("🔒 Acceso bloqueado. Demasiados intentos fallidos.");
+        notificar("✅ Bienvenido " + data.user.nombre, "success");
+        setTimeout(() => navigate("/home", { replace: true }), 1500);
       } else {
-        setAdminError(`❌ Contraseña incorrecta. Te quedan ${nuevosIntentos} intento${nuevosIntentos === 1 ? "" : "s"}.`);
+        notificar("❌ " + (data.message || "Credenciales incorrectas"));
       }
+    } catch {
+      notificar("❌ Error de conexión");
     }
-  };
-
-  const cerrarModalAdmin = () => {
-    setModalAdmin(false);
-    setAdminLoginData(null);
-    setAdminMasterInput("");
-    setAdminIntentos(3);
-    setAdminBloqueado(false);
-    setAdminError("");
   };
 
   // ════════════════════════════════
@@ -388,7 +339,7 @@ const handleLogin = async () => {
       notificar("❌ Revisa los campos del formulario"); return;
     }
     try {
-      const res = await fetch("http://localhost:3000/api/users/register", {
+      const res = await fetch("https://localhost:7237/api/Users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg, password: passReg, nombre: nombre.trim(), codigo: codigoInput }),

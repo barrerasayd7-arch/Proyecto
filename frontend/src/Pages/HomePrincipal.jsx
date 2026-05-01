@@ -5,8 +5,9 @@ import { formatearFecha } from "../utils/helpers";
 
 
 // ── Constantes ──
-const API = "http://localhost:3000/api/services";
-const API_USUARIO = "http://localhost:3000/api/users"
+const API = "https://localhost:7237/api/Services";
+const API_USUARIO = "https://localhost:7237/api/Users";
+const API_SOLICITUD = "https://localhost:7237/api/Solicitudes";
 const CANTIDAD_POR_PAGINA = 8;
 
 const CATEGORIAS = [
@@ -780,8 +781,8 @@ function SeccionSolicitudes() {
     setCargando(true);
 
     Promise.all([
-      fetch(`http://localhost:3000/api/solicitudes/enviadas/${id}`).then(r => r.json()),
-      fetch(`http://localhost:3000/api/solicitudes/recibidas/${id}`).then(r => r.json()),
+      fetch(`${API_SOLICITUD}/enviadas/${id}`).then(r => r.json()),
+      fetch(`${API_SOLICITUD}/recibidas/${id}`).then(r => r.json()),
     ])
       .then(([env, rec]) => {
         setEnviadas(Array.isArray(env) ? env : []);
@@ -792,12 +793,12 @@ function SeccionSolicitudes() {
   }, [id]);
 
 const responder = async (id_solicitud, accion, motivo_rechazo = "", contraoferta = null) => {
-  await fetch("http://localhost:3000/api/solicitudes/responder", {
+  await fetch(`${API_SOLICITUD}/responder`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id_solicitud, accion, motivo_rechazo, contraoferta }),
   });
-  const res = await fetch(`http://localhost:3000/api/solicitudes/recibidas/${id}`);
+  const res = await fetch(`${API_SOLICITUD}/recibidas/${id}`);
   setRecibidas(await res.json());
 };
 
