@@ -1,22 +1,26 @@
 <div align="center">
-  <br>
-  <!-- LOGO -->
-  <img src="./frontend\src\img\Logo+name_color_gnoBG_email.png" alt="UniServices Logo" width="700"/>
+<br>
+<!-- LOGO -->
+<img src="./frontend\src\img\Logo+name_color_gnoBG_email.png" alt="UniServices Logo" width="700"/>
+<!-- ESLOGAN -->
+<h3><em>Convierte tu conocimiento en oportunidades.<br>La plataforma segura para el intercambio estudiantil.</em></h3>
+<br><br>
+<!-- BADGES ROW 1 -->
+<img src="https://img.shields.io/badge/versión-1.2.5-6366F1?style=for-the-badge&logo=git&logoColor=white" alt="version"/>
+<img src="https://img.shields.io/badge/estado-updating-10B981?style=for-the-badge&logo=checkmarx&logoColor=white" alt="updating"/>
+<img src="https://img.shields.io/badge/licencia-MIT-F59E0B?style=for-the-badge" alt="licencia"/>
+<br><br>
+<!-- BADGES ROW 2 — STACK -->
+<img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React"/>
+<img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite"/>
+<img src="https://img.shields.io/badge/SQL_Server_2025-CC2927?style=flat-square&logo=microsoftsqlserver&logoColor=white" alt="SQL Server"/>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"/>
+<img src="https://img.shields.io/badge/JSX-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JSX"/>
+<br><br>
 
-  <!-- ESLOGAN -->
-  <h3><em>Convierte tu conocimiento en oportunidades.</em></h3>
-  <p><strong>La plataforma segura para el intercambio de servicios estudiantiles en Valledupar.</strong></p>
-  <br>
 
-  <!-- STACK BADGES -->
-  <img src="https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React"/>
-  <img src="https://img.shields.io/badge/Node_Express_5-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node/Express"/>
-  <img src="https://img.shields.io/badge/SQL_Server_2025-CC2927?style=flat-square&logo=microsoftsqlserver&logoColor=white" alt="SQL Server"/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"/>
-  <br><br>
+---
 </div>
-
-<hr />
 
 <h2>📌 Objetivo del Proyecto</h2>
 <p>
