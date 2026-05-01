@@ -4,9 +4,14 @@ import { useNavigate } from "react-router-dom";
 import logoIcon from '../img/logo_color_noBG.png';
 
 // ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+
 //  CREDENCIALES DE ADMINISTRADOR — Agrega o edita las que quieras
 //  Formato: { correo: "...", password: "..." }
-// ══════════════════════════════════════════════════════════════════
+
 const ADMIN_CREDENTIALS = [
   { correo: "admin@uniservice.co",   password: "admin123" },
   { correo: "frank@uniservice.co",   password: "frank2026" },
@@ -17,6 +22,11 @@ const ADMIN_CREDENTIALS = [
 const ADMIN_MASTER_PASSWORD = "uniservice_admin_2026";
 
 // ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -274,46 +284,50 @@ export default function Login() {
   // ════════════════════════════════
   // LOGIN — con detección de admin
   // ════════════════════════════════
-  const handleLogin = async () => {
-    if (!correo || errores.correo) { notificar("❌ Ingresa un correo válido"); return; }
-    if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
+const handleLogin = async () => {
+  if (!correo || errores.correo) { notificar("❌ Ingresa un correo válido"); return; }
+  if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
-    // ── Detectar si es una cuenta de admin antes de llamar al servidor ──
-    const esAdmin = ADMIN_CREDENTIALS.some(
-      a => a.correo === correo && a.password === pass
-    );
+  // 1. Verificar si es un Admin definido en el código
+  const adminLocal = ADMIN_CREDENTIALS.find(
+    a => a.correo === correo && a.password === pass
+  );
 
-    try {
-      const res = await fetch("http://localhost:3000/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo, password: pass }),
-      });
-      const data = await res.json();
+  if (adminLocal) {
+    // Si es admin del código, abrimos el modal directamente sin ir a la DB
+    // Creamos un objeto de sesión falso para que funcione el modal
+    setAdminLoginData({
+      token: "admin-local-token", // Token temporal
+      user: { id_usuario: 0, nombre: adminLocal.correo.split('@')[0], correo: adminLocal.correo }
+    });
+    setModalAdmin(true);
+    setAdminIntentos(3);
+    setAdminBloqueado(false);
+    setAdminMasterInput("");
+    setAdminError("");
+    return; // Detenemos aquí para que no intente buscar en la DB
+  }
 
-      if (data.token) {
-        if (esAdmin) {
-          // Guarda los datos pero no navega aún — abre el modal admin
-          setAdminLoginData(data);
-          setModalAdmin(true);
-          setAdminIntentos(3);
-          setAdminBloqueado(false);
-          setAdminMasterInput("");
-          setAdminError("");
-          return;
-        }
+  // 2. Si no es admin local, procedemos con el login normal de la DB
+  try {
+    const res = await fetch("http://localhost:3000/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ correo, password: pass }),
+    });
+    const data = await res.json();
 
-        // Login normal
-        guardarSesion(data, false);
-        notificar("✅ Bienvenido " + data.user.nombre, "success");
-        setTimeout(() => navigate("/home", { replace: true }), 1500);
-      } else {
-        notificar("❌ " + (data.message || "Credenciales incorrectas"));
-      }
-    } catch {
-      notificar("❌ Error de conexión");
+    if (data.token) {
+      guardarSesion(data, false);
+      notificar("✅ Bienvenido " + data.user.nombre, "success");
+      setTimeout(() => navigate("/home", { replace: true }), 1500);
+    } else {
+      notificar("❌ " + (data.message || "Credenciales incorrectas"));
     }
-  };
+  } catch {
+    notificar("❌ Error de conexión");
+  }
+};
 
   // Guarda la sesión en localStorage
   const guardarSesion = (data, esAdmin) => {
@@ -335,7 +349,7 @@ export default function Login() {
       // ✅ Contraseña correcta — guardar sesión como admin y navegar
       guardarSesion(adminLoginData, true);
       setModalAdmin(false);
-      navigate("/admin", { replace: true });
+      navigate("/home-admin", { replace: true });
     } else {
       // ❌ Incorrecto — restar intento y animar
       const nuevosIntentos = adminIntentos - 1;
