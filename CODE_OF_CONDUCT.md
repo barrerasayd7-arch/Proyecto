@@ -1,9 +1,39 @@
 # Código de Conducta de UniService 🎓
 
-## Nuestro Compromiso
-Como miembros, colaboradores y líderes de **UniService**, nos comprometemos a hacer que la participación en nuestra comunidad sea una experiencia libre de acoso para todos, independientemente de su edad, dimensiones corporales, discapacidad visible o invisible, etnia, características sexuales, identidad y expresión de género, nivel de experiencia, educación, estatus socioeconómico, nacionalidad, apariencia personal, raza, casta, color, religión o identidad y orientación sexual.
+# Manifiesto de Compromiso: El Corazón de UniService 🎓
 
-Nos esforzamos por construir un entorno profesional y seguro donde los estudiantes de **Valledupar, Cesar**, puedan conectar para ofrecer y recibir servicios académicos y técnicos con total confianza.
+## 🚀 Nuestra Misión
+Más que un repositorio de código, **UniService** es nuestra apuesta por transformar la vida universitaria en Valledupar. Como equipo, no solo "escribimos funciones"; construimos puentes que permiten a nuestros compañeros estudiantes crecer, colaborar y profesionalizarse.
+
+## ❤️ Compromiso con el Proyecto
+Nuestra responsabilidad no termina al hacer un *push*. Nos comprometemos a:
+
+*   **Excelencia con Propósito:** Entregar código limpio y funcional porque sabemos que detrás de cada usuario hay un estudiante buscando una oportunidad.
+*   **Evolución Constante:** Tratar a UniService como un organismo vivo. Si algo no funciona, lo iteramos; si algo puede mejorar, lo proponemos.
+*   **Transparencia Radical:** Ser honestos sobre nuestras limitaciones técnicas y pedir ayuda cuando la necesitemos. En este equipo, el conocimiento se comparte, no se guarda.
+*   **Propiedad Colectiva:** Todos somos dueños del éxito y de los fallos. Si hay un bug, es nuestro bug; si hay un logro, es nuestro logro.
+
+---
+
+## 🤝 Compromiso con las Personas (Nuestros Estándares)
+Para que la tecnología brille, el ambiente debe ser sano. Nos comprometemos a mantener un espacio donde:
+
+*   **La curiosidad sea premiada:** Ninguna pregunta es "tonta". Estamos aquí para aprender juntos mientras construimos.
+*   **El respeto sea la base:** Valoramos la diversidad de habilidades. Respetamos tanto al experto en Backend como al que está puliendo sus primeras vistas en React.
+*   **La crítica sea un regalo:** Recibimos feedback con humildad y lo damos con empatía, siempre enfocados en mejorar el producto, nunca en atacar a la persona.
+*   **La seguridad sea innegociable:** Protegemos los datos de nuestra comunidad y el bienestar de nuestros compañeros. No toleramos el acoso, el lenguaje ofensivo ni la exclusión.
+
+---
+
+## 🛠️ Nuestra Palabra en el Desarrollo
+Como líderes y colaboradores, asumimos la responsabilidad de actuar con integridad. Si cometemos un error o faltamos a este compromiso, nos comprometemos a reconocerlo, repararlo y aprender de ello. 
+
+Estamos aquí porque creemos en el potencial de los estudiantes del Cesar, y este proyecto es nuestra herramienta para demostrarlo.
+
+---
+
+**UniService: Construido por estudiantes, para estudiantes.**
+*Adaptado con orgullo para la comunidad de Valledupar.*
 
 ---
 
