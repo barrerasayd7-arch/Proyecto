@@ -1,0 +1,8 @@
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.csproj.AssemblyReference.cache
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.AssemblyInfoInputs.cache
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.AssemblyInfo.cs
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.csproj.CoreCompileInputs.cache
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\andre\source\repos\UniServiceAPI\UniServiceAPI\obj\Debug\net8.0\UniService.API.MvcApplicationPartsAssemblyInfo.cache

@@ -1,0 +1,439 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\crearsolicituddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\crearsolicituddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\solicitudescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\solicitudescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\servicioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\servicioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/127.0.0.1_1433/UniService/sa/SqlTable/dbo.servicios.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/127.0.0.1_1433/UniService/sa/SqlTable/dbo.usuarios.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\registerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\registerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\verificarcodigodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\verificarcodigodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\emaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\emaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\data\\uniservicecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\data\\uniservicecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\seguidorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\seguidorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\serviciodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\serviciodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\dtos\\seguimientodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\dtos\\seguimientodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\models\\solicitud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\models\\solicitud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\models\\servicio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\models\\servicio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|c:\\users\\andre\\source\\repos\\uniserviceapi\\uniserviceapi\\uniserviceapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{878402C2-75AA-41B4-AB0F-DAAC09692015}|UniserviceAPI\\UniserviceAPI.csproj|solutionrelative:uniserviceapi\\uniserviceapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Models\\Usuario.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Usuario.cs",
+              "RelativeToolTip": "UniserviceAPI\\Models\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:52.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ServiciosController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\ServiciosController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\ServiciosController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\ServiciosController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\ServiciosController.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAswI8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:38:30.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SolicitudesController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\SolicitudesController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\SolicitudesController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\SolicitudesController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\SolicitudesController.cs",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAgwLcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:39:10.276Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CrearSolicitudDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\CrearSolicitudDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\CrearSolicitudDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\CrearSolicitudDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\CrearSolicitudDTO.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAmwCAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:26.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "LoginDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\LoginDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\LoginDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\LoginDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\LoginDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:37.518Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "EmailDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\EmailDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\EmailDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\EmailDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\EmailDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T04:18:57.522Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "UniserviceAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\appsettings.json",
+              "RelativeToolTip": "UniserviceAPI\\appsettings.json",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAYwAwAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-30T06:09:50.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Program.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Program.cs",
+              "RelativeToolTip": "UniserviceAPI\\Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:09:52.081Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "dbo.servicios [Datos]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/127.0.0.1_1433/UniService/sa/SqlTable/dbo.servicios.sql",
+              "ToolTip": "dbo.servicios [Datos]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-05-01T05:17:59.049Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "dbo.usuarios [Datos]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/127.0.0.1_1433/UniService/sa/SqlTable/dbo.usuarios.sql",
+              "ToolTip": "dbo.usuarios [Datos]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-05-01T05:05:36.183Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAiwH0AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:43:20.014Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "UniServiceContext.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Data\\UniServiceContext.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Data\\UniServiceContext.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Data\\UniServiceContext.cs",
+              "RelativeToolTip": "UniserviceAPI\\Data\\UniServiceContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:12.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "UniserviceAPI\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:31:17.785Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RegisterDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\RegisterDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\RegisterDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\RegisterDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\RegisterDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:40.798Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Services\\EmailService.cs",
+              "RelativeToolTip": "UniserviceAPI\\Services\\EmailService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAiwCsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T04:09:39.193Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAqwJYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T04:10:57.993Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "VerificarCodigoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\VerificarCodigoDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\VerificarCodigoDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\VerificarCodigoDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\VerificarCodigoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T04:19:35.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "SeguidoresController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\SeguidoresController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\SeguidoresController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\SeguidoresController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\SeguidoresController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:38:07.819Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "UniserviceAPI\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:47:19.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ServicioDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\ServicioDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\ServicioDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\ServicioDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\ServicioDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:43.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\WeatherForecast.cs",
+              "RelativeToolTip": "UniserviceAPI\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:58.377Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "SeguimientoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\SeguimientoDTO.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\DTOs\\SeguimientoDTO.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\DTOs\\SeguimientoDTO.cs",
+              "RelativeToolTip": "UniserviceAPI\\DTOs\\SeguimientoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:42.382Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Solicitud.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Solicitud.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Models\\Solicitud.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Solicitud.cs",
+              "RelativeToolTip": "UniserviceAPI\\Models\\Solicitud.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:50.431Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Servicio.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Servicio.cs",
+              "RelativeDocumentMoniker": "UniserviceAPI\\Models\\Servicio.cs",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniserviceAPI\\UniserviceAPI\\Models\\Servicio.cs",
+              "RelativeToolTip": "UniserviceAPI\\Models\\Servicio.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T06:37:48.805Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "UniserviceAPI.csproj",
+              "DocumentMoniker": "C:\\Users\\andre\\source\\repos\\UniServiceAPI\\UniserviceAPI\\UniserviceAPI.csproj",
+              "RelativeDocumentMoniker": "UniserviceAPI\\UniserviceAPI.csproj",
+              "ToolTip": "C:\\Users\\andre\\source\\repos\\UniServiceAPI\\UniserviceAPI\\UniserviceAPI.csproj",
+              "RelativeToolTip": "UniserviceAPI\\UniserviceAPI.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-30T06:08:17.636Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
