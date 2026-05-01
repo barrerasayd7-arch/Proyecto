@@ -9,15 +9,27 @@ Desktop.ini
 *.swo
 *.user
 
+# --- Visual Studio / .NET ---
+.vs/
+bin/
+obj/
+*.suo
+
 # --- Archivos Temporales ---
 *.log
 *.tmp
 *.bak
 
-# --- Web (si usas librerías) ---
+# --- Node / Frontend ---
 node_modules/
+dist/
+build/
 .env
 
-# --- (Fotos de perfil en la base de datos) ---
+# --- Configuración local ---
+.env.local
+appsettings.Development.json
+
+# --- Archivos específicos (fotos u otros) ---
 Proyecto-main/src/PHP/UserPerfilFotos/
 Proyecto-main/src/PHP/UserPerfilFotos/*
