@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 
 [ApiController]
@@ -17,7 +16,9 @@ public class ServicesController : ControllerBase
         _config = config;
     }
 
-    // ?? GET TODOS LOS SERVICIOS
+    // =========================
+    // GET TODOS LOS SERVICIOS
+    // =========================
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -30,12 +31,20 @@ public class ServicesController : ControllerBase
 
             using var cmd = new SqlCommand(@"
                 SELECT 
-                    s.*,
-                    u.nombre AS proveedor,
-                    c.nombre_categoria
+                    s.id_servicio,
+                    s.titulo,
+                    s.descripcion,
+                    s.precio_hora,
+                    s.icono,
+                    s.fecha_publicacion,
+                    s.modalidad,
+                    s.disponibilidad,
+                    c.nombre_categoria,
+                    u.nombre AS proveedor
                 FROM servicios s
                 LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
                 LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
+                ORDER BY s.fecha_publicacion DESC
             ", conn);
 
             using var reader = await cmd.ExecuteReaderAsync();
@@ -45,11 +54,15 @@ public class ServicesController : ControllerBase
                 servicios.Add(new
                 {
                     id_servicio = reader["id_servicio"],
-                    titulo = reader["titulo"],
-                    descripcion = reader["descripcion"],
+                    titulo = reader["titulo"]?.ToString(),
+                    descripcion = reader["descripcion"]?.ToString(),
                     precio_hora = reader["precio_hora"],
-                    proveedor = reader["proveedor"],
-                    categoria = reader["nombre_categoria"]
+                    icono = reader["icono"]?.ToString() ?? "📌",
+                    fecha_publicacion = reader["fecha_publicacion"],
+                    modalidad = MapModalidad(reader["modalidad"]),
+                    disponibilidad = MapDisponibilidad(reader["disponibilidad"]),
+                    nombre_categoria = reader["nombre_categoria"]?.ToString(),
+                    proveedor = reader["proveedor"]?.ToString()
                 });
             }
 
@@ -61,7 +74,9 @@ public class ServicesController : ControllerBase
         }
     }
 
-    // ?? GET POR ID
+    // =========================
+    // GET POR ID
+    // =========================
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -72,9 +87,16 @@ public class ServicesController : ControllerBase
 
             using var cmd = new SqlCommand(@"
                 SELECT 
-                    s.*,
-                    u.nombre AS proveedor,
-                    c.nombre_categoria
+                    s.id_servicio,
+                    s.titulo,
+                    s.descripcion,
+                    s.precio_hora,
+                    s.icono,
+                    s.fecha_publicacion,
+                    s.modalidad,
+                    s.disponibilidad,
+                    c.nombre_categoria,
+                    u.nombre AS proveedor
                 FROM servicios s
                 LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
                 LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
@@ -91,11 +113,15 @@ public class ServicesController : ControllerBase
             var servicio = new
             {
                 id_servicio = reader["id_servicio"],
-                titulo = reader["titulo"],
-                descripcion = reader["descripcion"],
+                titulo = reader["titulo"]?.ToString(),
+                descripcion = reader["descripcion"]?.ToString(),
                 precio_hora = reader["precio_hora"],
-                proveedor = reader["proveedor"],
-                categoria = reader["nombre_categoria"]
+                icono = reader["icono"]?.ToString() ?? "📌",
+                fecha_publicacion = reader["fecha_publicacion"],
+                modalidad = MapModalidad(reader["modalidad"]),
+                disponibilidad = MapDisponibilidad(reader["disponibilidad"]),
+                nombre_categoria = reader["nombre_categoria"]?.ToString(),
+                proveedor = reader["proveedor"]?.ToString()
             };
 
             return Ok(servicio);
@@ -106,7 +132,9 @@ public class ServicesController : ControllerBase
         }
     }
 
-    // ?? CREAR SERVICIO
+    // =========================
+    // CREATE SERVICIO
+    // =========================
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ServicioDTO dto)
     {
@@ -117,9 +145,9 @@ public class ServicesController : ControllerBase
 
             using var cmd = new SqlCommand(@"
                 INSERT INTO servicios
-                (id_proveedor, titulo, descripcion, id_categoria, precio_hora, contacto, modalidad, icono, disponibilidad)
+                (id_proveedor, titulo, descripcion, id_categoria, precio_hora, contacto, modalidad, icono, disponibilidad, fecha_publicacion)
                 VALUES
-                (@id_proveedor, @titulo, @descripcion, @id_categoria, @precio_hora, @contacto, @modalidad, @icono, @disponibilidad)
+                (@id_proveedor, @titulo, @descripcion, @id_categoria, @precio_hora, @contacto, @modalidad, @icono, @disponibilidad, GETDATE())
             ", conn);
 
             cmd.Parameters.AddWithValue("@id_proveedor", dto.id_proveedor);
@@ -129,16 +157,38 @@ public class ServicesController : ControllerBase
             cmd.Parameters.AddWithValue("@precio_hora", dto.precio_hora);
             cmd.Parameters.AddWithValue("@contacto", dto.contacto ?? "");
             cmd.Parameters.AddWithValue("@modalidad", dto.modalidad);
-            cmd.Parameters.AddWithValue("@icono", dto.icono ?? "");
+            cmd.Parameters.AddWithValue("@icono", dto.icono ?? "📌");
             cmd.Parameters.AddWithValue("@disponibilidad", dto.disponibilidad);
 
             await cmd.ExecuteNonQueryAsync();
 
-            return Ok(new { ok = true, message = "Servicio creado" });
+            return Ok(new { ok = true, message = "Servicio creado correctamente" });
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { error = ex.Message });
         }
+    }
+
+    private string MapModalidad(object value)
+    {
+        return value?.ToString() switch
+        {
+            "0" => "🏫 Presencial",
+            "1" => "💻 Virtual",
+            "2" => "🔄 Mixta",
+            _ => "No definido"
+        };
+    }
+
+    private string MapDisponibilidad(object value)
+    {
+        return value?.ToString() switch
+        {
+            "0" => "📆 Entre semana",
+            "1" => "🎉 Fines de semana",
+            "2" => "⏰ Siempre disponible",
+            _ => "No definido"
+        };
     }
 }
