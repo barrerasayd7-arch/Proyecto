@@ -102,3 +102,45 @@
 <p align="center">
   <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
 </p>
+
+---
+
+<h2 id="-estructura-del-repositorio">📂 Estructura del Repositorio</h2>
+
+```bash
+PROYECTO/
+├── backend/                 # Lógica del Servidor (Node.js/Express)
+│   ├── src/
+│   │   ├── assets/          # Plantillas de correo (email.html) e imágenes de sistema
+│   │   ├── config/          # Configuraciones (Base de datos, Mailer)
+│   │   ├── controllers/     # Lógica de las rutas (auth.controller.js, etc.)
+│   │   ├── img/             # Almacenamiento local de imágenes subidas
+│   │   ├── middlewares/     # Funciones de validación y seguridad
+│   │   ├── routes/          # Definición de end-points de la API
+│   │   └── app.js           # Configuración de Express
+│   ├── .env                 # Variables de entorno (Secretas)
+│   ├── package.json         # Dependencias del Backend
+│   └── server.js            # Punto de entrada del servidor (Entry point)
+├── database/                # Scripts SQL y persistencia
+├── frontend/                # Aplicación de Cliente (Vite + React)
+│   ├── dist/                # Build para producción
+│   ├── public/img/          # Imágenes estáticas accesibles por URL
+│   ├── src/
+│   │   ├── Components/      # Componentes reutilizables (Botones, Navbar)
+│   │   ├── img/             # Imágenes usadas en el código JSX
+│   │   ├── lib/             # Librerías o configuraciones de terceros
+│   │   ├── Pages/           # Vistas principales (Login, Perfil, Home)
+│   │   ├── styles/          # Archivos CSS
+│   │   ├── utils/           # Funciones de ayuda (Helpers)
+│   │   ├── App.jsx          # Enrutador principal
+│   │   └── main.jsx         # Renderizado de React
+│   ├── .env.example         # Plantilla de variables de entorno
+│   ├── index.html           # Punto de entrada HTML
+│   ├── MIGRACION_JSX.md     # Notas de cambios técnicos
+│   ├── package.json         # Dependencias del Frontend
+│   └── vite.config.js       # Configuración de Vite
+├── docker-compose.yml       # Orquestación de contenedores
+├── import-data.sh           # Script de carga masiva de datos
+├── package.json             # Dependencias de nivel raíz (si existen)
+└── README.md                # Documentación general
+```
