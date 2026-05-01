@@ -174,67 +174,128 @@ fieldset { border: none; padding: 0; }
 
 /* Contenedor principal */
 .contenedor-notificaciones {
+  max-height: 700px;
   position: fixed;
   bottom: 30px;
   right: 30px;
   z-index: 1000;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Botón circular */
+/* Botón circular (Verde esmeralda coherente con tu diseño) */
 .boton-notificaciones {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #28a745; /* El verde de UniServices */
+  background: rgb(9, 97, 94); 
   border: none;
   color: white;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  transition: transform 0.3s ease;
-  position: relative;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .boton-notificaciones:hover {
   transform: scale(1.1);
+  background: rgb(14, 165, 160); /* Cambio a azul al hacer hover para feedback visual */
 }
 
-/* Punto rojo de aviso */
-.punto-notificacion {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 12px;
-  height: 12px;
-  background-color: #ff4757;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-
-/* Panel que aparece al presionar */
+/* 1. Ajuste al Panel: Eliminamos el scroll de aquí para dárselo al contenedor interno */
 .panel-notificaciones {
   position: absolute;
   bottom: 80px;
   right: 0;
-  width: 300px;
-  background: white;
+  width: 320px;
+  max-height: 700px;
+  background: #1a2235;
   border-radius: 12px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-  padding: 15px;
-  color: #333;
-  animation: slideIn 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* El scroll se queda aquí */
+  scrollbar-width: none; /* Firefox */
+  animation: slideIn 1s ease-out;
 }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.panel-notificaciones::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* 2. Título Estático: La clave es position: sticky */
+.titulo-estatico {
+  position: sticky;
+  top: 0; /* Se pega al borde superior del panel */
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgb(19, 196, 190);
+  background: #1a2235; /* Color sólido para que no se trasluzcan las notas al pasar */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.5px;
+}
+
+/* 3. Lista de notificaciones: Ajuste de márgenes para que no se pegue al título */
+.panel-notificaciones ul {
+  margin: 0;
+  padding: 8px 16px 16px 16px;
+  list-style: none;
 }
 
 .item-notificacion {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  list-style: none;
-  font-size: 14px;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  border-left: 3px solid #F5C842; 
+  transition: background 0.2s;
+}
+
+.item-notificacion:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Mantén tu contenedor y botón igual */
+
+.item-notificacion:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.titulo-estatico {
+  text-align: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  padding: 12px 15px;
+  font-size: 16px;
+  color: #ffffff;
+  background: #1a2235; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  box-sizing: border-box; 
+  display: flex;
+  align-items: center;
 }
 
 /* ══════════════════════════════
