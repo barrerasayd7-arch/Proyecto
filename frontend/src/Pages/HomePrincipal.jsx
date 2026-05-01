@@ -947,21 +947,46 @@ function NotificacionesFlotantes() {
     { id: 20, texto: "🎁 ¡Gracias por ser parte de UniServices! Tienes un badge nuevo", leida: false }
   ]);
   
-  return (
-    <div className="contenedor-notificaciones">
-      <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
-        🔔
-      </button>
-      {abierto && (
-        <div className="panel-notificaciones">
+const vaciarNotificaciones = () => {
+  const confirmar = window.confirm("¿Estás seguro de que deseas eliminar todas las notificaciones? Esta acción no se puede deshacer.");
+  setNotificaciones([]); 
+};
+
+return (
+  <div className="contenedor-notificaciones">
+    <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
+      🔔
+    </button>
+    
+    {abierto && (
+      <div className="panel-notificaciones">
+        {/* Encabezado estático con título y botón de borrar */}
+        <div className="cabecera-estatica">
           <h3 className="titulo-estatico">Notificaciones</h3>
-          <ul>
-            {notificaciones.map(n => <li key={n.id} className="item-notificacion">{n.texto}</li>)}
-          </ul>
+          <button 
+            className="boton-vaciar" 
+            onClick={vaciarNotificaciones}
+            title="Vaciar todas las notificaciones"
+          >
+            🗑️
+          </button>
         </div>
-      )}
-    </div>
-  );
+        
+        <ul className="lista-scroll">
+          {notificaciones.length > 0 ? (
+            notificaciones.map(n => (
+              <li key={n.id} className="item-notificacion">
+                {n.texto}
+              </li>
+            ))
+          ) : (
+            <li className="sin-notificaciones">No tienes notificaciones pendientes</li>
+          )}
+        </ul>
+      </div>
+    )}
+  </div>
+);
 }
 
 export default function HomePrincipal() {

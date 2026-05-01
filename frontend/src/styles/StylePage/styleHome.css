@@ -169,12 +169,10 @@ fieldset { border: none; padding: 0; }
 }
   
 /* ══════════════════════════════
-   NOTIFICACIONES
+   NOTIFICACIONES - UNISERVICES
 ══════════════════════════════ */
 
-/* Contenedor principal */
 .contenedor-notificaciones {
-  max-height: 700px;
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -182,7 +180,7 @@ fieldset { border: none; padding: 0; }
   font-family: 'Inter', sans-serif;
 }
 
-/* Botón circular (Verde esmeralda coherente con tu diseño) */
+/* Botón principal */
 .boton-notificaciones {
   width: 60px;
   height: 60px;
@@ -197,14 +195,28 @@ fieldset { border: none; padding: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  animation: shake 3s ease-in-out infinite;
+  transform-origin: center;
 }
 
 .boton-notificaciones:hover {
   transform: scale(1.1);
-  background: rgb(14, 165, 160); /* Cambio a azul al hacer hover para feedback visual */
+  background: rgb(14, 165, 160);
 }
 
-/* 1. Ajuste al Panel: Eliminamos el scroll de aquí para dárselo al contenedor interno */
+.punto-notificacion {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 12px;
+  height: 12px;
+  background-color: #ff4757;
+  border-radius: 50%;
+  border: 2px solid #1a2235;
+}
+
+/* Panel principal */
 .panel-notificaciones {
   position: absolute;
   bottom: 80px;
@@ -217,85 +229,107 @@ fieldset { border: none; padding: 0; }
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* El scroll se queda aquí */
-  scrollbar-width: none; /* Firefox */
-  animation: slideIn 1s ease-out;
+  overflow: hidden; /* Importante para que el sticky funcione dentro */
+  animation: slideIn 0.4s ease-out;
 }
 
-.panel-notificaciones::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
-}
-
-/* 2. Título Estático: La clave es position: sticky */
-.titulo-estatico {
+/* Cabecera Estática */
+.cabecera-estatica {
   position: sticky;
-  top: 0; /* Se pega al borde superior del panel */
-  left: 0;
-  right: 0;
+  top: 0;
   z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: #1a2235;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+}
+
+.titulo-estatico {
   margin: 0;
-  padding: 16px;
   font-size: 15px;
   font-weight: 600;
   color: rgb(19, 196, 190);
-  background: #1a2235; /* Color sólido para que no se trasluzcan las notas al pasar */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   letter-spacing: 0.5px;
 }
 
-/* 3. Lista de notificaciones: Ajuste de márgenes para que no se pegue al título */
-.panel-notificaciones ul {
+/* Botón Vaciar */
+.boton-vaciar {
+  background: rgba(235, 73, 87, 0.15);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boton-vaciar:hover {
+  background: rgba(198, 18, 33, 0.8);
+  transform: scale(1.1);
+}
+
+/* Lista con scroll oculto */
+.lista-scroll {
   margin: 0;
   padding: 8px 16px 16px 16px;
   list-style: none;
+  overflow-y: auto;
+  flex-grow: 1;
+  scrollbar-width: none; /* Firefox */
 }
 
+.lista-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Items individuales */
 .item-notificacion {
   padding: 12px;
-  margin-top: 12px;
+  margin-top: 10px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
   font-size: 13px;
   color: #cbd5e1;
   line-height: 1.4;
-  border-left: 3px solid #F5C842; 
-  transition: background 0.2s;
+  border-left: 3px solid #F5C842; /* Acento amarillo/dorado */
+  transition: all 0.2s ease;
 }
 
 .item-notificacion:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
+  transform: translateX(4px);
+  animation-play-state: paused;
+  transform: scale(1.1);
 }
 
-/* Mantén tu contenedor y botón igual */
-
-.item-notificacion:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+.sin-notificaciones {
+  padding: 40px 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  font-style: italic;
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.titulo-estatico {
-  text-align: center;
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  margin: 0;
-  padding: 12px 15px;
-  font-size: 16px;
-  color: #ffffff;
-  background: #1a2235; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 10;
-  box-sizing: border-box; 
-  display: flex;
-  align-items: center;
+@keyframes shake {
+  0% { transform: rotate(8deg); }
+  10% { transform: rotate(8deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(8deg); }
+  40% { transform: rotate(-8deg); }
+  50% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
 }
 
 /* ══════════════════════════════
