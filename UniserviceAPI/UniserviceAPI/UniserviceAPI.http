@@ -1,6 +1,0 @@
-@UniserviceAPI_HostAddress = http://localhost:5056
-
-GET {{UniserviceAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
