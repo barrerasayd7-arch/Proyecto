@@ -901,7 +901,7 @@ function Footer() {
           </div>
         </div>
         <hr />
-        <p className="footer-copy">© 2025 UniServicios — Hecho por y para estudiantes 🎓</p>
+        <p className="footer-copy">© 2026 UniServicios — Hecho por y para estudiantes 🎓</p>
       </div>
     </footer> 
   );
