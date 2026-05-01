@@ -830,7 +830,7 @@ export default function Servicio() {
         <div className="container">
           <hr />
           <p className="footer-copy">
-            © 2025 UniServicios — Hecho por y para estudiantes 🎓
+            © 2026 UniServicios — Hecho por y para estudiantes 🎓
           </p>
         </div>
       </footer>

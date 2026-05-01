@@ -902,33 +902,92 @@ function Footer() {
           </div>
         </div>
         <hr />
-        <p className="footer-copy">© 2025 UniServicios — Hecho por y para estudiantes 🎓</p>
+        <p className="footer-copy">© 2026 UniServicios — Hecho por y para estudiantes 🎓</p>
       </div>
     </footer> 
   );
 }
 
 function NotificacionesFlotantes() {
-  const [abierto, setAbierto] = useState(false);
-  const [notificaciones] = useState([
-    { id: 1, texto: "Nueva solicitud en Tutoría", leida: false },
-  ]);
 
-  return (
-    <div className="contenedor-notificaciones">
-      <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
-        🔔
-      </button>
-      {abierto && (
-        <div className="panel-notificaciones">
-          <h3>Notificaciones</h3>
-          <ul>
-            {notificaciones.map(n => <li key={n.id} className="item-notificacion">{n.texto}</li>)}
-          </ul>
+  const [abierto, setAbierto] = useState(false);
+  
+  const [notificaciones] = useState([
+    // --- Solicitudes y Servicios ---
+    { id: 1, texto: "📩 ¡Nueva solicitud! Un estudiante requiere tu tutoría en Programación", leida: false },
+    { id: 2, texto: "✅ Tu solicitud para 'Asesoría en Cálculo' ha sido aceptada", leida: false },
+    { id: 3, texto: "📅 Recordatorio: Tu tutoría de 'Bases de Datos' comienza en 30 minutos", leida: false },
+    { id: 4, texto: "🍎 Daniela ha solicitado tu servicio de 'Asesoría Nutricional'", leida: false },
+    { id: 5, texto: "🛠️ Camilo marcó como 'En Proceso' el Mantenimiento de tu PC", leida: true },
+  
+    // --- Reseñas y Calificaciones ---
+    { id: 6, texto: "⭐ ¡Nueva calificación! Alguien valoró tu servicio con 5 estrellas", leida: false },
+    { id: 7, texto: "📝 Julian dejó un comentario en tu perfil: 'Excelente explicación'", leida: false },
+    { id: 8, texto: "🏅 ¡Felicidades! Has alcanzado el nivel de 'Tutor Destacado'", leida: false },
+  
+    // --- Pagos y Precios ---
+    { id: 9, texto: "💰 Se ha confirmado el pago de $45,000 por 'Formateo de Laptop'", leida: true },
+    { id: 10, texto: "📉 Oferta: El servicio 'Venta de Almuerzos' bajó de precio", leida: false },
+  
+    // --- Mensajería e Interacción ---
+    { id: 11, texto: "💬 Mariana te envió un mensaje: '¿A qué hora nos vemos?'", leida: false },
+    { id: 12, texto: "👋 Diego quiere contactarte por 'Reparación de Celulares'", leida: false },
+  
+    // --- Sistema y Seguridad (Acorde a tu SECURITY.md) ---
+    { id: 13, texto: "🔒 Tu código de verificación ha sido generado exitosamente", leida: true },
+    { id: 14, texto: "⚠️ Alerta de seguridad: Nuevo inicio de sesión detectado", leida: false },
+    { id: 15, texto: "🔄 Tu contraseña ha sido actualizada correctamente", leida: true },
+  
+    // --- Comunidad y Material (Repositorio Académico) ---
+    { id: 16, texto: "📚 Se ha subido un nuevo taller al repositorio de 'Física II'", leida: false },
+    { id: 17, texto: "🔥 ¡Tu aporte al repositorio ha sido descargado 10 veces!", leida: false },
+    { id: 18, texto: "📍 Nuevo servicio cerca de ti: 'Arriendo de Habitaciones'", leida: false },
+  
+    // --- Actualizaciones de UniServices ---
+    { id: 19, texto: "🚀 Actualización v1.2.5: Revisa las nuevas mejoras en la interfaz", leida: true },
+    { id: 20, texto: "🎁 ¡Gracias por ser parte de UniServices! Tienes un badge nuevo", leida: false }
+  ]);
+  
+const vaciarNotificaciones = () => {
+  const confirmar = window.confirm("¿Estás seguro de que deseas eliminar todas las notificaciones? Esta acción no se puede deshacer.");
+  setNotificaciones([]); 
+};
+
+return (
+  <div className="contenedor-notificaciones">
+    <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
+      🔔
+    </button>
+    
+    {abierto && (
+      <div className="panel-notificaciones">
+        {/* Encabezado estático con título y botón de borrar */}
+        <div className="cabecera-estatica">
+          <h3 className="titulo-estatico">Notificaciones</h3>
+          <button 
+            className="boton-vaciar" 
+            onClick={vaciarNotificaciones}
+            title="Vaciar todas las notificaciones"
+          >
+            🗑️
+          </button>
         </div>
-      )}
-    </div>
-  );
+        
+        <ul className="lista-scroll">
+          {notificaciones.length > 0 ? (
+            notificaciones.map(n => (
+              <li key={n.id} className="item-notificacion">
+                {n.texto}
+              </li>
+            ))
+          ) : (
+            <li className="sin-notificaciones">No tienes notificaciones pendientes</li>
+          )}
+        </ul>
+      </div>
+    )}
+  </div>
+);
 }
 
 export default function HomePrincipal() {
