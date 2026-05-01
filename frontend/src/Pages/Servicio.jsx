@@ -6,9 +6,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/StylePage/styleHome.css";
 import "../styles/StylePage/StyleServicio.css";
 
-const API = "http://localhost:3000/api/services";
-const API_USUARIO = "http://localhost:3000/api/users";
-const API_SOLICITUD = "http://localhost:3000/api/solicitudes";
+const API = "https://localhost:7237/api/Services";
+const API_USUARIO = "https://localhost:7237/api/Users";
+const API_SOLICITUD = "https://localhost:7237/api/Solicitudes";
 
 const MODALIDAD_MAP = { 0: "Presencial", 1: "Virtual", 2: "Mixta" };
 const DISPONIBILIDAD_MAP = {
@@ -197,14 +197,13 @@ function FormSolicitud({
 
   // 📩 CREAR PAYLOAD CORRECTO
   const payload = {
-    accion: "crear",
     id_cliente,
     id_proveedor: id_proveedor_num,
     id_servicio: id_servicio_num,
 
     tipo_servicio: form.tipo_servicio,
     descripcion: form.descripcion,
-    fecha_deseada: form.fecha_deseada,
+    fecha_deseada: form.fecha_deseada + "T00:00:00",
     hora_deseada: formatHora(form.hora_deseada) || null,
     tema: "sin tema",
 

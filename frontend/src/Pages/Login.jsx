@@ -102,7 +102,7 @@ export default function Login() {
     }
     setEnviandoCodigo(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/send-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/send-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg }),
@@ -126,7 +126,7 @@ export default function Login() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:3000/api/users/verify-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg, codigo: codigoInput }),
@@ -160,7 +160,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/forgot-password", {
+      const res = await fetch("https://localhost:7237/api/Auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo }),
@@ -181,7 +181,7 @@ export default function Login() {
   const handleResetReenviarCodigo = async () => {
     setResetCargando(true);
     try {
-      await fetch("http://localhost:3000/api/users/forgot-password", {
+      await fetch("https://localhost:7237/api/Auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo }),
@@ -202,7 +202,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/verify-code", {
+      const res = await fetch("https://localhost:7237/api/Auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: resetCorreo, codigo: resetCodigo }),
@@ -232,7 +232,7 @@ export default function Login() {
     }
     setResetCargando(true);
     try {
-      const res = await fetch("http://localhost:3000/api/users/reset-password", {
+      const res = await fetch("https://localhost:7237/api/Auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -274,7 +274,7 @@ export default function Login() {
     if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
     try {
-      const res = await fetch("http://localhost:3000/api/users/login", {
+      const res = await fetch("https://localhost:7237/api/Users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, password: pass }),
@@ -290,7 +290,7 @@ export default function Login() {
 
         // Marcar como conectado en la base
         try {
-          await fetch(`http://localhost:3000/api/users/${data.user.id_usuario}`, {
+          await fetch(`https://localhost:7237/api/Users/${data.user.id_usuario}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -304,6 +304,9 @@ export default function Login() {
 
         notificar("✅ Bienvenido " + data.user.nombre, "success");
         setTimeout(() => navigate("/home", { replace: true }), 1500);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("usuarioId", data.user.id);
+        localStorage.setItem("usuario", data.user.nombre);
       } else {
         notificar("❌ " + (data.message || "Credenciales incorrectas"));
       }
@@ -322,7 +325,7 @@ export default function Login() {
       notificar("❌ Revisa los campos del formulario"); return;
     }
     try {
-      const res = await fetch("http://localhost:3000/api/users/register", {
+      const res = await fetch("https://localhost:7237/api/Users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: correoReg, password: passReg, nombre: nombre.trim(), codigo: codigoInput }),
