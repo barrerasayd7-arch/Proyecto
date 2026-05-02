@@ -292,7 +292,7 @@ const handleLogin = async () => {
   if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
   try {
-    const res = await fetch("https://localhost:7237/api/Users/login", {
+    const res = await fetch("http://localhost:5165/api/Users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ correo, password: pass }),
