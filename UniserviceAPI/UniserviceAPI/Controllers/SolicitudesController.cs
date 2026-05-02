@@ -102,7 +102,7 @@ public class SolicitudesController : ControllerBase
             {
                 id_solicitud = reader["id_solicitud"],
                 estado = reader["estado"],
-                descripcion = reader["descripcion"],
+                descripcion = reader["descripcion"] == DBNull.Value ? "" : reader["descripcion"].ToString(),
                 nombre_proveedor = reader["nombre_proveedor"],
                 titulo_servicio = reader["titulo_servicio"],
                 icono = reader["icono"]
@@ -143,12 +143,12 @@ public class SolicitudesController : ControllerBase
             {
                 id_solicitud = reader["id_solicitud"],
                 estado = reader["estado"],
-                descripcion = reader["descripcion"],
+                descripcion = reader["descripcion"] == DBNull.Value ? "" : reader["descripcion"].ToString(),
                 nombre_cliente = reader["nombre_cliente"],
                 titulo_servicio = reader["titulo_servicio"],
                 icono = reader["icono"],
-                motivo_rechazo = reader["motivo_rechazo"],
-                contraoferta = reader["contraoferta"]
+                motivo_rechazo = reader["motivo_rechazo"] == DBNull.Value ? "" : reader["motivo_rechazo"].ToString(),
+                contraoferta = reader["contraoferta"] == DBNull.Value ? "" : reader["contraoferta"].ToString(),
             });
         }
 
@@ -181,4 +181,5 @@ public class SolicitudesController : ControllerBase
 
         return Ok(new { message = "Solicitud actualizada" });
     }
+
 }
