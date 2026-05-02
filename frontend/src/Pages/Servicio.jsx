@@ -105,18 +105,10 @@ function FormSolicitud({
   useEffect(() => {
     const verificar = async () => {
       try {
-        const res = await fetch(API_SOLICITUD, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            accion: "verificar",
-            id_cliente: Number(localStorage.getItem("usuarioId")),
-            id_servicio: servicioId,
-          }),
-        });
-
-        const data = await res.json();
-        setSolicitudExiste(data.existe);
+            const id_cliente = Number(localStorage.getItem("usuarioId"));
+            const res = await fetch(`${API_SOLICITUD}/verificar?id_cliente=${id_cliente}&id_servicio=${servicioId}`);
+            const data = await res.json();
+            setSolicitudExiste(data.existe);
       } catch (error) {
         console.error(error);
       }
@@ -148,16 +140,10 @@ function FormSolicitud({
   // 🗑️ ELIMINAR
   if (solicitudExiste) {
     try {
-      const res = await fetch(API_SOLICITUD, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          accion: "eliminar",
-          id_cliente,
-          id_proveedor: id_proveedor_num,
-          id_servicio: id_servicio_num,
-        }),
-      });
+      const res = await fetch(`${API_SOLICITUD}/eliminar?id_cliente=${id_cliente}&id_servicio=${id_servicio_num}`, {
+      method: "DELETE",
+});
+
 
       const data = await res.json();
 
