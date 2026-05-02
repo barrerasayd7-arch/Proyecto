@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configuraci髇 de Autenticaci髇 JWT
+// 1. Configuraci贸n de Autenticaci贸n JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
@@ -27,15 +27,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// 2. Configuraci髇 de Base de Datos (SQL Server)
+// 2. Configuraci贸n de Base de Datos (SQL Server)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 builder.Services.AddScoped<EmailService>();
 
-// 3. Configuraci髇 de CORS
-// IMPORTANTE: Se agregan los puertos 5173 y 5174 por si Vite cambia de puerto autom醫icamente
+// 3. Configuraci贸n de CORS
+// IMPORTANTE: Se agregan los puertos 5173 y 5174 por si Vite cambia de puerto autom谩ticamente
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReact",
@@ -50,7 +50,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// 4. Configuraci髇 de Swagger
+// 4. Configuraci贸n de Swagger
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -81,7 +81,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// --- CONFIGURACI覰 DEL PIPELINE DE HTTP (ORDEN CR蚑ICO) ---
+// --- CONFIGURACI脫N DEL PIPELINE DE HTTP (ORDEN CR脥TICO) ---
 
 if (app.Environment.IsDevelopment())
 {
@@ -98,7 +98,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// C. Mantenemos comentada la redirecci髇 HTTPS para facilitar la conexi髇 local
+// C. Mantenemos comentada la redirecci贸n HTTPS para facilitar la conexi贸n local
 // app.UseHttpsRedirection();
 
 app.MapControllers();

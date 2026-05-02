@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/StylePage/styleAdmin.css";
 
 // ── Constantes ──
-const API = "http://localhost:3000/api";
+const API = "http://localhost:5165/api";
 
 // ── Helpers ──
 function formatFecha(fecha) {
