@@ -291,44 +291,30 @@ const handleLogin = async () => {
   if (!correo || errores.correo) { notificar("❌ Ingresa un correo válido"); return; }
   if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
-    try {
-      const res = await fetch("http://localhost:5165/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo, password: pass }),
-      });
-      const data = await res.json();
+  try {
+    const res = await fetch("https://localhost:7237/api/Users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ correo, password: pass }),
+    });
+    const data = await res.json();
 
-      if (data.token) {
-        localStorage.setItem("token",        data.token);
-        localStorage.setItem("usuarioId",    data.user.id_usuario);
-        localStorage.setItem("usuario",      data.user.nombre);
-        localStorage.setItem("usuarioCorreo",data.user.correo);
-        localStorage.setItem("logueado",     "true");
+    if (data.token) {
+      localStorage.setItem("token",         data.token);
+      localStorage.setItem("usuarioId",     data.user.id);
+      localStorage.setItem("usuario",       data.user.nombre);
+      localStorage.setItem("usuarioCorreo", data.user.correo);
+      localStorage.setItem("logueado",      "true");
 
-        // Marcar como conectado en la base
-        try {
-          await fetch(`http://localhost:5165/api/users/${data.user.id_usuario}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${data.token}`
-            },
-            body: JSON.stringify({ estado: 1 })
-          });
-        } catch (e) {
-          console.error("Error silencioso al cambiar estado:", e);
-        }
-
-        notificar("✅ Bienvenido " + data.user.nombre, "success");
-        setTimeout(() => navigate("/home", { replace: true }), 1500);
-      } else {
-        notificar("❌ " + (data.message || "Credenciales incorrectas"));
-      }
-    } catch {
-      notificar("❌ Error de conexión");
+      notificar("✅ Bienvenido " + data.user.nombre, "success");
+      setTimeout(() => navigate("/home", { replace: true }), 1500);
+    } else {
+      notificar("❌ " + (data.message || "Credenciales incorrectas"));
     }
-  };
+  } catch {
+    notificar("❌ Error de conexión");
+  }
+};
 
   // ════════════════════════════════
   // REGISTRO
