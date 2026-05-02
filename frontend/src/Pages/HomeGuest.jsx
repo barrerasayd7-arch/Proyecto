@@ -4,7 +4,7 @@ import "../styles/StylePage/styleHome.css";
 import { formatearFecha } from "../utils/helpers";
 
 // ── Constantes ──
-const API = "http://localhost:3000/api/services";
+const API = "http://localhost:5165/api/services";
 const CANTIDAD_POR_PAGINA = 8;
 
 const CHIPS_CATEGORIA = [

@@ -292,7 +292,7 @@ const handleLogin = async () => {
   if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
 
     try {
-      const res = await fetch("http://localhost:3000/api/users/login", {
+      const res = await fetch("http://localhost:5165/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, password: pass }),
@@ -308,7 +308,7 @@ const handleLogin = async () => {
 
         // Marcar como conectado en la base
         try {
-          await fetch(`http://localhost:3000/api/users/${data.user.id_usuario}`, {
+          await fetch(`http://localhost:5165/api/users/${data.user.id_usuario}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
