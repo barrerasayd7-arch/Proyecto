@@ -102,7 +102,7 @@ public class SolicitudesController : ControllerBase
             {
                 id_solicitud = reader["id_solicitud"],
                 estado = reader["estado"],
-                descripcion = reader["descripcion"],
+                descripcion = reader["descripcion"] == DBNull.Value ? "" : reader["descripcion"].ToString(),
                 nombre_proveedor = reader["nombre_proveedor"],
                 titulo_servicio = reader["titulo_servicio"],
                 icono = reader["icono"]
@@ -143,12 +143,12 @@ public class SolicitudesController : ControllerBase
             {
                 id_solicitud = reader["id_solicitud"],
                 estado = reader["estado"],
-                descripcion = reader["descripcion"],
+                descripcion = reader["descripcion"] == DBNull.Value ? "" : reader["descripcion"].ToString(),
                 nombre_cliente = reader["nombre_cliente"],
                 titulo_servicio = reader["titulo_servicio"],
                 icono = reader["icono"],
-                motivo_rechazo = reader["motivo_rechazo"],
-                contraoferta = reader["contraoferta"]
+                motivo_rechazo = reader["motivo_rechazo"] == DBNull.Value ? "" : reader["motivo_rechazo"].ToString(),
+                contraoferta = reader["contraoferta"] == DBNull.Value ? "" : reader["contraoferta"].ToString(),
             });
         }
 
@@ -181,4 +181,46 @@ public class SolicitudesController : ControllerBase
 
         return Ok(new { message = "Solicitud actualizada" });
     }
+
+
+    // 🔹 VERIFICAR SI YA EXISTE SOLICITUD
+    [HttpGet("verificar")]
+    public async Task<IActionResult> Verificar([FromQuery] int id_cliente, [FromQuery] int id_servicio)
+    {
+        using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+        await conn.OpenAsync();
+
+        var cmd = new SqlCommand(@"
+        SELECT COUNT(*) FROM solicitudes
+        WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio
+        AND estado NOT IN ('Rechazada', 'Cancelada')
+    ", conn);
+
+        cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
+        cmd.Parameters.AddWithValue("@id_servicio", id_servicio);
+
+        var count = (int)await cmd.ExecuteScalarAsync();
+        return Ok(new { existe = count > 0 });
+    }
+
+    // 🔹 ELIMINAR SOLICITUD
+    [HttpDelete("eliminar")]
+    public async Task<IActionResult> Eliminar([FromQuery] int id_cliente, [FromQuery] int id_servicio)
+    {
+        using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+        await conn.OpenAsync();
+
+        var cmd = new SqlCommand(@"
+        DELETE FROM solicitudes
+        WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio
+        AND estado NOT IN ('Rechazada', 'Cancelada')
+    ", conn);
+
+        cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
+        cmd.Parameters.AddWithValue("@id_servicio", id_servicio);
+
+        await cmd.ExecuteNonQueryAsync();
+        return Ok(new { message = "Solicitud eliminada" });
+    }
+
 }
