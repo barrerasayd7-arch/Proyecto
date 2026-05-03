@@ -447,6 +447,103 @@ function FormSolicitud({
   );
 }
 
+
+const API_CALIFICACIONES = "https://localhost:7237/api/calificaciones";
+
+function FormCalificacion({ servicioId, showModal, onNuevaResena }) {
+  const [permiso, setPermiso] = useState(null); // null=cargando, {puede, yaCalifico, id_solicitud}
+  const [estrellas, setEstrellas] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [comentario, setComentario] = useState("");
+  const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    const id_cliente = Number(localStorage.getItem("usuarioId"));
+    if (!id_cliente || !servicioId) return;
+
+    fetch(`${API_CALIFICACIONES}/puede-calificar?id_cliente=${id_cliente}&id_servicio=${servicioId}`)
+      .then(r => r.json())
+      .then(data => setPermiso(data))
+      .catch(() => setPermiso(null));
+  }, [servicioId]);
+
+  const handleEnviar = async () => {
+    if (estrellas === 0) { showModal("error", "❌ Selecciona una puntuación"); return; }
+    const id_cliente = Number(localStorage.getItem("usuarioId"));
+    setEnviando(true);
+    try {
+      const res = await fetch(API_CALIFICACIONES, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_solicitud: permiso.id_solicitud,
+          id_cliente,
+          id_servicio: Number(servicioId),
+          puntuacion: estrellas,
+          comentario: comentario || null
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showModal("success", "⭐ ¡Reseña enviada!");
+        setPermiso(p => ({ ...p, puede: false, yaCalifico: true }));
+        onNuevaResena(); // recarga las reseñas
+      } else {
+        showModal("error", data.error || "Error al enviar reseña");
+      }
+    } catch {
+      showModal("error", "Error de conexión");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  if (!permiso) return null;
+  if (permiso.yaCalifico) return (
+    <div className="seccion-info" style={{ textAlign: "center", padding: "20px" }}>
+      <p style={{ color: "var(--teal)" }}>✅ Ya calificaste este servicio. ¡Gracias!</p>
+    </div>
+  );
+  if (!permiso.puede) return null; // no tiene solicitud aceptada, no mostrar nada
+
+  return (
+    <div className="seccion-info">
+      <h3>⭐ Dejar una reseña</h3>
+
+      {/* Selector de estrellas */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "16px", fontSize: "32px" }}>
+        {[1,2,3,4,5].map(n => (
+          <span
+            key={n}
+            style={{ cursor: "pointer", color: n <= (hover || estrellas) ? "#fbbf24" : "#374151" }}
+            onMouseEnter={() => setHover(n)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => setEstrellas(n)}
+          >★</span>
+        ))}
+      </div>
+
+      <textarea
+        className="form-input-custom"
+        placeholder="Cuéntanos tu experiencia... (opcional)"
+        value={comentario}
+        onChange={e => setComentario(e.target.value)}
+        rows={3}
+        style={{ marginBottom: "12px" }}
+      />
+
+      <button
+        type="button"
+        className="btn-primary"
+        onClick={handleEnviar}
+        disabled={enviando}
+      >
+        {enviando ? "Enviando..." : "📤 Publicar reseña"}
+      </button>
+    </div>
+  );
+}
+
 // ── Componente principal ──
 export default function Servicio() {
   const navigate = useNavigate();
@@ -457,6 +554,7 @@ export default function Servicio() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
   const [imagenActual, setImagenActual] = useState(0);
+  const [recargarResenas, setRecargarResenas] = useState(0);
   const [modal, setModal] = useState({
     show: false,
     type: "",
@@ -503,7 +601,7 @@ export default function Servicio() {
       })
       .catch(() => setError(true))
       .finally(() => setCargando(false));
-  }, [idServicio]);
+    }, [idServicio, recargarResenas]);
 
   // Cerrar sesión
   const handleCerrarSesion = async () => {
@@ -680,6 +778,7 @@ export default function Servicio() {
             {/* Reseñas */}
             <div className="seccion-info">
               <h3>⭐ Reseñas de Clientes</h3>
+              
               {Array.isArray(servicio.resenas) &&
               servicio.resenas.length > 0 ? (
                 <div className="resenas-container">
@@ -712,6 +811,14 @@ export default function Servicio() {
                 </p>
               )}
             </div>
+
+            {/* Formulario de calificación */}
+            <FormCalificacion
+              servicioId={idServicio}
+              showModal={showModal}
+              onNuevaResena={() => setRecargarResenas(n => n + 1)}
+            />
+
           </div>
 
           {/* ── COLUMNA DERECHA ── */}
