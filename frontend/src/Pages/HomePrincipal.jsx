@@ -418,7 +418,7 @@ function SeccionBuscar({ serviciosTotales }) {
   );
 }
 
-function SeccionPublicar() {
+function SeccionPublicar({ onPublicado }) {
   const [form, setForm] = useState(initialPublicar);
   const [loading, setLoading] = useState(false);
 
@@ -467,9 +467,10 @@ function SeccionPublicar() {
       });
       const data = await res.json();
       if (data.ok) {
-        alert("✅ Servicio publicado correctamente");
-        setForm(initialPublicar);
-      } else {
+                    alert("✅ Servicio publicado correctamente");
+                    setForm(initialPublicar);
+                    onPublicado(); 
+} else {
         alert("❌ Error: " + (data.error || "No se pudo publicar"));
       }
     } catch {
@@ -1005,18 +1006,23 @@ export default function HomePrincipal() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [navigate]);
 
-  useEffect(() => {
-    fetch(API)
-      .then(res => res.json())
-      .then(data => {
-        const ordenados = [...data].reverse();
-        setServiciosTotales(ordenados);
-        setRecientes(ordenados.slice(0, 4));
-        const top = [...data].sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)).slice(0, 3);
-        setTop3(top);
-      })
-      .finally(() => setCargando(false));
-  }, []);
+// DESPUÉS:
+const cargarServicios = useCallback(() => {
+  setCargando(true);
+  fetch(API)
+    .then(res => res.json())
+    .then(data => {
+      setServiciosTotales([...data].reverse());
+      setRecientes(data.slice(0, 4));
+      const top = [...data].sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)).slice(0, 3);
+      setTop3(top);
+    })
+    .finally(() => setCargando(false));
+}, []);
+
+useEffect(() => {
+  cargarServicios();
+}, [cargarServicios]);
 
   const handleCerrarSesion = () => {
     localStorage.clear();
@@ -1030,7 +1036,7 @@ export default function HomePrincipal() {
       <SeccionBuscar serviciosTotales={serviciosTotales} />
       <SeccionRecientes servicios={recientes} cargando={cargando} />
       <SeccionTop top3={top3} />
-      <SeccionPublicar />
+      <SeccionPublicar onPublicado={cargarServicios} />
        <SeccionSolicitudes />
       <NotificacionesFlotantes />
       <Footer />
