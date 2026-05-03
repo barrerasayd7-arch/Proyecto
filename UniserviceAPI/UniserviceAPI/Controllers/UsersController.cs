@@ -149,4 +149,64 @@ public class UsersController : ControllerBase
             return StatusCode(500, new { error = ex.Message });
         }
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserById(int id)
+    {
+        try
+        {
+            using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await conn.OpenAsync();
+
+            // Esta consulta solo pide lo básico de la tabla usuarios para asegurar que cargue
+            // Si tienes las otras columnas en tu tabla, agrégalas aquí
+            string sql = @"
+            SELECT 
+                id_usuario, nombre, correo, estado, 
+                ISNULL(avatar, '../src/img/default-avatar.png') as avatar, 
+                ISNULL(descripcion, 'Sin descripción') as descripcion, 
+                ISNULL(telefono, 'No disponible') as telefono, 
+                ISNULL(fecha_registro, GETDATE()) as fecha_registro, 
+                ISNULL(universidad, 'Sin universidad') as universidad
+            FROM usuarios 
+            WHERE id_usuario = @id";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                // Devolvemos los datos. Si las tablas de seguidores/servicios no existen,
+                // ponemos 0 manualmente para que no salga el error 500.
+                return Ok(new
+                {
+                    id = (int)reader["id_usuario"],
+                    nombre = reader["nombre"].ToString(),
+                    correo = reader["correo"].ToString(),
+                    estado = reader["estado"],
+                    avatar = reader["avatar"].ToString(),
+                    descripcion = reader["descripcion"].ToString(),
+                    telefono = reader["telefono"].ToString(),
+                    fecha_registro = (DateTime)reader["fecha_registro"],
+                    universidad = reader["universidad"].ToString(),
+
+                    // Valores quemados temporalmente para evitar el error 500 
+                    // si no tienes las tablas de seguidores o servicios aún:
+                    total_publicaciones = 0,
+                    total_seguidores = 0,
+                    total_siguiendo = 0,
+                    reputacion = 0,
+                });
+            }
+
+            return NotFound(new { message = "Usuario no encontrado" });
+        }
+        catch (Exception ex)
+        {
+            // Esto te enviará el error real al frontend para que sepas qué columna falta
+            return StatusCode(500, new { error = "Error en SQL: " + ex.Message });
+        }
+    }
 }
