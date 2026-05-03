@@ -68,7 +68,9 @@ const PrivacyPage = () => {
             nosotros a través de nuestros canales oficiales.
           </p>
 
-          <h3 className="privacy-subtitle">5. Cookies y Tecnologías Similares</h3>
+          <h3 className="privacy-subtitle">
+            5. Cookies y Tecnologías Similares
+          </h3>
           <p className="privacy-text">
             Utilizamos cookies y tecnologías similares para mejorar la
             funcionalidad del sitio, analizar el tráfico y personalizar tu
