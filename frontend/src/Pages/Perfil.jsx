@@ -53,14 +53,18 @@ const [misServicios,     setMisServicios]     = useState([]);
 const [editando,         setEditando]         = useState(null);
 const [confirmEliminar,  setConfirmEliminar]  = useState(null);
 
-    // ════════════════════════════════
+// ════════════════════════════════
     // CARGAR DATOS DEL USUARIO
     // ════════════════════════════════
     useEffect(() => {
-        if (!id_a_consultar) return;
+        // 1. Evitamos el error de "undefined"
+        if (!id_a_consultar || id_a_consultar === "undefined") {
+            console.warn("No hay ID guardado. Debes iniciar sesión.");
+            return;
+        }
 
-        // Petición al backend Node.js para traer el perfil completo
-        fetch(`/api/users/${id_a_consultar}`, {
+        // 2. USAMOS LA URL COMPLETA DIRECTA A C# (Ignorando el proxy de Vite)
+        fetch(`http://localhost:5165/api/users/${id_a_consultar}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         })
         .then(res => res.json())
@@ -68,10 +72,10 @@ const [confirmEliminar,  setConfirmEliminar]  = useState(null);
             if (!data.error){
                 const estadoNormalizado = !!(data.estado === true || data.estado === 1 || data.estado === "1");
         
-        setUserData({
-            ...data,
-            estado: estadoNormalizado
-        });
+                setUserData({
+                    ...data,
+                    estado: estadoNormalizado
+                });
             }
         })
         .catch(err => console.error("Error al cargar perfil:", err));
@@ -83,16 +87,20 @@ const [confirmEliminar,  setConfirmEliminar]  = useState(null);
     }, [id_a_consultar]);
 
 
-    //cargar datos de seguimiento para perfil
-useEffect(() => {
-  if (esPerfilExterno || !id_a_consultar) return;
-  fetch(`/api/services`)
-    .then(r => r.json())
-    .then(data => setMisServicios(
-      data.filter(s => s.id_proveedor === parseInt(id_a_consultar))
-    ))
-    .catch(console.error);
-}, [id_a_consultar, esPerfilExterno]);
+    // ════════════════════════════════
+    // CARGAR DATOS DE SERVICIOS
+    // ════════════════════════════════
+    useEffect(() => {
+      if (esPerfilExterno || !id_a_consultar || id_a_consultar === "undefined") return;
+      
+      // USAMOS LA URL COMPLETA AQUI TAMBIEN
+      fetch(`http://localhost:5165/api/services`)
+        .then(r => r.json())
+        .then(data => setMisServicios(
+          data.filter(s => s.id_proveedor === parseInt(id_a_consultar))
+        ))
+        .catch(console.error);
+    }, [id_a_consultar, esPerfilExterno]);
 
     // ════════════════════════════════
     // ACTUALIZAR CAMPO EN LA BASE
