@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/StylePage/styleHome.css";
+import "../styles/styleHome.css";
 import { formatearFecha } from "../utils/helpers";
 
 // ── Constantes ──

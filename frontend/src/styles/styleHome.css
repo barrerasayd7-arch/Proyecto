@@ -418,7 +418,7 @@ fieldset {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url(fondo1.png);
+  background-image: url(./src/img/fondo1.png);
   background-size: cover;
   background-position: center;
   opacity: 0.7; /* ajusta entre 0.1 y 0.25 a tu gusto */

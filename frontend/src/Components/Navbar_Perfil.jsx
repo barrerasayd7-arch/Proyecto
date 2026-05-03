@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/StylePage/styleHome.css";
+import "../styles/styleHome.css";
 
 function Navbar({ onCerrarSesion }) {
   const [menuAbierto, setMenuAbierto] = useState(false);

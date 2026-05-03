@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/StylePage/stylePrivacy.css";
+import "../styles/stylePrivacy.css";
 
 const PrivacyPage = () => {
   return (

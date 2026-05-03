@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/StylePage/styleAdmin.css";
+import "../styles/styleAdmin.css";
 
 // ── Constantes ──
 const API = "http://localhost:5165/api";

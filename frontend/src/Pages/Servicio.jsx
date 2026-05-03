@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { formatearFecha, calcularEstrellas, iniciales } from "../utils/helpers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../styles/StylePage/styleHome.css";
-import "../styles/StylePage/StyleServicio.css";
+import "../styles/styleHome.css";
+import "../styles/styleServicio.css";
 
 const API = "https://localhost:7237/api/Services";
 const API_USUARIO = "https://localhost:7237/api/Users";

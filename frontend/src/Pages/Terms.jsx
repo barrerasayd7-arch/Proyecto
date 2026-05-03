@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/StylePage/styleTerms.css";
+import "../styles/styleTerms.css";
 
 const TermsPage = () => {
   return (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../styles/StylePage/StyleLogin.css";
+import "../styles/styleLogin.css";
 import { useNavigate } from "react-router-dom";
 import logoIcon from "../img/logo_color_noBG.png";
 

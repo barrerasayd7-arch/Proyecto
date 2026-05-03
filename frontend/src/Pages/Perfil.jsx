@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../Components/Navbar_Perfil";
-import "../styles/StylePage/styleHome.css";
-import "../styles/StylePage/stylePerfil.css";
+import "../styles/styleHome.css";
+import "../styles/stylePerfil.css";
 
 const API_USUARIO = "http://localhost:5165/api/users";
 
