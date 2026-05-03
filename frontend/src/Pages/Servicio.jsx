@@ -105,10 +105,12 @@ function FormSolicitud({
   useEffect(() => {
     const verificar = async () => {
       try {
-            const id_cliente = Number(localStorage.getItem("usuarioId"));
-            const res = await fetch(`${API_SOLICITUD}/verificar?id_cliente=${id_cliente}&id_servicio=${servicioId}`);
-            const data = await res.json();
-            setSolicitudExiste(data.existe);
+        const id_cliente = Number(localStorage.getItem("usuarioId"));
+        const res = await fetch(
+          `${API_SOLICITUD}/verificar?id_cliente=${id_cliente}&id_servicio=${servicioId}`,
+        );
+        const data = await res.json();
+        setSolicitudExiste(data.existe);
       } catch (error) {
         console.error(error);
       }
@@ -128,116 +130,117 @@ function FormSolicitud({
   const presupuesto = Number(form.presupuesto);
 
   const handleAccionSolicitud = async () => {
-  const id_cliente = Number(localStorage.getItem("usuarioId"));
-  const id_servicio_num = Number(servicioId);
-  const id_proveedor_num = Number(proveedorId);
+    const id_cliente = Number(localStorage.getItem("usuarioId"));
+    const id_servicio_num = Number(servicioId);
+    const id_proveedor_num = Number(proveedorId);
 
-  if (!id_cliente || !id_servicio_num || !id_proveedor_num) {
-    showModal("error", "❌ Datos inválidos");
-    return;
-  }
+    if (!id_cliente || !id_servicio_num || !id_proveedor_num) {
+      showModal("error", "❌ Datos inválidos");
+      return;
+    }
 
-  // 🗑️ ELIMINAR
-  if (solicitudExiste) {
+    // 🗑️ ELIMINAR
+    if (solicitudExiste) {
+      try {
+        const res = await fetch(
+          `${API_SOLICITUD}/eliminar?id_cliente=${id_cliente}&id_servicio=${id_servicio_num}`,
+          {
+            method: "DELETE",
+          },
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setSolicitudExiste(false);
+          showModal("success", "🗑️ Solicitud eliminada");
+        } else {
+          showModal("error", data.error || "Error al eliminar");
+        }
+      } catch (error) {
+        showModal("error", "Error al eliminar solicitud");
+      }
+
+      return;
+    }
+
+    // 📩 VALIDAR SOLO PARA CREAR
+    if (
+      !form.tipo_servicio ||
+      !form.descripcion ||
+      !form.fecha_deseada ||
+      !form.hora_deseada ||
+      !form.duracion ||
+      !form.modalidad ||
+      !form.metodo_pago ||
+      !form.presupuesto ||
+      !form.urgencia
+    ) {
+      showModal("error", "❌ Completa todos los campos obligatorios");
+      return;
+    }
+
+    if (Number(form.presupuesto) > 9999999) {
+      showModal("error", "❌ El presupuesto es demasiado grande");
+      return;
+    }
+
+    // 📩 CREAR PAYLOAD CORRECTO
+    const payload = {
+      id_cliente,
+      id_proveedor: id_proveedor_num,
+      id_servicio: id_servicio_num,
+
+      tipo_servicio: form.tipo_servicio,
+      descripcion: form.descripcion,
+      fecha_deseada: form.fecha_deseada + "T00:00:00",
+      hora_deseada: formatHora(form.hora_deseada) || null,
+      tema: "sin tema",
+
+      duracion: form.duracion,
+      modalidad: form.modalidad,
+      metodo_pago: form.metodo_pago,
+      presupuesto: Number(form.presupuesto),
+      pago_anticipado: form.pago_anticipado,
+      urgencia: form.urgencia,
+      archivo: form.archivo ? form.archivo.name : null,
+    };
+
     try {
-      const res = await fetch(`${API_SOLICITUD}/eliminar?id_cliente=${id_cliente}&id_servicio=${id_servicio_num}`, {
-      method: "DELETE",
-});
-
+      const res = await fetch(API_SOLICITUD, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
       if (res.ok) {
-        setSolicitudExiste(false);
-        showModal("success", "🗑️ Solicitud eliminada");
+        setSolicitudExiste(true);
+
+        setForm({
+          tipo_servicio: "",
+          descripcion: "",
+          fecha_deseada: "",
+          hora_deseada: "",
+          duracion: "",
+          modalidad: "",
+          metodo_pago: "",
+          presupuesto: "",
+          pago_anticipado: false,
+          urgencia: "",
+          archivo: null,
+        });
+
+        showModal("success", "📩 Solicitud enviada");
       } else {
-        showModal("error", data.error || "Error al eliminar");
+        console.log("❌ RESPUESTA COMPLETA BACKEND:", data);
+        showModal("error", data.message || data.error || "Error al enviar");
       }
     } catch (error) {
-      showModal("error", "Error al eliminar solicitud");
+      showModal("error", "Error al enviar solicitud");
     }
-
-    return;
-  }
-
-  // 📩 VALIDAR SOLO PARA CREAR
-  if (
-    !form.tipo_servicio ||
-    !form.descripcion ||
-    !form.fecha_deseada ||
-    !form.hora_deseada ||
-    !form.duracion ||
-    !form.modalidad ||
-    !form.metodo_pago ||
-    !form.presupuesto ||
-    !form.urgencia
-  ) {
-    showModal("error", "❌ Completa todos los campos obligatorios");
-    return;
-  }
-
-  if (Number(form.presupuesto) > 9999999) {
-    showModal("error", "❌ El presupuesto es demasiado grande");
-    return;
-  }
-
-  // 📩 CREAR PAYLOAD CORRECTO
-  const payload = {
-    id_cliente,
-    id_proveedor: id_proveedor_num,
-    id_servicio: id_servicio_num,
-
-    tipo_servicio: form.tipo_servicio,
-    descripcion: form.descripcion,
-    fecha_deseada: form.fecha_deseada + "T00:00:00",
-    hora_deseada: formatHora(form.hora_deseada) || null,
-    tema: "sin tema",
-
-    duracion: form.duracion,
-    modalidad: form.modalidad,
-    metodo_pago: form.metodo_pago,
-    presupuesto: Number(form.presupuesto),
-    pago_anticipado: form.pago_anticipado,
-    urgencia: form.urgencia,
-    archivo: form.archivo ? form.archivo.name : null,
   };
-
-  try {
-    const res = await fetch(API_SOLICITUD, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setSolicitudExiste(true);
-
-      setForm({
-        tipo_servicio: "",
-        descripcion: "",
-        fecha_deseada: "",
-        hora_deseada: "",
-        duracion: "",
-        modalidad: "",
-        metodo_pago: "",
-        presupuesto: "",
-        pago_anticipado: false,
-        urgencia: "",
-        archivo: null,
-      });
-
-      showModal("success", "📩 Solicitud enviada");
-    } else {
-    console.log("❌ RESPUESTA COMPLETA BACKEND:", data);
-    showModal("error", data.message || data.error || "Error al enviar");    
-}
-  } catch (error) {
-    showModal("error", "Error al enviar solicitud");
-  }
-  };
-  
 
   const handleNumericChange = (e) => {
     const { name, value } = e.target;
@@ -249,7 +252,6 @@ function FormSolicitud({
     setForm({
       ...form,
       [name]: limitado,
-    
     });
   };
 
@@ -447,6 +449,103 @@ function FormSolicitud({
   );
 }
 
+
+const API_CALIFICACIONES = "https://localhost:7237/api/calificaciones";
+
+function FormCalificacion({ servicioId, showModal, onNuevaResena }) {
+  const [permiso, setPermiso] = useState(null); // null=cargando, {puede, yaCalifico, id_solicitud}
+  const [estrellas, setEstrellas] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [comentario, setComentario] = useState("");
+  const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    const id_cliente = Number(localStorage.getItem("usuarioId"));
+    if (!id_cliente || !servicioId) return;
+
+    fetch(`${API_CALIFICACIONES}/puede-calificar?id_cliente=${id_cliente}&id_servicio=${servicioId}`)
+      .then(r => r.json())
+      .then(data => setPermiso(data))
+      .catch(() => setPermiso(null));
+  }, [servicioId]);
+
+  const handleEnviar = async () => {
+    if (estrellas === 0) { showModal("error", "❌ Selecciona una puntuación"); return; }
+    const id_cliente = Number(localStorage.getItem("usuarioId"));
+    setEnviando(true);
+    try {
+      const res = await fetch(API_CALIFICACIONES, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_solicitud: permiso.id_solicitud,
+          id_cliente,
+          id_servicio: Number(servicioId),
+          puntuacion: estrellas,
+          comentario: comentario || null
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showModal("success", "⭐ ¡Reseña enviada!");
+        setPermiso(p => ({ ...p, puede: false, yaCalifico: true }));
+        onNuevaResena(); // recarga las reseñas
+      } else {
+        showModal("error", data.error || "Error al enviar reseña");
+      }
+    } catch {
+      showModal("error", "Error de conexión");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  if (!permiso) return null;
+  if (permiso.yaCalifico) return (
+    <div className="seccion-info" style={{ textAlign: "center", padding: "20px" }}>
+      <p style={{ color: "var(--teal)" }}>✅ Ya calificaste este servicio. ¡Gracias!</p>
+    </div>
+  );
+  if (!permiso.puede) return null; // no tiene solicitud aceptada, no mostrar nada
+
+  return (
+    <div className="seccion-info">
+      <h3>⭐ Dejar una reseña</h3>
+
+      {/* Selector de estrellas */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "16px", fontSize: "32px" }}>
+        {[1,2,3,4,5].map(n => (
+          <span
+            key={n}
+            style={{ cursor: "pointer", color: n <= (hover || estrellas) ? "#fbbf24" : "#374151" }}
+            onMouseEnter={() => setHover(n)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => setEstrellas(n)}
+          >★</span>
+        ))}
+      </div>
+
+      <textarea
+        className="form-input-custom"
+        placeholder="Cuéntanos tu experiencia... (opcional)"
+        value={comentario}
+        onChange={e => setComentario(e.target.value)}
+        rows={3}
+        style={{ marginBottom: "12px" }}
+      />
+
+      <button
+        type="button"
+        className="btn-primary"
+        onClick={handleEnviar}
+        disabled={enviando}
+      >
+        {enviando ? "Enviando..." : "📤 Publicar reseña"}
+      </button>
+    </div>
+  );
+}
+
 // ── Componente principal ──
 export default function Servicio() {
   const navigate = useNavigate();
@@ -457,6 +556,7 @@ export default function Servicio() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
   const [imagenActual, setImagenActual] = useState(0);
+  const [recargarResenas, setRecargarResenas] = useState(0);
   const [modal, setModal] = useState({
     show: false,
     type: "",
@@ -503,7 +603,7 @@ export default function Servicio() {
       })
       .catch(() => setError(true))
       .finally(() => setCargando(false));
-  }, [idServicio]);
+    }, [idServicio, recargarResenas]);
 
   // Cerrar sesión
   const handleCerrarSesion = async () => {
@@ -680,6 +780,7 @@ export default function Servicio() {
             {/* Reseñas */}
             <div className="seccion-info">
               <h3>⭐ Reseñas de Clientes</h3>
+              
               {Array.isArray(servicio.resenas) &&
               servicio.resenas.length > 0 ? (
                 <div className="resenas-container">
@@ -712,6 +813,14 @@ export default function Servicio() {
                 </p>
               )}
             </div>
+
+            {/* Formulario de calificación */}
+            <FormCalificacion
+              servicioId={idServicio}
+              showModal={showModal}
+              onNuevaResena={() => setRecargarResenas(n => n + 1)}
+            />
+
           </div>
 
           {/* ── COLUMNA DERECHA ── */}
@@ -773,8 +882,6 @@ export default function Servicio() {
                 </a>
               )}
             </div>
-
-            
 
             {/* Info proveedor */}
             <div className="seccion-info">

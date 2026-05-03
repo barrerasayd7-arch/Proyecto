@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "../styles/StylePage/styleHome.css";
 import { formatearFecha } from "../utils/helpers";
 
-
 // ── Constantes ──
 const API = "https://localhost:7237/api/Services";
 const API_USUARIO = "https://localhost:7237/api/Users";
@@ -19,11 +18,15 @@ const CATEGORIAS = [
   { valor: "diseno", label: "🎨 Diseño" },
   { valor: "arriendo", label: "🏠 Arriendo de habitaciones" },
   { valor: "otros", label: "🌐 Otros servicios" },
-  { valor: "Diseño", label: "🖌️ Diseños"}
+  { valor: "Diseño", label: "🖌️ Diseños" },
 ];
 
 const MODALIDADES = ["🏫 Presencial", "💻 Virtual", "🔄 Mixta"];
-const DISPONIBILIDAD = ["📆 Entre semana", "🎉 Fines de semana", "⏰ Siempre disponible"];
+const DISPONIBILIDAD = [
+  "📆 Entre semana",
+  "🎉 Fines de semana",
+  "⏰ Siempre disponible",
+];
 
 const CHIPS_CATEGORIA = [
   { label: "🌐 Todos", valor: "todos" },
@@ -36,8 +39,14 @@ const CHIPS_CATEGORIA = [
 ];
 
 const initialPublicar = {
-  titulo: "", descripcion: "", categoria: "", precio: "",
-  universidad: "", contacto: "", modalidad: "", disponibilidad: "",
+  titulo: "",
+  descripcion: "",
+  categoria: "",
+  precio: "",
+  universidad: "",
+  contacto: "",
+  modalidad: "",
+  disponibilidad: "",
 };
 
 // ── Helpers ──
@@ -59,18 +68,32 @@ function truncar(texto, max = 90) {
 }
 
 function normalizar(texto) {
-  return (texto || "").toString().toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  return (texto || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 const mapaIconos = {
-  tutorias: "📚", ensayos: "✍️", proyectos: "🗂️",
-  programacion: "💻", diseno: "🎨", arriendo: "🏠", otros: "🌐",
+  tutorias: "📚",
+  ensayos: "✍️",
+  proyectos: "🗂️",
+  programacion: "💻",
+  diseno: "🎨",
+  arriendo: "🏠",
+  otros: "🌐",
 };
 
 const mapaCategoriaId = {
-  tutorias: 1, ensayos: 2, proyectos: 3,
-  programacion: 4, diseno: 5, arriendo: 6, otros: 7,
+  tutorias: 1,
+  ensayos: 2,
+  proyectos: 3,
+  programacion: 4,
+  diseno: 5,
+  arriendo: 6,
+  otros: 7,
 };
 
 // ── Subcomponentes ──
@@ -80,17 +103,20 @@ function Navbar({ scrolled, onCerrarSesion }) {
   const nombreUsuario = localStorage.getItem("usuario") || "Usuario";
 
   return (
-    
     <nav className={`navbar-custom${scrolled ? " scrolled" : ""}`}>
       <div className="container">
-        <a href="#inicio" className="navbar-brand-custom">UniService</a>
+        <a href="#inicio" className="navbar-brand-custom">
+          UniService
+        </a>
 
         <button
           className={`nav-toggle${menuAbierto ? " active" : ""}`}
-          onClick={() => setMenuAbierto(v => !v)}
+          onClick={() => setMenuAbierto((v) => !v)}
           aria-label="Menú"
         >
-          <span /><span /><span />
+          <span />
+          <span />
+          <span />
         </button>
 
         <div className={`navbar-links${menuAbierto ? " active" : ""}`}>
@@ -103,17 +129,19 @@ function Navbar({ scrolled, onCerrarSesion }) {
             ["#solicitudes", "Mis solicitudes"],
             ["#soporte", "Soporte"],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="nav-link-custom"
-              onClick={() => setMenuAbierto(false)}>{label}</a>
+            <a
+              key={href}
+              href={href}
+              className="nav-link-custom"
+              onClick={() => setMenuAbierto(false)}
+            >
+              {label}
+            </a>
           ))}
           <a href="/perfil" className="nav-link-custom nav-iniciar">
             👤 {nombreUsuario}
           </a>
-          <button
-            type="button"
-            className="nav-Cerrar"
-            onClick={onCerrarSesion}
-          >
+          <button type="button" className="nav-Cerrar" onClick={onCerrarSesion}>
             Cerrar Sesión
           </button>
         </div>
@@ -129,15 +157,20 @@ function Hero() {
         <p className="label-seccion">Plataforma Universitaria</p>
         <h1>
           Intercambia <span className="acento">servicios</span>
-          <br />entre estudiantes
+          <br />
+          entre estudiantes
         </h1>
         <p className="hero-desc">
           Tutorías, ensayos, proyectos, diseño, programación y arriendo de
           habitaciones — todo para la comunidad universitaria.
         </p>
         <div className="hero-btns">
-          <a href="#buscar" className="btn btn-verde">🔍 Explorar servicios</a>
-          <a href="#publicar" className="btn btn-borde">➕ Publicar mi servicio</a>
+          <a href="#buscar" className="btn btn-verde">
+            🔍 Explorar servicios
+          </a>
+          <a href="#publicar" className="btn btn-borde">
+            ➕ Publicar mi servicio
+          </a>
         </div>
       </div>
     </section>
@@ -146,13 +179,19 @@ function Hero() {
 
 function TarjetaServicio({ servicio }) {
   const estrellas = calcularEstrellas(servicio.estrellas);
-  const numReseñas = Array.isArray(servicio.estrellas) ? servicio.estrellas.length : 0;
-  const universidad = servicio.universidad === 1 || servicio.universidad === "1"
-    ? "Universidad Popular del Cesar"
-    : servicio.universidad || "Universidad no especificada";
+  const numReseñas = Array.isArray(servicio.estrellas)
+    ? servicio.estrellas.length
+    : 0;
+  const universidad =
+    servicio.universidad === 1 || servicio.universidad === "1"
+      ? "Universidad Popular del Cesar"
+      : servicio.universidad || "Universidad no especificada";
 
   return (
-    <a href={`/servicio?id=${servicio.id_servicio}`} className="card-servicio card-3d">
+    <a
+      href={`/servicio?id=${servicio.id_servicio}`}
+      className="card-servicio card-3d"
+    >
       <div className="card-icono card-icono-azul">{servicio.icono || "📌"}</div>
       <div className="card-body-custom">
         <span className="etiqueta et-azul">
@@ -162,16 +201,29 @@ function TarjetaServicio({ servicio }) {
         <h5>{servicio.titulo || "Sin título"}</h5>
         <p className="texto-muted">{truncar(servicio.descripcion)}</p>
         <div className="card-autor">
-          <div className="avatar avatar-azul" style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
-            width: "32px", height: "32px", borderRadius: "50%",
-            fontSize: "0.75rem", fontWeight: "700", flexShrink: 0
-          }}>
+          <div
+            className="avatar avatar-azul"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              fontSize: "0.75rem",
+              fontWeight: "700",
+              flexShrink: 0,
+            }}
+          >
             {(servicio.proveedor || "?").charAt(0).toUpperCase()}
           </div>
-          <span className="texto-muted">{servicio.proveedor || "Proveedor anónimo"}</span>
+          <span className="texto-muted">
+            {servicio.proveedor || "Proveedor anónimo"}
+          </span>
         </div>
-        <div className="texto-fecha">{formatearFecha(servicio.fecha_publicacion) || ""}</div>
+        <div className="texto-fecha">
+          {formatearFecha(servicio.fecha_publicacion) || ""}
+        </div>
         <div className="card-footer">
           <div>
             <hr className="card-divider" />
@@ -191,19 +243,29 @@ function SeccionRecientes({ servicios, cargando }) {
       <div className="container">
         <p className="label-seccion">🕐 Recién publicados</p>
         <h2>Servicios más recientes</h2>
-        <p className="seccion-desc">Los últimos servicios añadidos por la comunidad</p>
+        <p className="seccion-desc">
+          Los últimos servicios añadidos por la comunidad
+        </p>
 
         {cargando ? (
-          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
+          <p
+            className="texto-muted"
+            style={{ textAlign: "center", padding: "40px 0" }}
+          >
             Cargando servicios...
           </p>
         ) : servicios.length === 0 ? (
-          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
+          <p
+            className="texto-muted"
+            style={{ textAlign: "center", padding: "40px 0" }}
+          >
             Aún no hay servicios publicados.
           </p>
         ) : (
           <div id="contenedor-tarjetas" className="cards-3d-container">
-            {servicios.map(s => <TarjetaServicio key={s.id_servicio} servicio={s} />)}
+            {servicios.map((s) => (
+              <TarjetaServicio key={s.id_servicio} servicio={s} />
+            ))}
           </div>
         )}
       </div>
@@ -218,11 +280,17 @@ function SeccionTop({ top3 }) {
       <div className="container">
         <p className="label-seccion">🏆 Top valorados</p>
         <h2>Servicios mejor calificados ⭐</h2>
-        <p className="seccion-desc">Ordenados por satisfacción de los usuarios</p>
+        <p className="seccion-desc">
+          Ordenados por satisfacción de los usuarios
+        </p>
 
         <div className="top-cards-3d">
           {top3.map((s, i) => (
-            <a key={s.id_servicio} href={`/servicio?id=${s.id_servicio}`} className="top-card">
+            <a
+              key={s.id_servicio}
+              href={`/servicio?id=${s.id_servicio}`}
+              className="top-card"
+            >
               <div className="top-card-rank">
                 <span className="rank-number">{i + 1}</span>
                 <span className="rank-medal">{medallas[i]}</span>
@@ -236,9 +304,12 @@ function SeccionTop({ top3 }) {
                     : s.universidad || "Universidad no especificada"}
                 </p>
                 <div className="top-card-rating">
-                  <span className="stars estrellas">{calcularEstrellas(s.estrellas)}</span>
+                  <span className="stars estrellas">
+                    {calcularEstrellas(s.estrellas)}
+                  </span>
                   <span className="rating-text">
-                    {Array.isArray(s.estrellas) ? s.estrellas.length : 0} reseñas
+                    {Array.isArray(s.estrellas) ? s.estrellas.length : 0}{" "}
+                    reseñas
                   </span>
                 </div>
                 <div className="top-card-footer">
@@ -269,43 +340,66 @@ function SeccionBuscar({ serviciosTotales }) {
     setMostrados(CANTIDAD_POR_PAGINA);
   }, [serviciosTotales]);
 
-  const aplicarFiltros = useCallback((texto, cat, ord, limite) => {
-    let filtrados = [...serviciosTotales].filter(s => {
-      const q = normalizar(texto);
-      const coincideTexto = !q ||
-        normalizar(s.titulo).includes(q) ||
-        normalizar(s.descripcion).includes(q) ||
-        normalizar(s.nombre_categoria).includes(q) ||
-        normalizar(s.proveedor).includes(q);
+  const aplicarFiltros = useCallback(
+    (texto, cat, ord, limite) => {
+      let filtrados = [...serviciosTotales].filter((s) => {
+        const q = normalizar(texto);
+        const coincideTexto =
+          !q ||
+          normalizar(s.titulo).includes(q) ||
+          normalizar(s.descripcion).includes(q) ||
+          normalizar(s.nombre_categoria).includes(q) ||
+          normalizar(s.proveedor).includes(q);
 
-      const coincideCat = cat === "todos" ||
-        normalizar(s.nombre_categoria).includes(normalizar(cat));
+        const coincideCat =
+          cat === "todos" ||
+          normalizar(s.nombre_categoria).includes(normalizar(cat));
 
-      return coincideTexto && coincideCat;
-    });
+        return coincideTexto && coincideCat;
+      });
 
-    switch (ord) {
-      case "precio-menor":
-        filtrados.sort((a, b) => Number(a.precio_hora || 0) - Number(b.precio_hora || 0));
-        break;
-      case "precio-mayor":
-        filtrados.sort((a, b) => Number(b.precio_hora || 0) - Number(a.precio_hora || 0));
-        break;
-      case "rating-mayor":
-        filtrados.sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas));
-        break;
-      case "rating-menor":
-        filtrados.sort((a, b) => promedioEstrellas(a.estrellas) - promedioEstrellas(b.estrellas));
-        break;
-      case "antiguos":
-        filtrados.sort((a, b) => new Date(a.fecha_publicacion || 0) - new Date(b.fecha_publicacion || 0));
-        break;
-      default: // recientes
-        filtrados.sort((a, b) => new Date(b.fecha_publicacion || 0) - new Date(a.fecha_publicacion || 0));
-    }
+      switch (ord) {
+        case "precio-menor":
+          filtrados.sort(
+            (a, b) => Number(a.precio_hora || 0) - Number(b.precio_hora || 0),
+          );
+          break;
+        case "precio-mayor":
+          filtrados.sort(
+            (a, b) => Number(b.precio_hora || 0) - Number(a.precio_hora || 0),
+          );
+          break;
+        case "rating-mayor":
+          filtrados.sort(
+            (a, b) =>
+              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas),
+          );
+          break;
+        case "rating-menor":
+          filtrados.sort(
+            (a, b) =>
+              promedioEstrellas(a.estrellas) - promedioEstrellas(b.estrellas),
+          );
+          break;
+        case "antiguos":
+          filtrados.sort(
+            (a, b) =>
+              new Date(a.fecha_publicacion || 0) -
+              new Date(b.fecha_publicacion || 0),
+          );
+          break;
+        default: // recientes
+          filtrados.sort(
+            (a, b) =>
+              new Date(b.fecha_publicacion || 0) -
+              new Date(a.fecha_publicacion || 0),
+          );
+      }
 
-    setResultados(filtrados.slice(0, limite));
-  }, [serviciosTotales]);
+      setResultados(filtrados.slice(0, limite));
+    },
+    [serviciosTotales],
+  );
 
   const handleBusqueda = (e) => {
     const val = e.target.value;
@@ -314,7 +408,9 @@ function SeccionBuscar({ serviciosTotales }) {
   };
 
   const handleCategoria = (cat, e) => {
-    document.querySelectorAll("#filtros-categorias .chip").forEach(b => b.classList.remove("activo"));
+    document
+      .querySelectorAll("#filtros-categorias .chip")
+      .forEach((b) => b.classList.remove("activo"));
     e.target.classList.add("activo");
     setCategoriaActual(cat);
     aplicarFiltros(busqueda, cat, orden, mostrados);
@@ -334,15 +430,20 @@ function SeccionBuscar({ serviciosTotales }) {
 
   return (
     <section className="seccion seccion-oscura" id="buscar">
-
       {/* Header búsqueda */}
-      <header className="seccion" style={{ paddingBottom: 0, paddingTop: 0, background: "transparent" }}>
+      <header
+        className="seccion"
+        style={{ paddingBottom: 0, paddingTop: 0, background: "transparent" }}
+      >
         <div className="container" style={{ textAlign: "center" }}>
           <p className="label-seccion">Marketplace Universitario</p>
           <h1 style={{ fontSize: "2.5rem" }}>
             Todos los <span className="acento">servicios</span>
           </h1>
-          <div className="caja-formulario" style={{ maxWidth: "700px", margin: "30px auto" }}>
+          <div
+            className="caja-formulario"
+            style={{ maxWidth: "700px", margin: "30px auto" }}
+          >
             <input
               type="text"
               className="form-input"
@@ -355,9 +456,12 @@ function SeccionBuscar({ serviciosTotales }) {
       </header>
 
       {/* Chips de categoría */}
-      <div className="container chips-container" id="filtros-categorias"
-        style={{ marginBottom: "24px" }}>
-        {CHIPS_CATEGORIA.map(chip => (
+      <div
+        className="container chips-container"
+        id="filtros-categorias"
+        style={{ marginBottom: "24px" }}
+      >
+        {CHIPS_CATEGORIA.map((chip) => (
           <button
             key={chip.valor}
             className={`chip${categoriaActual === chip.valor ? " activo" : ""}`}
@@ -392,17 +496,28 @@ function SeccionBuscar({ serviciosTotales }) {
 
         <div className="cards-grid" id="contenedor-explorar">
           {resultados.length === 0 ? (
-            <p className="texto-muted"
-              style={{ gridColumn: "1 / -1", textAlign: "center", padding: "32px 0" }}>
+            <p
+              className="texto-muted"
+              style={{
+                gridColumn: "1 / -1",
+                textAlign: "center",
+                padding: "32px 0",
+              }}
+            >
               No se encontraron servicios.
             </p>
           ) : (
-            resultados.map(s => <TarjetaServicio key={s.id_servicio} servicio={s} />)
+            resultados.map((s) => (
+              <TarjetaServicio key={s.id_servicio} servicio={s} />
+            ))
           )}
         </div>
 
         {/* Botón mostrar más */}
-        <div id="contenedor-boton" style={{ textAlign: "center", marginTop: "32px" }}>
+        <div
+          id="contenedor-boton"
+          style={{ textAlign: "center", marginTop: "32px" }}
+        >
           {resultados.length >= mostrados && (
             <button
               type="button"
@@ -424,16 +539,32 @@ function SeccionPublicar({ onPublicado }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { titulo, descripcion, categoria, precio,
-      universidad, contacto, modalidad, disponibilidad } = form;
+    const {
+      titulo,
+      descripcion,
+      categoria,
+      precio,
+      universidad,
+      contacto,
+      modalidad,
+      disponibilidad,
+    } = form;
 
-    if (!titulo || !descripcion || !categoria || !precio ||
-      !universidad || !contacto || !modalidad || !disponibilidad) {
+    if (
+      !titulo ||
+      !descripcion ||
+      !categoria ||
+      !precio ||
+      !universidad ||
+      !contacto ||
+      !modalidad ||
+      !disponibilidad
+    ) {
       alert("❌ Completa todos los campos");
       return;
     }
@@ -444,15 +575,23 @@ function SeccionPublicar({ onPublicado }) {
       return;
     }
 
-    const modalidadDB = { "🏫 Presencial": 0, "💻 Virtual": 1, "🔄 Mixta": 2 }[modalidad] ?? 0;
-    const dispDB = { "📆 Entre semana": 0, "🎉 Fines de semana": 1, "⏰ Siempre disponible": 2 }[disponibilidad] ?? 0;
+    const modalidadDB =
+      { "🏫 Presencial": 0, "💻 Virtual": 1, "🔄 Mixta": 2 }[modalidad] ?? 0;
+    const dispDB =
+      {
+        "📆 Entre semana": 0,
+        "🎉 Fines de semana": 1,
+        "⏰ Siempre disponible": 2,
+      }[disponibilidad] ?? 0;
 
     const nuevoServicio = {
       id_proveedor: Number(proveedor),
-      titulo, descripcion,
+      titulo,
+      descripcion,
       id_categoria: mapaCategoriaId[categoria] || 7,
       precio_hora: Number(precio),
-      contacto, universidad,
+      contacto,
+      universidad,
       modalidad: modalidadDB,
       disponibilidad: dispDB,
       icono: mapaIconos[categoria] || "📌",
@@ -467,10 +606,10 @@ function SeccionPublicar({ onPublicado }) {
       });
       const data = await res.json();
       if (data.ok) {
-                    alert("✅ Servicio publicado correctamente");
-                    setForm(initialPublicar);
-                    onPublicado(); 
-} else {
+        alert("✅ Servicio publicado correctamente");
+        setForm(initialPublicar);
+        onPublicado();
+      } else {
         alert("❌ Error: " + (data.error || "No se pudo publicar"));
       }
     } catch {
@@ -490,65 +629,125 @@ function SeccionPublicar({ onPublicado }) {
         <div className="publicar-wrapper">
           <p className="label-seccion">Nuevo servicio</p>
           <h2>Publicar servicio</h2>
-          <p className="seccion-desc">Comparte tu talento con la comunidad universitaria</p>
+          <p className="seccion-desc">
+            Comparte tu talento con la comunidad universitaria
+          </p>
 
           <div className="caja-formulario">
             <fieldset>
-              <legend className="legend-custom">📌 Información del servicio</legend>
+              <legend className="legend-custom">
+                📌 Información del servicio
+              </legend>
 
               <div className="form-grid cols-1">
                 <div className="form-grupo">
-                  <label className="form-label">✍️ Título del servicio <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <input type="text" name="titulo" className="form-input"
+                  <label className="form-label">
+                    ✍️ Título del servicio{" "}
+                    <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="titulo"
+                    className="form-input"
                     placeholder="Ej: Tutoría de Cálculo Diferencial para ingeniería"
-                    value={form.titulo} onChange={handleChange} />
+                    value={form.titulo}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="form-grupo">
-                  <label className="form-label">📝 Descripción completa <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <textarea name="descripcion" className="form-input" rows={4}
+                  <label className="form-label">
+                    📝 Descripción completa{" "}
+                    <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <textarea
+                    name="descripcion"
+                    className="form-input"
+                    rows={4}
                     placeholder="Describe tu servicio: qué ofreces, cómo trabajas, qué incluye el precio..."
-                    value={form.descripcion} onChange={handleChange} />
+                    value={form.descripcion}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
               <div className="form-grid cols-2">
                 <div className="form-grupo">
-                  <label className="form-label">📂 Categoría <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <select name="categoria" className="form-select"
-                    value={form.categoria} onChange={handleChange}>
-                    {CATEGORIAS.map(c => (
-                      <option key={c.valor} value={c.valor}>{c.label}</option>
+                  <label className="form-label">
+                    📂 Categoría <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <select
+                    name="categoria"
+                    className="form-select"
+                    value={form.categoria}
+                    onChange={handleChange}
+                  >
+                    {CATEGORIAS.map((c) => (
+                      <option key={c.valor} value={c.valor}>
+                        {c.label}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div className="form-grupo">
-                  <label className="form-label">💰 Precio (COP/hora) <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <input type="number" name="precio" className="form-input"
-                    placeholder="Ej: 30000" min="1000"
-                    value={form.precio} onChange={handleChange} />
+                  <label className="form-label">
+                    💰 Precio (COP/hora){" "}
+                    <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="precio"
+                    className="form-input"
+                    placeholder="Ej: 30000"
+                    min="1000"
+                    value={form.precio}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="form-grupo">
-                  <label className="form-label">🏫 Tu universidad <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <input type="text" name="universidad" className="form-input"
+                  <label className="form-label">
+                    🏫 Tu universidad{" "}
+                    <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="universidad"
+                    className="form-input"
                     placeholder="Ej: Universidad Nacional de Colombia"
-                    value={form.universidad} onChange={handleChange} />
+                    value={form.universidad}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="form-grupo">
-                  <label className="form-label">📱 Contacto (WhatsApp/Email) <span style={{ color: "var(--teal)" }}>*</span></label>
-                  <input type="text" name="contacto" className="form-input"
+                  <label className="form-label">
+                    📱 Contacto (WhatsApp/Email){" "}
+                    <span style={{ color: "var(--teal)" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="contacto"
+                    className="form-input"
                     placeholder="Ej: +57 300 123 4567 o correo@email.com"
-                    value={form.contacto} onChange={handleChange} />
+                    value={form.contacto}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
               <div className="form-grupo" style={{ marginBottom: "20px" }}>
-                <p className="form-label">📍 Modalidad del servicio <span style={{ color: "var(--teal)" }}>*</span></p>
+                <p className="form-label">
+                  📍 Modalidad del servicio{" "}
+                  <span style={{ color: "var(--teal)" }}>*</span>
+                </p>
                 <div className="check-group button-style">
-                  {MODALIDADES.map(m => (
+                  {MODALIDADES.map((m) => (
                     <label key={m} className="check-item">
-                      <input type="radio" name="modalidad" value={m}
+                      <input
+                        type="radio"
+                        name="modalidad"
+                        value={m}
                         checked={form.modalidad === m}
-                        onChange={handleChange} />
+                        onChange={handleChange}
+                      />
                       <span>{m}</span>
                     </label>
                   ))}
@@ -556,13 +755,20 @@ function SeccionPublicar({ onPublicado }) {
               </div>
 
               <div className="form-grupo" style={{ marginBottom: "20px" }}>
-                <p className="form-label">📅 Disponibilidad <span style={{ color: "var(--teal)" }}>*</span></p>
+                <p className="form-label">
+                  📅 Disponibilidad{" "}
+                  <span style={{ color: "var(--teal)" }}>*</span>
+                </p>
                 <div className="check-group button-style">
-                  {DISPONIBILIDAD.map(d => (
+                  {DISPONIBILIDAD.map((d) => (
                     <label key={d} className="check-item">
-                      <input type="radio" name="disponibilidad" value={d}
+                      <input
+                        type="radio"
+                        name="disponibilidad"
+                        value={d}
                         checked={form.disponibilidad === d}
-                        onChange={handleChange} />
+                        onChange={handleChange}
+                      />
                       <span>{d}</span>
                     </label>
                   ))}
@@ -570,12 +776,19 @@ function SeccionPublicar({ onPublicado }) {
               </div>
 
               <div className="form-btns">
-                <button type="button" className="btn btn-verde"
-                  onClick={handleSubmit} disabled={loading}>
+                <button
+                  type="button"
+                  className="btn btn-verde"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
                   {loading ? "Publicando..." : "✓ Publicar servicio"}
                 </button>
-                <button type="button" className="btn btn-borde"
-                  onClick={() => setForm(initialPublicar)}>
+                <button
+                  type="button"
+                  className="btn btn-borde"
+                  onClick={() => setForm(initialPublicar)}
+                >
                   🗑️ Limpiar formulario
                 </button>
               </div>
@@ -588,9 +801,9 @@ function SeccionPublicar({ onPublicado }) {
 }
 
 const BADGE = {
-  Pendiente:  { bg: "#FFF3CD", color: "#856404", texto: "⏳ Pendiente"  },
-  Aceptada:   { bg: "#D1E7DD", color: "#0A5C36", texto: "✅ Aceptada"   },
-  Rechazada:  { bg: "#F8D7DA", color: "#721C24", texto: "❌ Rechazada"  },
+  Pendiente: { bg: "#FFF3CD", color: "#856404", texto: "⏳ Pendiente" },
+  Aceptada: { bg: "#D1E7DD", color: "#0A5C36", texto: "✅ Aceptada" },
+  Rechazada: { bg: "#F8D7DA", color: "#721C24", texto: "❌ Rechazada" },
 };
 
 function ModalRechazo({ onConfirmar, onCancelar }) {
@@ -598,39 +811,73 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
   const [contraoferta, setContraoferta] = useState("");
 
   return (
-    <div style={{
-      position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      zIndex: 9999, padding: "20px"
-    }}>
-      <div style={{
-        background: "#051a2d", border: "1px solid rgba(255,255,255,0.1)",
-        borderRadius: "16px", padding: "28px", maxWidth: "440px", width: "100%"
-      }}>
-        <h3 style={{ margin: "0 0 6px", color: "#fff" }}>❌ Rechazar solicitud</h3>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 9999,
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          background: "#051a2d",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: "16px",
+          padding: "28px",
+          maxWidth: "440px",
+          width: "100%",
+        }}
+      >
+        <h3 style={{ margin: "0 0 6px", color: "#fff" }}>
+          ❌ Rechazar solicitud
+        </h3>
         <p style={{ margin: "0 0 20px", opacity: 0.6, fontSize: "0.85rem" }}>
           Explica el motivo y, si quieres, propón un precio alternativo.
         </p>
 
         {/* Motivo */}
-        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, marginBottom: "6px" }}>
+        <label
+          style={{
+            display: "block",
+            fontSize: "0.82rem",
+            opacity: 0.7,
+            marginBottom: "6px",
+          }}
+        >
           Motivo del rechazo
         </label>
         <textarea
           value={motivo}
-          onChange={e => setMotivo(e.target.value)}
+          onChange={(e) => setMotivo(e.target.value)}
           placeholder="Ej: No tengo disponibilidad en esa fecha..."
           rows={3}
           style={{
-            width: "100%", background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
-            color: "#fff", padding: "10px", fontSize: "0.88rem",
-            resize: "vertical", boxSizing: "border-box"
+            width: "100%",
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "10px",
+            color: "#fff",
+            padding: "10px",
+            fontSize: "0.88rem",
+            resize: "vertical",
+            boxSizing: "border-box",
           }}
         />
 
         {/* Contraoferta (opcional) */}
-        <label style={{ display: "block", fontSize: "0.82rem", opacity: 0.7, margin: "14px 0 6px" }}>
+        <label
+          style={{
+            display: "block",
+            fontSize: "0.82rem",
+            opacity: 0.7,
+            margin: "14px 0 6px",
+          }}
+        >
           💰 Contraoferta (opcional)
         </label>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -640,13 +887,17 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
             min="0"
             step="0.01"
             value={contraoferta}
-            onChange={e => setContraoferta(e.target.value)}
+            onChange={(e) => setContraoferta(e.target.value)}
             placeholder="Ej: 35000"
             style={{
-              flex: 1, background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
-              color: "#fff", padding: "10px", fontSize: "0.88rem",
-              boxSizing: "border-box"
+              flex: 1,
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: "10px",
+              color: "#fff",
+              padding: "10px",
+              fontSize: "0.88rem",
+              boxSizing: "border-box",
             }}
           />
         </div>
@@ -669,7 +920,12 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
             className="btn btn-verde"
             style={{ flex: 1 }}
             disabled={!motivo.trim()}
-            onClick={() => onConfirmar(motivo, contraoferta ? parseFloat(contraoferta) : null)}
+            onClick={() =>
+              onConfirmar(
+                motivo,
+                contraoferta ? parseFloat(contraoferta) : null,
+              )
+            }
           >
             Confirmar rechazo
           </button>
@@ -679,24 +935,30 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
   );
 }
 
-
-
 function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
-  const badge  = BADGE[sol.estado] || BADGE.Pendiente;
+  const badge = BADGE[sol.estado] || BADGE.Pendiente;
   const nombre = tipo === "enviada" ? sol.nombre_proveedor : sol.nombre_cliente;
   const subtitulo = tipo === "enviada" ? "Proveedor" : "Cliente";
 
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.04)",
-      border: "1px solid rgba(255,255,255,0.1)",
-      borderRadius: "14px",
-      padding: "18px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-    }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <div
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: "14px",
+        padding: "18px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <span style={{ fontSize: "1.6rem" }}>{sol.icono || "📌"}</span>
           <div>
@@ -708,18 +970,34 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
             </p>
           </div>
         </div>
-        <span style={{
-          background: badge.bg, color: badge.color,
-          padding: "3px 10px", borderRadius: "20px",
-          fontSize: "0.75rem", fontWeight: 600, whiteSpace: "nowrap",
-        }}>
+        <span
+          style={{
+            background: badge.bg,
+            color: badge.color,
+            padding: "3px 10px",
+            borderRadius: "20px",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            whiteSpace: "nowrap",
+          }}
+        >
           {badge.texto}
         </span>
       </div>
 
       {sol.descripcion && (
-        <p style={{ margin: 0, fontSize: "0.82rem", opacity: 0.7, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "8px" }}>
-          {sol.descripcion.length > 120 ? sol.descripcion.slice(0, 120) + "..." : sol.descripcion}
+        <p
+          style={{
+            margin: 0,
+            fontSize: "0.82rem",
+            opacity: 0.7,
+            borderTop: "1px solid rgba(255,255,255,0.08)",
+            paddingTop: "8px",
+          }}
+        >
+          {sol.descripcion.length > 120
+            ? sol.descripcion.slice(0, 120) + "..."
+            : sol.descripcion}
         </p>
       )}
 
@@ -729,37 +1007,59 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
         </p>
       )}
       {sol.contraoferta && (
-  <div style={{
-    background: "rgba(74, 199, 182, 0.1)",
-    border: "1px solid rgba(74, 199, 182, 0.3)",
-    borderRadius: "10px",
-    padding: "10px 14px",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px"
-  }}>
-    <span style={{ fontSize: "1.2rem" }}>💰</span>
-    <div>
-      <p style={{ margin: 0, fontSize: "0.75rem", color: "#4ac7b6", fontWeight: 600 }}>
-        El proveedor propone un nuevo precio
-      </p>
-      <p style={{ margin: 0, fontSize: "1rem", color: "#fff", fontWeight: 700 }}>
-        ${Number(sol.contraoferta).toLocaleString("es-CO")}
-      </p>
-    </div>
-  </div>
-)}
+        <div
+          style={{
+            background: "rgba(74, 199, 182, 0.1)",
+            border: "1px solid rgba(74, 199, 182, 0.3)",
+            borderRadius: "10px",
+            padding: "10px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>💰</span>
+          <div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.75rem",
+                color: "#4ac7b6",
+                fontWeight: 600,
+              }}
+            >
+              El proveedor propone un nuevo precio
+            </p>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "1rem",
+                color: "#fff",
+                fontWeight: 700,
+              }}
+            >
+              ${Number(sol.contraoferta).toLocaleString("es-CO")}
+            </p>
+          </div>
+        </div>
+      )}
 
       {tipo === "recibida" && sol.estado === "Pendiente" && (
         <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
-          <button type="button" className="btn btn-verde"
+          <button
+            type="button"
+            className="btn btn-verde"
             style={{ flex: 1, fontSize: "0.82rem", padding: "8px" }}
-            onClick={() => responder(sol.id_solicitud, "aceptar")}>
+            onClick={() => responder(sol.id_solicitud, "aceptar")}
+          >
             ✅ Aceptar
           </button>
-          <button type="button" className="btn btn-borde"
+          <button
+            type="button"
+            className="btn btn-borde"
             style={{ flex: 1, fontSize: "0.82rem", padding: "8px" }}
-           onClick={() => setRechazando(sol.id_solicitud)}>
+            onClick={() => setRechazando(sol.id_solicitud)}
+          >
             ❌ Rechazar
           </button>
         </div>
@@ -769,10 +1069,10 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
 }
 
 function SeccionSolicitudes() {
-  const [tab, setTab]         = useState("enviadas");
-  const [enviadas, setEnviadas]   = useState([]);
+  const [tab, setTab] = useState("enviadas");
+  const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
-  const [cargando, setCargando]   = useState(true);
+  const [cargando, setCargando] = useState(true);
   const [rechazando, setRechazando] = useState(null);
 
   const id = localStorage.getItem("usuarioId");
@@ -782,8 +1082,8 @@ function SeccionSolicitudes() {
     setCargando(true);
 
     Promise.all([
-      fetch(`${API_SOLICITUD}/enviadas/${id}`).then(r => r.json()),
-      fetch(`${API_SOLICITUD}/recibidas/${id}`).then(r => r.json()),
+      fetch(`${API_SOLICITUD}/enviadas/${id}`).then((r) => r.json()),
+      fetch(`${API_SOLICITUD}/recibidas/${id}`).then((r) => r.json()),
     ])
       .then(([env, rec]) => {
         setEnviadas(Array.isArray(env) ? env : []);
@@ -793,15 +1093,25 @@ function SeccionSolicitudes() {
       .finally(() => setCargando(false));
   }, [id]);
 
-const responder = async (id_solicitud, accion, motivo_rechazo = "", contraoferta = null) => {
-  await fetch(`${API_SOLICITUD}/responder`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_solicitud, accion, motivo_rechazo, contraoferta }),
-  });
-  const res = await fetch(`${API_SOLICITUD}/recibidas/${id}`);
-  setRecibidas(await res.json());
-};
+  const responder = async (
+    id_solicitud,
+    accion,
+    motivo_rechazo = "",
+    contraoferta = null,
+  ) => {
+    await fetch(`${API_SOLICITUD}/responder`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id_solicitud,
+        accion,
+        motivo_rechazo,
+        contraoferta,
+      }),
+    });
+    const res = await fetch(`${API_SOLICITUD}/recibidas/${id}`);
+    setRecibidas(await res.json());
+  };
 
   const lista = tab === "enviadas" ? enviadas : recibidas;
 
@@ -812,33 +1122,54 @@ const responder = async (id_solicitud, accion, motivo_rechazo = "", contraoferta
         <h2>Mis solicitudes</h2>
 
         <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>
-          {[["enviadas", "📤 Enviadas"], ["recibidas", "📥 Recibidas"]].map(([val, label]) => (
-            <button key={val} type="button"
+          {[
+            ["enviadas", "📤 Enviadas"],
+            ["recibidas", "📥 Recibidas"],
+          ].map(([val, label]) => (
+            <button
+              key={val}
+              type="button"
               onClick={() => setTab(val)}
               className={tab === val ? "btn btn-verde" : "btn btn-borde"}
-              style={{ fontSize: "0.85rem" }}>
-              {label} ({val === "enviadas" ? enviadas.length : recibidas.length})
+              style={{ fontSize: "0.85rem" }}
+            >
+              {label} ({val === "enviadas" ? enviadas.length : recibidas.length}
+              )
             </button>
           ))}
         </div>
 
         {cargando ? (
-          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
+          <p
+            className="texto-muted"
+            style={{ textAlign: "center", padding: "40px 0" }}
+          >
             Cargando solicitudes...
           </p>
         ) : lista.length === 0 ? (
-          <p className="texto-muted" style={{ textAlign: "center", padding: "40px 0" }}>
-            {tab === "enviadas" ? "Aún no has enviado solicitudes." : "Aún no tienes solicitudes recibidas."}
+          <p
+            className="texto-muted"
+            style={{ textAlign: "center", padding: "40px 0" }}
+          >
+            {tab === "enviadas"
+              ? "Aún no has enviado solicitudes."
+              : "Aún no tienes solicitudes recibidas."}
           </p>
         ) : (
-          <div style={{ display: "grid", gap: "14px", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
-            {lista.map(sol => (
+          <div
+            style={{
+              display: "grid",
+              gap: "14px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            }}
+          >
+            {lista.map((sol) => (
               <TarjetaSolicitud
                 key={sol.id_solicitud}
                 sol={sol}
                 tipo={tab === "enviadas" ? "enviada" : "recibida"}
                 responder={responder}
-                 setRechazando={setRechazando} 
+                setRechazando={setRechazando}
               />
             ))}
           </div>
@@ -847,12 +1178,12 @@ const responder = async (id_solicitud, accion, motivo_rechazo = "", contraoferta
       {rechazando && (
         <ModalRechazo
           onConfirmar={(motivo, contraoferta) => {
-          responder(rechazando, "rechazar", motivo, contraoferta);
-          setRechazando(null);
-      }}
-        onCancelar={() => setRechazando(null)}
-      />
-)}
+            responder(rechazando, "rechazar", motivo, contraoferta);
+            setRechazando(null);
+          }}
+          onCancelar={() => setRechazando(null)}
+        />
+      )}
     </section>
   );
 }
@@ -863,8 +1194,13 @@ function Footer() {
       <div className="container">
         <div className="row g-4">
           <div className="col-md-4">
-            <p className="logo">Uni<span>Servicios</span></p>
-            <p>La plataforma de intercambio de servicios entre estudiantes universitarios de Colombia.</p>
+            <p className="logo">
+              Uni<span>Servicios</span>
+            </p>
+            <p>
+              La plataforma de intercambio de servicios entre estudiantes
+              universitarios de Colombia.
+            </p>
           </div>
           <div className="col-6 col-md-2">
             <h5>Plataforma</h5>
@@ -903,92 +1239,185 @@ function Footer() {
           </div>
         </div>
         <hr />
-        <p className="footer-copy">© 2026 UniServicios — Hecho por y para estudiantes 🎓</p>
+        <p className="footer-copy">
+          © 2026 UniServicios — Hecho por y para estudiantes 🎓
+        </p>
       </div>
-    </footer> 
+    </footer>
   );
 }
 
 function NotificacionesFlotantes() {
-
   const [abierto, setAbierto] = useState(false);
-  
+
   const [notificaciones] = useState([
     // --- Solicitudes y Servicios ---
-    { id: 1, texto: "📩 ¡Nueva solicitud! Un estudiante requiere tu tutoría en Programación", leida: false },
-    { id: 2, texto: "✅ Tu solicitud para 'Asesoría en Cálculo' ha sido aceptada", leida: false },
-    { id: 3, texto: "📅 Recordatorio: Tu tutoría de 'Bases de Datos' comienza en 30 minutos", leida: false },
-    { id: 4, texto: "🍎 Daniela ha solicitado tu servicio de 'Asesoría Nutricional'", leida: false },
-    { id: 5, texto: "🛠️ Camilo marcó como 'En Proceso' el Mantenimiento de tu PC", leida: true },
-  
-    // --- Reseñas y Calificaciones ---
-    { id: 6, texto: "⭐ ¡Nueva calificación! Alguien valoró tu servicio con 5 estrellas", leida: false },
-    { id: 7, texto: "📝 Julian dejó un comentario en tu perfil: 'Excelente explicación'", leida: false },
-    { id: 8, texto: "🏅 ¡Felicidades! Has alcanzado el nivel de 'Tutor Destacado'", leida: false },
-  
-    // --- Pagos y Precios ---
-    { id: 9, texto: "💰 Se ha confirmado el pago de $45,000 por 'Formateo de Laptop'", leida: true },
-    { id: 10, texto: "📉 Oferta: El servicio 'Venta de Almuerzos' bajó de precio", leida: false },
-  
-    // --- Mensajería e Interacción ---
-    { id: 11, texto: "💬 Mariana te envió un mensaje: '¿A qué hora nos vemos?'", leida: false },
-    { id: 12, texto: "👋 Diego quiere contactarte por 'Reparación de Celulares'", leida: false },
-  
-    // --- Sistema y Seguridad (Acorde a tu SECURITY.md) ---
-    { id: 13, texto: "🔒 Tu código de verificación ha sido generado exitosamente", leida: true },
-    { id: 14, texto: "⚠️ Alerta de seguridad: Nuevo inicio de sesión detectado", leida: false },
-    { id: 15, texto: "🔄 Tu contraseña ha sido actualizada correctamente", leida: true },
-  
-    // --- Comunidad y Material (Repositorio Académico) ---
-    { id: 16, texto: "📚 Se ha subido un nuevo taller al repositorio de 'Física II'", leida: false },
-    { id: 17, texto: "🔥 ¡Tu aporte al repositorio ha sido descargado 10 veces!", leida: false },
-    { id: 18, texto: "📍 Nuevo servicio cerca de ti: 'Arriendo de Habitaciones'", leida: false },
-  
-    // --- Actualizaciones de UniServices ---
-    { id: 19, texto: "🚀 Actualización v1.2.5: Revisa las nuevas mejoras en la interfaz", leida: true },
-    { id: 20, texto: "🎁 ¡Gracias por ser parte de UniServices! Tienes un badge nuevo", leida: false }
-  ]);
-  
-const vaciarNotificaciones = () => {
-  const confirmar = window.confirm("¿Estás seguro de que deseas eliminar todas las notificaciones? Esta acción no se puede deshacer.");
-  setNotificaciones([]); 
-};
+    {
+      id: 1,
+      texto:
+        "📩 ¡Nueva solicitud! Un estudiante requiere tu tutoría en Programación",
+      leida: false,
+    },
+    {
+      id: 2,
+      texto: "✅ Tu solicitud para 'Asesoría en Cálculo' ha sido aceptada",
+      leida: false,
+    },
+    {
+      id: 3,
+      texto:
+        "📅 Recordatorio: Tu tutoría de 'Bases de Datos' comienza en 30 minutos",
+      leida: false,
+    },
+    {
+      id: 4,
+      texto: "🍎 Daniela ha solicitado tu servicio de 'Asesoría Nutricional'",
+      leida: false,
+    },
+    {
+      id: 5,
+      texto: "🛠️ Camilo marcó como 'En Proceso' el Mantenimiento de tu PC",
+      leida: true,
+    },
 
-return (
-  <div className="contenedor-notificaciones">
-    <button className="boton-notificaciones" onClick={() => setAbierto(!abierto)}>
-      🔔
-    </button>
-    
-    {abierto && (
-      <div className="panel-notificaciones">
-        {/* Encabezado estático con título y botón de borrar */}
-        <div className="cabecera-estatica">
-          <h3 className="titulo-estatico">Notificaciones</h3>
-          <button 
-            className="boton-vaciar" 
-            onClick={vaciarNotificaciones}
-            title="Vaciar todas las notificaciones"
-          >
-            🗑️
-          </button>
-        </div>
-        
-        <ul className="lista-scroll">
-          {notificaciones.length > 0 ? (
-            notificaciones.map(n => (
-              <li key={n.id} className="item-notificacion">
-                {n.texto}
+    // --- Reseñas y Calificaciones ---
+    {
+      id: 6,
+      texto:
+        "⭐ ¡Nueva calificación! Alguien valoró tu servicio con 5 estrellas",
+      leida: false,
+    },
+    {
+      id: 7,
+      texto:
+        "📝 Julian dejó un comentario en tu perfil: 'Excelente explicación'",
+      leida: false,
+    },
+    {
+      id: 8,
+      texto: "🏅 ¡Felicidades! Has alcanzado el nivel de 'Tutor Destacado'",
+      leida: false,
+    },
+
+    // --- Pagos y Precios ---
+    {
+      id: 9,
+      texto: "💰 Se ha confirmado el pago de $45,000 por 'Formateo de Laptop'",
+      leida: true,
+    },
+    {
+      id: 10,
+      texto: "📉 Oferta: El servicio 'Venta de Almuerzos' bajó de precio",
+      leida: false,
+    },
+
+    // --- Mensajería e Interacción ---
+    {
+      id: 11,
+      texto: "💬 Mariana te envió un mensaje: '¿A qué hora nos vemos?'",
+      leida: false,
+    },
+    {
+      id: 12,
+      texto: "👋 Diego quiere contactarte por 'Reparación de Celulares'",
+      leida: false,
+    },
+
+    // --- Sistema y Seguridad (Acorde a tu SECURITY.md) ---
+    {
+      id: 13,
+      texto: "🔒 Tu código de verificación ha sido generado exitosamente",
+      leida: true,
+    },
+    {
+      id: 14,
+      texto: "⚠️ Alerta de seguridad: Nuevo inicio de sesión detectado",
+      leida: false,
+    },
+    {
+      id: 15,
+      texto: "🔄 Tu contraseña ha sido actualizada correctamente",
+      leida: true,
+    },
+
+    // --- Comunidad y Material (Repositorio Académico) ---
+    {
+      id: 16,
+      texto: "📚 Se ha subido un nuevo taller al repositorio de 'Física II'",
+      leida: false,
+    },
+    {
+      id: 17,
+      texto: "🔥 ¡Tu aporte al repositorio ha sido descargado 10 veces!",
+      leida: false,
+    },
+    {
+      id: 18,
+      texto: "📍 Nuevo servicio cerca de ti: 'Arriendo de Habitaciones'",
+      leida: false,
+    },
+
+    // --- Actualizaciones de UniServices ---
+    {
+      id: 19,
+      texto:
+        "🚀 Actualización v1.2.5: Revisa las nuevas mejoras en la interfaz",
+      leida: true,
+    },
+    {
+      id: 20,
+      texto: "🎁 ¡Gracias por ser parte de UniServices! Tienes un badge nuevo",
+      leida: false,
+    },
+  ]);
+
+  const vaciarNotificaciones = () => {
+    const confirmar = window.confirm(
+      "¿Estás seguro de que deseas eliminar todas las notificaciones? Esta acción no se puede deshacer.",
+    );
+    setNotificaciones([]);
+  };
+
+  return (
+    <div className="contenedor-notificaciones">
+      <button
+        className="boton-notificaciones"
+        onClick={() => setAbierto(!abierto)}
+      >
+        🔔
+      </button>
+
+      {abierto && (
+        <div className="panel-notificaciones">
+          {/* Encabezado estático con título y botón de borrar */}
+          <div className="cabecera-estatica">
+            <h3 className="titulo-estatico">Notificaciones</h3>
+            <button
+              className="boton-vaciar"
+              onClick={vaciarNotificaciones}
+              title="Vaciar todas las notificaciones"
+            >
+              🗑️
+            </button>
+          </div>
+
+          <ul className="lista-scroll">
+            {notificaciones.length > 0 ? (
+              notificaciones.map((n) => (
+                <li key={n.id} className="item-notificacion">
+                  {n.texto}
+                </li>
+              ))
+            ) : (
+              <li className="sin-notificaciones">
+                No tienes notificaciones pendientes
               </li>
-            ))
-          ) : (
-            <li className="sin-notificaciones">No tienes notificaciones pendientes</li>
-          )}
-        </ul>
-      </div>
-    )}
-  </div>
-);
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function HomePrincipal() {
@@ -1006,23 +1435,28 @@ export default function HomePrincipal() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [navigate]);
 
-// DESPUÉS:
-const cargarServicios = useCallback(() => {
-  setCargando(true);
-  fetch(API)
-    .then(res => res.json())
-    .then(data => {
-      setServiciosTotales([...data].reverse());
-      setRecientes(data.slice(0, 4));
-      const top = [...data].sort((a, b) => promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)).slice(0, 3);
-      setTop3(top);
-    })
-    .finally(() => setCargando(false));
-}, []);
+  // DESPUÉS:
+  const cargarServicios = useCallback(() => {
+    setCargando(true);
+    fetch(API)
+      .then((res) => res.json())
+      .then((data) => {
+        setServiciosTotales([...data].reverse());
+        setRecientes(data.slice(0, 4));
+        const top = [...data]
+          .sort(
+            (a, b) =>
+              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas),
+          )
+          .slice(0, 3);
+        setTop3(top);
+      })
+      .finally(() => setCargando(false));
+  }, []);
 
-useEffect(() => {
-  cargarServicios();
-}, [cargarServicios]);
+  useEffect(() => {
+    cargarServicios();
+  }, [cargarServicios]);
 
   const handleCerrarSesion = () => {
     localStorage.clear();
@@ -1037,7 +1471,7 @@ useEffect(() => {
       <SeccionRecientes servicios={recientes} cargando={cargando} />
       <SeccionTop top3={top3} />
       <SeccionPublicar onPublicado={cargarServicios} />
-       <SeccionSolicitudes />
+      <SeccionSolicitudes />
       <NotificacionesFlotantes />
       <Footer />
     </>
