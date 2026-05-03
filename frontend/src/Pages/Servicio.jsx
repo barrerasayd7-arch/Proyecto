@@ -659,10 +659,10 @@ export default function Servicio() {
     );
 
   const {
-    texto: estrellasTexto,
-    prom,
-    num,
-  } = calcularEstrellas(servicio.estrellas);
+      texto: estrellasTexto,
+      prom,
+     num,
+} = calcularEstrellas(servicio.resenas);
   const universidad =
     servicio.universidad === 1 || servicio.universidad === "1"
       ? "Universidad Popular del Cesar"

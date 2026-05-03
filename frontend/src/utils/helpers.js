@@ -5,16 +5,18 @@ export function formatearFecha(fechaISO) {
   });
 }
 
-// Aprovecha y exporta los otros helpers que también usas en varios lados
-export function calcularEstrellas(estrellas) {
-  if (!Array.isArray(estrellas) || estrellas.length === 0)
-    return { texto: "☆☆☆☆☆", prom: 0, num: 0 };
-  const prom = estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
+export function calcularEstrellas(resenas) {
+  if (!Array.isArray(resenas) || resenas.length === 0)
+    return { texto: "☆☆☆☆☆", prom: "0.0", num: 0 };
+
+  const valores = resenas.map(r => typeof r === "object" ? Number(r.estrellas) : Number(r));
+  const prom = valores.reduce((a, b) => a + b, 0) / valores.length;
   const llenas = Math.round(prom);
+
   return {
     texto: "★".repeat(llenas) + "☆".repeat(5 - llenas),
     prom:  prom.toFixed(1),
-    num:   estrellas.length,
+    num:   valores.length,
   };
 }
 
