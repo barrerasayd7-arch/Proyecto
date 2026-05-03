@@ -145,26 +145,39 @@ const [confirmEliminar,  setConfirmEliminar]  = useState(null);
             navigate("/home-guest");
         }
     };
-    const guardarEdicion = async (s) => {
-  const res = await fetch(`/api/services/${s.id_servicio}`, {
+const guardarEdicion = async (s) => {
+  const body = {
+    id_proveedor: parseInt(id_usuario_logueado),
+    titulo: s.titulo || "",
+    descripcion: s.descripcion || "",
+    precio_hora: Number(s.precio_hora) || 0,
+    contacto: s.contacto || "",
+    icono: s.icono || "📌",
+  };
+
+  const res = await fetch(`http://localhost:5165/api/services/${s.id_servicio}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...s, id_proveedor: parseInt(id_usuario_logueado) }),
+    body: JSON.stringify(body),
   });
+
   if (res.ok) {
-    setMisServicios(prev => prev.map(x => x.id_servicio === s.id_servicio ? s : x));
+    setMisServicios(prev => prev.map(x => x.id_servicio === s.id_servicio ? { ...x, ...body } : x));
     setEditando(null);
   } else {
-    alert("Error al guardar los cambios.");
+    const err = await res.json();
+    alert("Error: " + (err.error || "No se pudo guardar"));
   }
 };
 
 const confirmarEliminar = async () => {
-  const res = await fetch(`/api/services/${confirmEliminar}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_proveedor: parseInt(id_usuario_logueado) }),
-  });
+  const res = await fetch(
+    `http://localhost:5165/api/services/${confirmEliminar}?id_proveedor=${id_usuario_logueado}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
   if (res.ok) {
     setMisServicios(prev => prev.filter(s => s.id_servicio !== confirmEliminar));
     setConfirmEliminar(null);
