@@ -88,48 +88,102 @@ public class ServicesController : ControllerBase
             using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             await conn.OpenAsync();
 
+            // 1. Datos del servicio
             using var cmd = new SqlCommand(@"
-                SELECT 
-                    s.id_servicio,
-                    s.id_proveedor,
-                    s.titulo,
-                    s.descripcion,
-                    s.precio_hora,
-                    s.icono,
-                    s.fecha_publicacion,
-                    s.modalidad,
-                    s.disponibilidad,
-                    c.nombre_categoria,
-                    u.nombre AS proveedor
-                FROM servicios s
-                LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
-                LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
-                WHERE s.id_servicio = @id
-            ", conn);
-
+            SELECT 
+                s.id_servicio,
+                s.id_proveedor,
+                s.titulo,
+                s.descripcion,
+                s.precio_hora,
+                s.icono,
+                s.contacto,
+                s.fecha_publicacion,
+                s.modalidad,
+                s.disponibilidad,
+                c.nombre_categoria,
+                u.nombre AS proveedor,
+                u.universidad
+            FROM servicios s
+            LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
+            LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
+            WHERE s.id_servicio = @id
+        ", conn);
             cmd.Parameters.AddWithValue("@id", id);
 
             using var reader = await cmd.ExecuteReaderAsync();
-
             if (!await reader.ReadAsync())
                 return NotFound(new { error = "Servicio no encontrado" });
 
             var servicio = new
             {
-                id_servicio = reader["id_servicio"],
+                id_servicio = (int)reader["id_servicio"],
                 id_proveedor = (int)reader["id_proveedor"],
                 titulo = reader["titulo"]?.ToString(),
                 descripcion = reader["descripcion"]?.ToString(),
                 precio_hora = reader["precio_hora"],
                 icono = reader["icono"]?.ToString() ?? "📌",
+                contacto = reader["contacto"]?.ToString(),
                 fecha_publicacion = reader["fecha_publicacion"],
                 modalidad = MapModalidad(reader["modalidad"]),
                 disponibilidad = MapDisponibilidad(reader["disponibilidad"]),
                 nombre_categoria = reader["nombre_categoria"]?.ToString(),
-                proveedor = reader["proveedor"]?.ToString()
+                proveedor = reader["proveedor"]?.ToString(),
+                universidad = reader["universidad"]
             };
+            reader.Close();
 
-            return Ok(servicio);
+            // 2. Reseñas
+            using var cmdResenas = new SqlCommand(@"
+            SELECT 
+                c.puntuacion,
+                c.comentario,
+                c.fecha_calificacion,
+                u.nombre AS autor
+            FROM calificaciones c
+            INNER JOIN usuarios u ON c.id_cliente = u.id_usuario
+            WHERE c.id_servicio = @id
+            ORDER BY c.fecha_calificacion DESC
+        ", conn);
+            cmdResenas.Parameters.AddWithValue("@id", id);
+
+            var resenas = new List<object>();
+            using var rReader = await cmdResenas.ExecuteReaderAsync();
+            while (await rReader.ReadAsync())
+            {
+                resenas.Add(new
+                {
+                    estrellas = (byte)rReader["puntuacion"],
+                    comentario = rReader["comentario"]?.ToString(),
+                    fecha = ((DateTime)rReader["fecha_calificacion"]).ToString("dd MMM yyyy"),
+                    autor = rReader["autor"]?.ToString()
+                });
+            }
+            rReader.Close();
+
+            // 3. Promedio
+            double prom = resenas.Count > 0
+                ? resenas.Average(r => (double)((dynamic)r).estrellas)
+                : 0;
+
+            return Ok(new
+            {
+                servicio.id_servicio,
+                servicio.id_proveedor,
+                servicio.titulo,
+                servicio.descripcion,
+                servicio.precio_hora,
+                servicio.icono,
+                servicio.contacto,
+                servicio.fecha_publicacion,
+                servicio.modalidad,
+                servicio.disponibilidad,
+                servicio.nombre_categoria,
+                servicio.proveedor,
+                servicio.universidad,
+                resenas,
+                estrellas = prom.ToString("0.0")
+            });
         }
         catch (Exception ex)
         {
