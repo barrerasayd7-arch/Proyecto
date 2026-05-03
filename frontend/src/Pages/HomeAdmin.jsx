@@ -451,14 +451,20 @@ function SeccionLogs() {
 }
 
 // ── Componente raíz ──
+// ── Componente raíz (EL ÚNICO EXPORT DEFAULT) ──
 export default function HomeAdmin() {
   const navigate = useNavigate();
   const [seccion, setSeccion] = useState("dashboard");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const rol   = localStorage.getItem("rol");
-    if (!token || rol !== "admin") navigate("/login");
+    // 🛡️ Única validación de seguridad centralizada
+    const logueado = localStorage.getItem("logueado");
+    const rol = localStorage.getItem("usuarioRol");
+
+    // Ajustamos para que acepte tanto el bypass como el login normal
+    if (logueado !== "true" || rol !== "1") {
+      navigate("/login", { replace: true });
+    }
   }, [navigate]);
 
   const handleCerrarSesion = () => {

@@ -9,19 +9,19 @@ import Perfil from "./Pages/Perfil.jsx";
 import HomeAdmin from "./Pages/HomeAdmin.jsx";
 
 export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/"                element={<Navigate to="/home-guest" />} />
-        <Route path="/login"           element={<Login />} />
-        <Route path="/home-guest"      element={<HomeGuest />} />
-        <Route path="/home"            element={<HomePrincipal />} />
-        <Route path="/servicio"        element={<Servicio />} />
-        <Route path="/privacidad"      element={<PrivacyPage />} />
-        <Route path="/terminos"        element={<TermsPage />} />
-        <Route path="/perfil"          element={<Perfil />} />
-        <Route path="/perfil/:id"      element={<Perfil />} />
-        <Route path="/home-admin"      element={<HomeAdmin />} />
+  return (     
+    <BrowserRouter>     
+      <Routes>     
+        <Route path="/"                     element={<Navigate to="/home-guest" />} />
+        <Route path="/login"                element={<Login />} />
+        <Route path="/home-guest"           element={<HomeGuest />} />
+        <Route path="/home"                 element={<HomePrincipal />} />
+        <Route path="/servicio"             element={<Servicio />} />
+        <Route path="/privacidad"           element={<PrivacyPage />} />
+        <Route path="/terminos"             element={<TermsPage />} />
+        <Route path="/perfil"               element={<Perfil />} />
+        <Route path="/perfil/:id"           element={<Perfil />} />
+        <Route path="/admin-dashboard"      element={<HomeAdmin />} />
       </Routes>
     </BrowserRouter>
   );

@@ -16,12 +16,10 @@ const ADMIN_CREDENTIALS = [
   { correo: "admin@uniservice.co",   password: "admin123" },
   { correo: "frank@uniservice.co",   password: "frank2026" },
   { correo: "lenin@uniservice.co",   password: "lenin2026" },
-  { correo: "sayd@uniservice.co",   password: "sayd2026" },
-  { correo: "andres@uniservice.co",   password: "andres2026" },
-  // { correo: "otro@uniservice.co", password: "otrapass" }, ← agrega más aquí
+  { correo: "sayd@uniservice.co",    password: "sayd2026" },
+  { correo: "andres@uniservice.co",  password: "andres2026" },
 ];
 
-// Contraseña maestra que se pide en el modal de admin
 const ADMIN_MASTER_PASSWORD = "admin_2026";
 
 // ══════════════════════════════════════════════════════════════════
@@ -285,12 +283,71 @@ export default function Login() {
   };
 
   // ════════════════════════════════
+  // MODAL ADMIN — con detección de admin
+  // ════════════════════════════════
+
+  // Función para cerrar y limpiar el modal
+const cerrarModalAdmin = () => {
+  setModalAdmin(false);
+  setAdminMasterInput("");
+  setAdminError("");
+  setAdminIntentos(0); // Reiniciamos los puntitos rojos si cerramos
+  setAdminBloqueado(false);
+};
+
+// Función para validar la contraseña maestra
+const handleAdminConfirmar = () => {
+  if (adminBloqueado) return;
+
+  if (adminMasterInput === ADMIN_MASTER_PASSWORD) {
+    notificar("🔓 Acceso concedido, Comandante", "success");
+    setModalAdmin(false);
+    
+    // Guardamos estado de sesión
+    localStorage.setItem("logueado", "true");
+    localStorage.setItem("usuarioRol", "1");
+
+    setTimeout(() => {
+      navigate("/admin-dashboard", { replace: true });
+    }, 1000);
+  } else {
+    const nuevosIntentos = adminIntentos + 1;
+    setAdminIntentos(nuevosIntentos);
+    setAdminShake(true); // Activa la animación CSS de tu modal
+    setTimeout(() => setAdminShake(false), 500);
+
+    if (nuevosIntentos >= 3) {
+      setAdminBloqueado(true);
+      setAdminError("DEMASIADOS INTENTOS FALLIDOS. ACCESO DENEGADO.");
+    } else {
+      setAdminError(`Contraseña incorrecta. Intento ${nuevosIntentos} de 3.`);
+    }
+  }
+};
+
+  // ════════════════════════════════
   // LOGIN — con detección de admin
   // ════════════════════════════════
 const handleLogin = async () => {
   if (!correo || errores.correo) { notificar("❌ Ingresa un correo válido"); return; }
-  if (pass.length < 8) { notificar("❌ La contraseña debe tener mínimo 8 caracteres"); return; }
+  if (pass.length < 8) { notificar("❌ Mínimo 8 caracteres"); return; }
 
+  // 🚪 BYPASS: Verificar si es un Admin Hardcoded
+  const adminEncontrado = ADMIN_CREDENTIALS.find(
+    (a) => a.correo === correo && a.password === pass
+  );
+
+  if (adminEncontrado) {
+    // Simulamos los datos necesarios para que el modal funcione
+    localStorage.setItem("usuario", adminEncontrado.correo.split('@')[0]);
+    localStorage.setItem("usuarioRol", 1); // Forzamos el rol de Admin
+    
+    setModalAdmin(true); // Abrimos el modal directamente
+    notificar("🔑 Cuenta de administrador detectada", "info");
+    return; // Detenemos la ejecución aquí, no va al backend
+  }
+
+  // 🌐 FLUJO NORMAL: Si no es admin de la lista, va a la DB (C#)
   try {
     const res = await fetch("http://localhost:5165/api/Users/login", {
       method: "POST",
@@ -300,19 +357,21 @@ const handleLogin = async () => {
     const data = await res.json();
 
     if (data.token) {
-      localStorage.setItem("token",         data.token);
-      localStorage.setItem("usuarioId",     data.user.id);
-      localStorage.setItem("usuario",       data.user.nombre);
-      localStorage.setItem("usuarioCorreo", data.user.correo);
-      localStorage.setItem("logueado",      "true");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("usuarioId", data.user.id);
+      localStorage.setItem("usuarioRol", data.user.id_rol); //
+      localStorage.setItem("logueado", "true");
 
-      notificar("✅ Bienvenido " + data.user.nombre, "success");
-      setTimeout(() => navigate("/home", { replace: true }), 1500);
+      if (data.user.id_rol === 1) {
+        setModalAdmin(true); // También abre el modal si el de la DB es admin
+      } else {
+        navigate("/home", { replace: true });
+      }
     } else {
       notificar("❌ " + (data.message || "Credenciales incorrectas"));
     }
   } catch {
-    notificar("❌ Error de conexión");
+    notificar("❌ Error de conexión con el servidor");
   }
 };
 
