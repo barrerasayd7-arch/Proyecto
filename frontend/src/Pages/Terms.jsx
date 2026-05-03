@@ -71,7 +71,9 @@ const TermsPage = () => {
             descritas, te recomendamos no utilizar nuestros servicios.
           </div>
 
-          <h3 className="terms-subtitle">4. Privacidad y Protección de Datos</h3>
+          <h3 className="terms-subtitle">
+            4. Privacidad y Protección de Datos
+          </h3>
           <p className="terms-text">
             UniService se compromete a proteger la privacidad de sus usuarios.
             La información personal recopilada será utilizada únicamente para
@@ -92,7 +94,9 @@ const TermsPage = () => {
             de cambios constituye la aceptación de los mismos.
           </p>
 
-          <h3 className="terms-subtitle">6. Jurisdicción y Legislación Aplicable</h3>
+          <h3 className="terms-subtitle">
+            6. Jurisdicción y Legislación Aplicable
+          </h3>
           <p className="terms-text">
             Estos términos y condiciones se rigen por las leyes vigentes en
             Colombia. En caso de surgir cualquier disputa relacionada con el uso

@@ -33,8 +33,13 @@
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Modal overlay */
@@ -182,7 +187,11 @@
   margin-bottom: 30px;
   text-align: center;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(14, 165, 160, 0.05) 0%, rgba(245, 200, 66, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 160, 0.05) 0%,
+    rgba(245, 200, 66, 0.03) 100%
+  );
   border-radius: 16px;
   border: 1px solid rgba(14, 165, 160, 0.1);
 }
@@ -205,7 +214,11 @@
   gap: 8px;
   margin-bottom: 20px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(14, 165, 160, 0.03) 0%, rgba(245, 200, 66, 0.02) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 160, 0.03) 0%,
+    rgba(245, 200, 66, 0.02) 100%
+  );
   border-radius: 16px;
   border: 1px solid rgba(14, 165, 160, 0.1);
   backdrop-filter: blur(5px);
@@ -230,10 +243,14 @@
 }
 
 .rating-star::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(14, 165, 160, 0.1) 0%, rgba(245, 200, 66, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 160, 0.1) 0%,
+    rgba(245, 200, 66, 0.1) 100%
+  );
   border-radius: 8px;
   opacity: 0;
   transform: scale(0.8);
@@ -241,10 +258,15 @@
 }
 
 .rating-star::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -2px;
-  background: linear-gradient(135deg, transparent 0%, rgba(14, 165, 160, 0.2) 50%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(14, 165, 160, 0.2) 50%,
+    transparent 100%
+  );
   border-radius: 10px;
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -340,7 +362,8 @@
 }
 
 @keyframes starPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1.1) translateY(-2px);
   }
   50% {
@@ -351,7 +374,11 @@
 .rating-value {
   display: inline-block;
   padding: 12px 24px;
-  background: linear-gradient(135deg, rgba(14, 165, 160, 0.15) 0%, rgba(245, 200, 66, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 160, 0.15) 0%,
+    rgba(245, 200, 66, 0.1) 100%
+  );
   border: 2px solid rgba(14, 165, 160, 0.3);
   border-radius: 25px;
   color: var(--teal2);
@@ -401,7 +428,11 @@
 }
 
 .rating-aspect-btn.selected {
-  background: linear-gradient(135deg, rgba(14, 165, 160, 0.2) 0%, rgba(14, 165, 160, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 160, 0.2) 0%,
+    rgba(14, 165, 160, 0.1) 100%
+  );
   border-color: var(--teal);
   color: var(--teal2);
   box-shadow: 0 0 12px rgba(14, 165, 160, 0.2);
@@ -415,7 +446,7 @@
   border: 2px solid var(--borde);
   border-radius: 12px;
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.95rem;
   resize: vertical;
   min-height: 100px;

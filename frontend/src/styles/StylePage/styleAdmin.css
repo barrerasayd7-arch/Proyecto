@@ -3,46 +3,54 @@
    Sin Bootstrap · Sin !important
    ═══════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=DM+Serif+Display:ital@0;1&display=swap");
 
 /* ── Variables ── */
 :root {
   /* Base oscura adaptada del Home */
-  --bg:           #070d16;
-  --bg2:          #0b1420;
-  --bg3:          #0f1c2e;
-  --card:         #0e1929;
-  --card-hover:   #111f33;
-  --borde:        #1a2e48;
-  --borde2:       #243d5c;
-  
+  --bg: #070d16;
+  --bg2: #0b1420;
+  --bg3: #0f1c2e;
+  --card: #0e1929;
+  --card-hover: #111f33;
+  --borde: #1a2e48;
+  --borde2: #243d5c;
+
   /* Tonos rojizos reemplazando al Teal del Home */
-  --rojo:         #ef4444;
-  --rojo2:        #dc2626;
-  --rojo-dim:     rgba(239, 68, 68, 0.12);
-  --rojo-glow:    rgba(239, 68, 68, 0.3);
-  
+  --rojo: #ef4444;
+  --rojo2: #dc2626;
+  --rojo-dim: rgba(239, 68, 68, 0.12);
+  --rojo-glow: rgba(239, 68, 68, 0.3);
+
   /* Acentos y Texto del Home */
-  --amarillo:     #f5c842;
-  --texto:        #e8eef8;
-  --texto2:       #8fa3bf;
-  --texto3:       #4a6080;
-  --trans:        all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  
+  --amarillo: #f5c842;
+  --texto: #e8eef8;
+  --texto2: #8fa3bf;
+  --texto3: #4a6080;
+  --trans: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
   /* Estados Admin */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger:  #EF4444;
-  --color-info:    #06B6D4;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #06b6d4;
 }
 
 /* ── Reset y Base ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: var(--bg);
   color: var(--texto);
   line-height: 1.6;
@@ -61,7 +69,7 @@ body {
 
 .admin-main {
   flex: 1;
-  padding-top: 80px; 
+  padding-top: 80px;
   position: relative;
 }
 
@@ -78,16 +86,26 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+  background:
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(239, 68, 68, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(139, 92, 246, 0.04) 0%,
+      transparent 50%
+    );
   z-index: 0;
 }
 
 /* ── Navbar Admin (Estilo Home Navbar) ── */
 .admin-nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 70px;
   background-color: rgba(7, 13, 22, 0.95);
   backdrop-filter: blur(16px);
@@ -121,7 +139,7 @@ body {
 }
 
 .admin-nav__logo-text {
-  font-family: 'DM Serif Display', serif;
+  font-family: "DM Serif Display", serif;
   font-size: 1.5rem;
   color: var(--texto);
   letter-spacing: 0.5px;
@@ -150,7 +168,7 @@ body {
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
   transition: var(--trans);
   display: flex;
@@ -176,7 +194,7 @@ body {
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.85rem;
   cursor: pointer;
   transition: var(--trans);
@@ -207,17 +225,19 @@ body {
 
 .admin-nav__logout {
   /* Mantenemos tus estilos previos, solo aseguramos el margen */
-  margin-left: 0; 
+  margin-left: 0;
   padding: 8px 18px;
 }
 
 /* ── Encabezados de Sección (Animaciones y Gradientes Home) ── */
-.admin-header, .admin-section__header {
+.admin-header,
+.admin-section__header {
   margin-bottom: 36px;
   animation: fadeUp 0.7s ease both;
 }
 
-.admin-header__pre, .admin-section__pre {
+.admin-header__pre,
+.admin-section__pre {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 2.5px;
@@ -226,17 +246,27 @@ body {
   margin-bottom: 10px;
   display: inline-block;
   padding: 8px 16px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(239, 68, 68, 0.05) 100%
+  );
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 8px;
 }
 
-.admin-header__title, .admin-section__title {
-  font-family: 'DM Serif Display', serif;
+.admin-header__title,
+.admin-section__title {
+  font-family: "DM Serif Display", serif;
   font-size: 2.5rem;
   font-weight: 400;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--texto) 0%, var(--rojo) 50%, var(--amarillo) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--texto) 0%,
+    var(--rojo) 50%,
+    var(--amarillo) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -268,19 +298,24 @@ body {
   background: var(--card-hover);
   border-color: var(--borde2);
   box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.3),
-      0 0 0 1px rgba(239, 68, 68, 0.15),
-      0 10px 20px rgba(239, 68, 68, 0.1);
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(239, 68, 68, 0.15),
+    0 10px 20px rgba(239, 68, 68, 0.1);
 }
 
 .admin-stat-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--rojo), var(--rojo2), var(--amarillo));
+  background: linear-gradient(
+    90deg,
+    var(--rojo),
+    var(--rojo2),
+    var(--amarillo)
+  );
   transform: scaleX(0);
   transition: transform 0.4s ease;
   border-radius: 16px 16px 0 0;
@@ -290,29 +325,46 @@ body {
   transform: scaleX(1);
 }
 
-.admin-stat-card__icon { 
-  font-size: 2rem; 
-  margin-bottom: 16px; 
+.admin-stat-card__icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
   display: inline-flex;
   padding: 12px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.15),
+    rgba(239, 68, 68, 0.02)
+  );
 }
 
-.admin-stat-card__value { 
-  font-size: 2.5rem; 
-  font-weight: 800; 
+.admin-stat-card__value {
+  font-size: 2.5rem;
+  font-weight: 800;
   line-height: 1;
   margin-bottom: 8px;
   color: var(--rojo);
 }
 
-.admin-stat-card__label { color: var(--texto2); font-weight: 600; font-size: 0.95rem; }
-.admin-stat-card__sub { font-size: 0.75rem; color: var(--color-success); margin-top: 8px; font-weight: 700; }
+.admin-stat-card__label {
+  color: var(--texto2);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.admin-stat-card__sub {
+  font-size: 0.75rem;
+  color: var(--color-success);
+  margin-top: 8px;
+  font-weight: 700;
+}
 
 /* ── Tablas (Estilo Caja Formulario Home) ── */
 .admin-table-container {
-  background: linear-gradient(135deg, var(--bg3) 0%, rgba(239, 68, 68, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg3) 0%,
+    rgba(239, 68, 68, 0.03) 100%
+  );
   border: 1px solid var(--borde);
   border-radius: 16px;
   overflow: hidden;
@@ -349,20 +401,36 @@ body {
   background: rgba(239, 68, 68, 0.03);
 }
 
-.admin-table__user-info { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+.admin-table__user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
 
 .admin-table__avatar {
-  width: 34px; height: 34px;
+  width: 34px;
+  height: 34px;
   background: linear-gradient(135deg, var(--rojo), var(--rojo2));
   color: #fff;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.8rem; font-weight: 700;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
-.admin-table__id { color: var(--texto2); font-size: 0.82rem; }
-.admin-table__price { font-weight: 800; color: var(--rojo); font-size: 1rem; }
+.admin-table__id {
+  color: var(--texto2);
+  font-size: 0.82rem;
+}
+.admin-table__price {
+  font-weight: 800;
+  color: var(--rojo);
+  font-size: 1rem;
+}
 
 /* ── Botones y Acciones (Estilo Botones Home) ── */
 .admin-btn-action {
@@ -370,7 +438,7 @@ body {
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.82rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
   border: 1px solid transparent;
   transition: var(--trans);
@@ -406,7 +474,7 @@ body {
   border: 1px solid var(--rojo);
   background: var(--rojo);
   color: #070d16;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   letter-spacing: 0.3px;
 }
 
@@ -427,17 +495,30 @@ body {
   text-transform: uppercase;
 }
 
-.admin-badge--activo { background: rgba(14, 165, 160, 0.12); color: #0ea5a0; border: 1px solid rgba(14, 165, 160, 0.2); }
-.admin-badge--suspendido, .admin-badge--pendiente { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+.admin-badge--activo {
+  background: rgba(14, 165, 160, 0.12);
+  color: #0ea5a0;
+  border: 1px solid rgba(14, 165, 160, 0.2);
+}
+.admin-badge--suspendido,
+.admin-badge--pendiente {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
 
 /* ── Inputs (Estilo Formularios Home) ── */
 .admin-input-search {
-  background: linear-gradient(135deg, var(--bg2) 0%, rgba(239, 68, 68, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg2) 0%,
+    rgba(239, 68, 68, 0.05) 100%
+  );
   border: 2px solid var(--borde);
   padding: 12px 20px;
   border-radius: 12px;
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.95rem;
   width: 300px;
   outline: none;
@@ -456,10 +537,15 @@ body {
   transform: translateY(-2px);
 }
 
-.admin-input-search::placeholder { color: var(--texto3); }
+.admin-input-search::placeholder {
+  color: var(--texto3);
+}
 
 /* ── Report Cards (Estilo Card Servicio Home) ── */
-.admin-reports-list { display: grid; gap: 20px; }
+.admin-reports-list {
+  display: grid;
+  gap: 20px;
+}
 
 .admin-report-card {
   background: var(--card);
@@ -473,19 +559,42 @@ body {
   border-color: var(--borde2);
   background: var(--card-hover);
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(239, 68, 68, 0.08);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(239, 68, 68, 0.08);
 }
 
-.admin-report-card--pendiente { border-left: 4px solid var(--rojo); }
+.admin-report-card--pendiente {
+  border-left: 4px solid var(--rojo);
+}
 
 .admin-report-card__header {
-  display: flex; justify-content: space-between; margin-bottom: 16px; align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  align-items: flex-start;
 }
 
-.admin-report-card__type { font-weight: 800; font-size: 1.1rem; color: var(--texto); }
-.admin-report-card__meta { font-size: 0.8rem; color: var(--texto2); margin-top: 4px; }
-.admin-report-card__meta span { color: var(--texto); font-weight: 600; }
-.admin-report-card__desc { line-height: 1.6; color: var(--texto2); margin-bottom: 20px; font-size: 0.95rem; }
+.admin-report-card__type {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--texto);
+}
+.admin-report-card__meta {
+  font-size: 0.8rem;
+  color: var(--texto2);
+  margin-top: 4px;
+}
+.admin-report-card__meta span {
+  color: var(--texto);
+  font-weight: 600;
+}
+.admin-report-card__desc {
+  line-height: 1.6;
+  color: var(--texto2);
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
 
 /* ── Actividad / Logs ── */
 .admin-activity-item {
@@ -504,29 +613,55 @@ body {
 }
 
 .admin-activity-item__dot {
-  width: 10px; height: 10px; border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
-.admin-activity-item__dot--alerta { background: var(--rojo); box-shadow: 0 0 8px var(--rojo); }
-.admin-activity-item__dot--usuario { background: var(--color-info); }
-.admin-activity-item__dot--servicio { background: var(--color-success); }
+.admin-activity-item__dot--alerta {
+  background: var(--rojo);
+  box-shadow: 0 0 8px var(--rojo);
+}
+.admin-activity-item__dot--usuario {
+  background: var(--color-info);
+}
+.admin-activity-item__dot--servicio {
+  background: var(--color-success);
+}
 
 /* ── Animaciones Reutilizables Home ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
-  .admin-nav__links { display: none; }
-  .admin-stats-grid { grid-template-columns: 1fr 1fr; }
-  .admin-input-search { width: 100%; margin-top: 16px; }
+  .admin-nav__links {
+    display: none;
+  }
+  .admin-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-input-search {
+    width: 100%;
+    margin-top: 16px;
+  }
 }
 
 @media (max-width: 540px) {
-  .admin-stats-grid { grid-template-columns: 1fr; }
-  .admin-header__title { font-size: 2rem; }
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-header__title {
+    font-size: 2rem;
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -555,7 +690,9 @@ body {
   background: var(--card-hover);
   border-color: var(--borde2);
   transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(239, 68, 68, 0.15);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(239, 68, 68, 0.15);
 }
 
 .admin-category-card__header {
@@ -572,7 +709,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1),
+    rgba(239, 68, 68, 0.02)
+  );
   border-radius: 14px;
 }
 
@@ -631,7 +772,7 @@ body {
   padding: 10px 16px;
   border-radius: 8px;
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.95rem;
   outline: none;
   transition: var(--trans);
