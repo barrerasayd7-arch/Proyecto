@@ -21,7 +21,7 @@ public class CrearSolicitudDTO
     public bool pago_anticipado { get; set; }
 
     public string urgencia { get; set; }
-    public string archivo { get; set; }
+    public string? archivo { get; set; }
 }
 
 public class ResponderSolicitudDTO
