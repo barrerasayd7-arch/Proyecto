@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UniserviceAPI.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -32,6 +33,7 @@ public class ServicesController : ControllerBase
             using var cmd = new SqlCommand(@"
                 SELECT 
                     s.id_servicio,
+                    s.id_proveedor, 
                     s.titulo,
                     s.descripcion,
                     s.precio_hora,
@@ -54,6 +56,7 @@ public class ServicesController : ControllerBase
                 servicios.Add(new
                 {
                     id_servicio = reader["id_servicio"],
+                    id_proveedor = (int)reader["id_proveedor"],
                     titulo = reader["titulo"]?.ToString(),
                     descripcion = reader["descripcion"]?.ToString(),
                     precio_hora = reader["precio_hora"],
@@ -88,6 +91,7 @@ public class ServicesController : ControllerBase
             using var cmd = new SqlCommand(@"
                 SELECT 
                     s.id_servicio,
+                    s.id_proveedor,
                     s.titulo,
                     s.descripcion,
                     s.precio_hora,
@@ -113,6 +117,7 @@ public class ServicesController : ControllerBase
             var servicio = new
             {
                 id_servicio = reader["id_servicio"],
+                id_proveedor = (int)reader["id_proveedor"],
                 titulo = reader["titulo"]?.ToString(),
                 descripcion = reader["descripcion"]?.ToString(),
                 precio_hora = reader["precio_hora"],
@@ -190,5 +195,74 @@ public class ServicesController : ControllerBase
             "2" => "⏰ Siempre disponible",
             _ => "No definido"
         };
+    }
+
+
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] EditarServicioDTO dto)
+    {
+        try
+        {
+            using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await conn.OpenAsync();
+
+            using var cmd = new SqlCommand(@"
+            UPDATE servicios
+            SET titulo = @titulo,
+                descripcion = @descripcion,
+                precio_hora = @precio_hora,
+                contacto = @contacto,
+                icono = @icono
+            WHERE id_servicio = @id AND id_proveedor = @id_proveedor
+        ", conn);
+
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@id_proveedor", dto.id_proveedor);
+            cmd.Parameters.AddWithValue("@titulo", dto.titulo ?? "");
+            cmd.Parameters.AddWithValue("@descripcion", dto.descripcion ?? "");
+            cmd.Parameters.AddWithValue("@precio_hora", dto.precio_hora);
+            cmd.Parameters.AddWithValue("@contacto", dto.contacto ?? "");
+            cmd.Parameters.AddWithValue("@icono", dto.icono ?? "");
+
+            int filas = await cmd.ExecuteNonQueryAsync();
+            if (filas == 0)
+                return NotFound(new { error = "Servicio no encontrado o no tienes permiso" });
+
+            return Ok(new { ok = true });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
+    }
+
+    // ── DELETE /api/services/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id, [FromQuery] int id_proveedor)
+    {
+        try
+        {
+            using var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await conn.OpenAsync();
+
+            using var cmd = new SqlCommand(@"
+            DELETE FROM servicios
+            WHERE id_servicio = @id AND id_proveedor = @id_proveedor
+        ", conn);
+
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@id_proveedor", id_proveedor);
+
+            int filas = await cmd.ExecuteNonQueryAsync();
+            if (filas == 0)
+                return NotFound(new { error = "Servicio no encontrado o no tienes permiso" });
+
+            return Ok(new { ok = true });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 }
