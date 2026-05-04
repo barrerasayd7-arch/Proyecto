@@ -51,9 +51,24 @@ const Perfil = () => {
   const [editando, setEditando] = useState(null);
   const [confirmEliminar, setConfirmEliminar] = useState(null);
 
-  // ════════════════════════════════
+  // ════════════════════════════════════════════════════════════
+  // SABER SI YA SAGUIMOS A ESTE USUARIO (solo en perfil externo)
+  // ════════════════════════════════════════════════════════════
+
+  useEffect(() => {
+    if (esPerfilExterno && id_usuario_logueado && id_a_consultar) {
+      fetch(
+        `${API_USUARIO}/es-seguidor?seguidor=${id_usuario_logueado}&seguido=${id_a_consultar}`,
+      )
+        .then((res) => res.json())
+        .then((data) => setSiguiendo(data.esSeguidor))
+        .catch((err) => console.error("Error al verificar seguimiento:", err));
+    }
+  }, [id_a_consultar, esPerfilExterno, id_usuario_logueado]);
+
+  // ════════════════════════
   // CARGAR DATOS DEL USUARIO
-  // ════════════════════════════════
+  // ════════════════════════
   useEffect(() => {
     // 1. Evitamos el error de "undefined"
     if (!id_a_consultar || id_a_consultar === "undefined") {
@@ -90,9 +105,9 @@ const Perfil = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [id_a_consultar]);
 
-  // ════════════════════════════════
-  // CARGAR DATOS DE SERVICIOS
-  // ════════════════════════════════
+  // ═════════════════════════════════
+  // CARGAR DATOS DE SERVICIOS PROPIOS
+  // ═════════════════════════════════
   useEffect(() => {
     if (esPerfilExterno || !id_a_consultar || id_a_consultar === "undefined")
       return;
@@ -108,9 +123,9 @@ const Perfil = () => {
       .catch(console.error);
   }, [id_a_consultar, esPerfilExterno]);
 
-  // ════════════════════════════════
-  // ACTUALIZAR CAMPO EN LA BASE
-  // ════════════════════════════════
+  // ════════════════════════════════════════════════════════
+  // ACTUALIZAR INFO EN LA BASE DE DATOS (solo perfil propio)
+  // ════════════════════════════════════════════════════════
   const handleUpdate = async (campo, valor) => {
     try {
       const res = await fetch(`/api/users/${id_usuario_logueado}`, {
@@ -131,9 +146,9 @@ const Perfil = () => {
     }
   };
 
-  // ════════════════════════════════
+  // ═════════════
   // CERRAR SESIÓN
-  // ════════════════════════════════
+  // ═════════════
   const handleCerrarSesion = async () => {
     try {
       await fetch(`/api/users/${id_usuario_logueado}`, {
@@ -201,9 +216,9 @@ const Perfil = () => {
     }
   };
 
-  // ════════════════════════════════
+  // ════════════════
   // COMPARTIR PERFIL
-  // ════════════════════════════════
+  // ════════════════
   const handleShare = async () => {
     try {
       if (navigator.share) {
@@ -283,43 +298,51 @@ const Perfil = () => {
     setEnviandoSeguimiento(true);
 
     try {
-      const accionActual = siguiendo; // Guardamos el estado actual
+      const accionActual = siguiendo;
       const endpoint = accionActual ? "dejar-seguir" : "seguir";
       const metodo = accionActual ? "DELETE" : "POST";
 
       const response = await fetch(`${API_USUARIO}/${endpoint}`, {
         method: metodo,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 Agregado por seguridad
+        },
         body: JSON.stringify({
-          id_seguidor: Number(id_usuario_logueado),
-          id_seguido: Number(id_a_consultar),
+          id_seguidor: parseInt(id_usuario_logueado),
+          id_seguido: parseInt(id_a_consultar),
         }),
       });
 
       if (response.ok) {
-        // 1. Invertimos el estado del botón
         setSiguiendo(!accionActual);
-
-        // 2. Actualizamos el contador localmente
         setUserData((prev) => ({
           ...prev,
           total_seguidores: accionActual
-            ? Math.max(0, prev.total_seguidores - 1) // Restar si estaba siguiendo
-            : prev.total_seguidores + 1, // Sumar si no estaba siguiendo
+            ? Math.max(0, prev.total_seguidores - 1)
+            : (prev.total_seguidores || 0) + 1,
         }));
       } else {
-        alert("No se pudo actualizar el seguimiento en el servidor.");
+        // Intenta leer el error del servidor para debug
+        const errorData = await response.json();
+        console.error("Error del servidor:", errorData);
+        alert(
+          "Error: " +
+            (errorData.message || "No se pudo actualizar el seguimiento"),
+        );
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error de conexión:", error);
       alert("Error de conexión al procesar el seguimiento");
     } finally {
       setEnviandoSeguimiento(false);
     }
   };
+
   // ════════════════════════════════
   // JSX
   // ════════════════════════════════
+
   return (
     <>
       <Navbar onCerrarSesion={handleCerrarSesion} />
@@ -775,6 +798,8 @@ const Perfil = () => {
             <div className="image-menu" onClick={(e) => e.stopPropagation()}>
               <h3 className="image-menu-title">✍️ Editar Perfil</h3>
               <div className="image-menu-options">
+                {/* BOTÓN PARA CAMBIAR USER NAME */}
+
                 <button
                   className="image-option"
                   onClick={() => {
@@ -787,13 +812,13 @@ const Perfil = () => {
                     <b>Cambiar Nombre</b>
                   </div>
                 </button>
+
+                {/* BOTÓN PARA CAMBIAR DESCRIPCIÓN */}
+
                 <button
                   className="image-option"
                   onClick={() => {
-                    const d = prompt(
-                      "Nueva descripción:",
-                      userData.descripcion,
-                    );
+                    const d = prompt("Nueva descripción:", userData.descripcion,);
                     if (d) handleUpdate("descripcion", d);
                   }}
                 >
@@ -802,6 +827,9 @@ const Perfil = () => {
                     <b>Cambiar Descripción</b>
                   </div>
                 </button>
+
+                {/* BOTÓN PARA CAMBIAR CORREO */}
+
                 <button
                   className="image-option"
                   onClick={() => {
@@ -812,6 +840,36 @@ const Perfil = () => {
                   <span className="image-option-icon">📧</span>
                   <div className="image-option-text">
                     <b>Cambiar Correo</b>
+                  </div>
+                </button>
+
+                {/* BOTÓN PARA CAMBIAR UNIVERSIDAD */}
+
+                <button
+                  className="image-option"
+                  onClick={() => {
+                    const e = prompt("Nueva universidad:", userData.universidad);
+                    if (e) handleUpdate("universidad", e);
+                  }}
+                >
+                  <span className="image-option-icon">🏛️</span>
+                  <div className="image-option-text">
+                    <b>Cambiar Universidad</b>
+                  </div>
+                </button>
+
+                {/* BOTÓN PARA CAMBIAR  */}
+
+                <button
+                  className="image-option"
+                  onClick={() => {
+                    const u = prompt("Nuevo número de teléfono:", userData.telefono);
+                    if (u) handleUpdate("telefono", u);
+                  }}
+                >
+                  <span className="image-option-icon">📱</span>
+                  <div className="image-option-text">
+                    <b>Cambiar Teléfono</b>
                   </div>
                 </button>
               </div>
