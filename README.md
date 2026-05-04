@@ -8,7 +8,7 @@
 <!-- BADGES ROW 1 -->
 <img src="https://img.shields.io/badge/versión-1.2.5-6366F1?style=for-the-badge&logo=git&logoColor=white" alt="version"/>
 <img src="https://img.shields.io/badge/estado-updating-10B981?style=for-the-badge&logo=checkmarx&logoColor=white" alt="updating"/>
-<img src="https://img.shields.io/badge/licencia-MIT-F59E0B?style=for-the-badge" alt="licencia"/>
+<img src="https://img.shields.io/badge/stack-Full Stack-F59E0B?style=for-the-badge" alt="licencia"/>
 <br><br>
 <!-- BADGES ROW 2 — STACK -->
 <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React"/>
@@ -18,8 +18,8 @@
 <img src="https://img.shields.io/badge/JSX-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JSX"/>
 <br><br>
 
-
 ---
+
 </div>
 
 <h2>📌 Objetivo del Proyecto</h2>
@@ -49,16 +49,22 @@
 </ul>
 
 <hr />
-
-<h2>🚀 Ejecución Rápida</h2>
-<p>Para poner en marcha el ecosistema completo de desarrollo:</p>
-<pre><code>npm run dev</code></pre>
-<p><em>Este comando inicia automáticamente el backend (servidor) y el frontend (cliente) de forma simultánea.</em></p>
-
 <br>
+
 <p align="center">
   <img src="./frontend/src/img/Img_Read_me.png" alt="UniService Banner" width="750" style="border-radius: 10px;">
 </p>
+
+<h2 align="center">🚀 Ejecución y Puesta en marcha</h2>
+<p>Para poner en marcha el ecosistema completo de desarrollo:</p>
+<br>
+<p>1️⃣ En la carpeta del front colocar el comando:</p>
+<pre><code>npm run dev</code></pre>
+<p>2️⃣ En Visual Studio lanzar la api</p>
+<p>3️⃣ Iniciar la base de datos en docker (en la carpeta raiz)</p>
+<pre><code>docker compose up</code></pre>
+<br>
+<p><em>Estos comandos inician automáticamente el backend (servidor) y el frontend (cliente).</em></p>
 
 <hr />
 
@@ -66,7 +72,6 @@
   Hecho por estudiantes, para estudiantes. 🎓<br>
   <sub>Valledupar, Cesar, Colombia.</sub>
 </h2>
-
 
 <p align="center">
   <sub><strong>UniService</strong> - Construido por estudiantes para transformar la vida universitaria.</sub>
