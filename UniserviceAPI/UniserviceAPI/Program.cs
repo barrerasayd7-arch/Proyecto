@@ -89,6 +89,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+
 // A. EL CORS debe ir antes de cualquier middleware que maneje rutas o seguridad
 app.UseCors("AllowReact");
 
@@ -104,3 +106,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
