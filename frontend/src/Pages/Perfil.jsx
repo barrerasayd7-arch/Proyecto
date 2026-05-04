@@ -504,7 +504,7 @@ const Perfil = () => {
                   {!esPerfilExterno && (
                     <div className="menu-list">
                       <MenuItem
-                        icon="💼"
+                        icon="🔒"
                         title="Seguridad"
                         desc="Gestiona tu cuenta"
                         onClick={() => navigate("/home#mis-servicios")}
@@ -828,21 +828,6 @@ const Perfil = () => {
                   </div>
                 </button>
 
-                {/* BOTÓN PARA CAMBIAR CORREO */}
-
-                <button
-                  className="image-option"
-                  onClick={() => {
-                    const c = prompt("Nuevo correo:", userData.correo);
-                    if (c) handleUpdate("correo", c);
-                  }}
-                >
-                  <span className="image-option-icon">📧</span>
-                  <div className="image-option-text">
-                    <b>Cambiar Correo</b>
-                  </div>
-                </button>
-
                 {/* BOTÓN PARA CAMBIAR UNIVERSIDAD */}
 
                 <button
@@ -858,7 +843,7 @@ const Perfil = () => {
                   </div>
                 </button>
 
-                {/* BOTÓN PARA CAMBIAR  */}
+                {/* BOTÓN PARA CAMBIAR NÚMERO DE TELÉFONO */}
 
                 <button
                   className="image-option"

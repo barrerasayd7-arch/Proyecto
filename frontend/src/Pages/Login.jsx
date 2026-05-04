@@ -758,19 +758,20 @@ export default function Login() {
             </div>
 
             {/* Título */}
-            <h2
+            <p
               style={{
                 fontFamily: "'Syne', sans-serif",
-                fontSize: "1.35rem",
+                fontSize: "2rem",
                 fontWeight: 800,
-                color: "#fff",
+                color: "#e00a0ae9",
                 textAlign: "center",
                 margin: "0 0 10px",
                 letterSpacing: "-0.02em",
               }}
             >
               Zona restringida
-            </h2>
+            </p>
+            <br />
 
             {/* Descripción */}
             <div
