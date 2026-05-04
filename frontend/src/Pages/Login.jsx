@@ -9,7 +9,7 @@ import logoIcon from "../img/logo_color_noBG.png";
 // ══════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════
 
-//  CREDENCIALES DE ADMINISTRADOR — Agrega o edita las que quieras
+//  CREDENCIALES DE ADMINISTRADOR (HARDCODEADAS PARA PRUEBAS)
 //  Formato: { correo: "...", password: "..." }
 
 const ADMIN_CREDENTIALS = [
@@ -314,9 +314,9 @@ export default function Login() {
     setResetPass2("");
   };
 
-  // ════════════════════════════════
+  // ════════════════════════════════════
   // MODAL ADMIN — con detección de admin
-  // ════════════════════════════════
+  // ════════════════════════════════════
 
   // Función para cerrar y limpiar el modal
   const cerrarModalAdmin = () => {
@@ -357,9 +357,9 @@ export default function Login() {
     }
   };
 
-  // ════════════════════════════════
-  // LOGIN — con detección de admin
-  // ════════════════════════════════
+  // ═══════════════════════════════════════
+  // LOGIN — con detección de usuarios admin
+  // ═══════════════════════════════════════
   const handleLogin = async () => {
     if (!correo || errores.correo) {
       notificar("❌ Ingresa un correo válido");

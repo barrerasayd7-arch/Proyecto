@@ -76,7 +76,6 @@ const Perfil = () => {
       return;
     }
 
-    // 2. USAMOS LA URL COMPLETA DIRECTA A C# (Ignorando el proxy de Vite)
     fetch(`http://localhost:5165/api/users/${id_a_consultar}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
@@ -243,26 +242,33 @@ const Perfil = () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", file); // Debe coincidir con el nombre del parámetro IFormFile en C#
     formData.append("id_usuario", id_usuario_logueado);
 
     try {
       const response = await fetch(
-        "http://localhost/api/crud/usuario_crud.php",
+        "http://localhost:5165/api/usuarios/upload-avatar",
         {
           method: "POST",
+          headers: {
+            // No incluyas Content-Type, el navegador lo pondrá por ti al ser FormData
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           body: formData,
         },
       );
+
       const result = await response.json();
-      if (result.ok) {
+
+      if (response.ok && result.ok) {
         setUserData((prev) => ({ ...prev, avatar: result.avatarUrl }));
         setActiveModal(null);
       } else {
-        alert("❌ Error al subir: " + result.error);
+        alert("❌ Error al subir: " + (result.error || "Error en el servidor"));
       }
     } catch (err) {
       console.error("Error en subida:", err);
+      alert("❌ Error de conexión con el servidor de C#");
     }
   };
 
@@ -818,7 +824,10 @@ const Perfil = () => {
                 <button
                   className="image-option"
                   onClick={() => {
-                    const d = prompt("Nueva descripción:", userData.descripcion,);
+                    const d = prompt(
+                      "Nueva descripción:",
+                      userData.descripcion,
+                    );
                     if (d) handleUpdate("descripcion", d);
                   }}
                 >
@@ -833,7 +842,10 @@ const Perfil = () => {
                 <button
                   className="image-option"
                   onClick={() => {
-                    const e = prompt("Nueva universidad:", userData.universidad);
+                    const e = prompt(
+                      "Nueva universidad:",
+                      userData.universidad,
+                    );
                     if (e) handleUpdate("universidad", e);
                   }}
                 >
@@ -848,7 +860,10 @@ const Perfil = () => {
                 <button
                   className="image-option"
                   onClick={() => {
-                    const u = prompt("Nuevo número de teléfono:", userData.telefono);
+                    const u = prompt(
+                      "Nuevo número de teléfono:",
+                      userData.telefono,
+                    );
                     if (u) handleUpdate("telefono", u);
                   }}
                 >
