@@ -1511,7 +1511,7 @@ export default function HomePrincipal() {
         const top = [...data]
           .sort(
             (a, b) =>
-              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)
+              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas),
           )
           .slice(0, 3);
         setTop3(top);

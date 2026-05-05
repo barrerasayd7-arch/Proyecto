@@ -30,29 +30,29 @@ export default function Login() {
   // ESTADOS DEL FORMULARIO DE LOGIN
   // Guardan lo que el usuario escribe en los campos de inicio de sesión
   // ════════════════════════════════
-  const [correo, setCorreo] = useState("");   // Campo correo del login
-  const [pass, setPass] = useState("");       // Campo contraseña del login
+  const [correo, setCorreo] = useState(""); // Campo correo del login
+  const [pass, setPass] = useState(""); // Campo contraseña del login
 
   // ════════════════════════════════
   // ESTADOS DEL FORMULARIO DE REGISTRO
   // Guardan los datos del formulario de crear cuenta nueva
   // ════════════════════════════════
-  const [nombre, setNombre] = useState("");       
-  const [correoReg, setCorreoReg] = useState(""); 
-  const [passReg, setPassReg] = useState("");     
-  const [passReg2, setPassReg2] = useState("");   
-  const [terminos, setTerminos] = useState(false); 
+  const [nombre, setNombre] = useState("");
+  const [correoReg, setCorreoReg] = useState("");
+  const [passReg, setPassReg] = useState("");
+  const [passReg2, setPassReg2] = useState("");
+  const [terminos, setTerminos] = useState(false);
 
   // ════════════════════════════════
   // ESTADOS DEL FLUJO DE VERIFICACIÓN DE CORREO
   // Controlan el proceso de envío y validación del código de 6 dígitos
   // que se envía al correo antes de poder registrarse
   // ════════════════════════════════
-  const [codigoEnviado, setCodigoEnviado] = useState(false);       
-  const [codigoInput, setCodigoInput] = useState("");               
-  const [correoVerificado, setCorreoVerificado] = useState(false);  
-  const [enviandoCodigo, setEnviandoCodigo] = useState(false);      
-  const [mostrarModalCodigo, setMostrarModalCodigo] = useState(false); 
+  const [codigoEnviado, setCodigoEnviado] = useState(false);
+  const [codigoInput, setCodigoInput] = useState("");
+  const [correoVerificado, setCorreoVerificado] = useState(false);
+  const [enviandoCodigo, setEnviandoCodigo] = useState(false);
+  const [mostrarModalCodigo, setMostrarModalCodigo] = useState(false);
 
   // ════════════════════════════════
   // ESTADOS DEL FLUJO "OLVIDÉ MI CONTRASEÑA"
@@ -61,11 +61,11 @@ export default function Login() {
   //   2. "codigo"  → el usuario ingresa el código recibido
   //   3. "nueva"   → el usuario escribe su nueva contraseña
   // ════════════════════════════════
-  const [resetPaso, setResetPaso] = useState(null);     // Paso actual del flujo (null = modal cerrado)
-  const [resetCorreo, setResetCorreo] = useState("");   // Correo ingresado para recuperar
-  const [resetCodigo, setResetCodigo] = useState("");   // Código de verificación recibido
-  const [resetPass, setResetPass] = useState("");       // Nueva contraseña
-  const [resetPass2, setResetPass2] = useState("");     // Confirmación de nueva contraseña
+  const [resetPaso, setResetPaso] = useState(null); // Paso actual del flujo (null = modal cerrado)
+  const [resetCorreo, setResetCorreo] = useState(""); // Correo ingresado para recuperar
+  const [resetCodigo, setResetCodigo] = useState(""); // Código de verificación recibido
+  const [resetPass, setResetPass] = useState(""); // Nueva contraseña
+  const [resetPass2, setResetPass2] = useState(""); // Confirmación de nueva contraseña
   const [resetCargando, setResetCargando] = useState(false); // Deshabilita botones mientras espera la API
 
   // ════════════════════════════════
@@ -73,19 +73,20 @@ export default function Login() {
   // Controlan el comportamiento del modal que aparece cuando
   // se detecta que el usuario es administrador
   // ════════════════════════════════
-  const [modalAdmin, setModalAdmin] = useState(false);         // Si el modal está visible
+  const [modalAdmin, setModalAdmin] = useState(false); // Si el modal está visible
   const [adminMasterInput, setAdminMasterInput] = useState(""); // Contraseña maestra que escribe el admin
-  const [adminIntentos, setAdminIntentos] = useState(3);        // Contador de intentos fallidos (máx 3)
-  const [adminBloqueado, setAdminBloqueado] = useState(false);  // Si se bloqueó por demasiados intentos
-  const [adminError, setAdminError] = useState("");             // Mensaje de error dentro del modal
-  const [adminLoginData, setAdminLoginData] = useState(null);   // Datos del usuario admin (reservado para uso futuro)
-  const [adminShake, setAdminShake] = useState(false);          // Activa animación de "shake" cuando falla
+  const [adminIntentos, setAdminIntentos] = useState(3); // Contador de intentos fallidos (máx 3)
+  const [adminBloqueado, setAdminBloqueado] = useState(false); // Si se bloqueó por demasiados intentos
+  const [adminError, setAdminError] = useState(""); // Mensaje de error dentro del modal
+  const [adminLoginData, setAdminLoginData] = useState(null); // Datos del usuario admin (reservado para uso futuro)
+  const [adminShake, setAdminShake] = useState(false); // Activa animación de "shake" cuando falla
 
   // ════════════════════════════════
   // ESTADOS GENERALES DE UI
   // ════════════════════════════════
   const [errores, setErrores] = useState({}); // Objeto con mensajes de error por campo (ej: { correo: "Inválido" })
-  const [modal, setModal] = useState({        // Modal genérico para mostrar mensajes al usuario
+  const [modal, setModal] = useState({
+    // Modal genérico para mostrar mensajes al usuario
     visible: false,
     mensaje: "",
     tipo: "error", // Puede ser "error", "success" o "info"
@@ -212,8 +213,8 @@ export default function Login() {
       });
       const data = await res.json();
       if (data.valido) {
-        setCorreoVerificado(true);         // Habilita el botón de crear cuenta
-        setMostrarModalCodigo(false);      // Cierra el modal del código
+        setCorreoVerificado(true); // Habilita el botón de crear cuenta
+        setMostrarModalCodigo(false); // Cierra el modal del código
         notificar("✅ Correo verificado con éxito", "success");
       } else {
         notificar("❌ Código incorrecto, intenta de nuevo");
@@ -1042,7 +1043,6 @@ export default function Login() {
         <div className="modal-overlay" onClick={cerrarModalReset}>
           {/* stopPropagation evita que el clic dentro del modal lo cierre */}
           <div className="modal-codigo" onClick={(e) => e.stopPropagation()}>
-
             {/* PASO 1: Ingresar correo para recibir el código */}
             {resetPaso === "correo" && (
               <>
