@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniserviceAPI.DTOs;
+using System.Linq;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -31,28 +32,42 @@ public class ServicesController : ControllerBase
             var servicios = new List<object>();
 
             using var cmd = new SqlCommand(@"
-                SELECT 
-                    s.id_servicio,
-                    s.id_proveedor, 
-                    s.titulo,
-                    s.descripcion,
-                    s.precio_hora,
-                    s.icono,
-                    s.fecha_publicacion,
-                    s.modalidad,
-                    s.disponibilidad,
-                    c.nombre_categoria,
-                    u.nombre AS proveedor
-                FROM servicios s
-                LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
-                LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
-                ORDER BY s.fecha_publicacion DESC
-            ", conn);
+            SELECT 
+                s.id_servicio,
+                s.id_proveedor, 
+                s.titulo,
+                s.descripcion,
+                s.precio_hora,
+                s.icono,
+                s.fecha_publicacion,
+                s.modalidad,
+                s.disponibilidad,
+                c.nombre_categoria,
+                u.nombre AS proveedor,
+                COUNT(cal.id_calificacion)      AS num_resenas,
+                ISNULL(AVG(CAST(cal.puntuacion AS FLOAT)), 0) AS promedio_estrellas
+            FROM servicios s
+            LEFT JOIN usuarios u ON s.id_proveedor = u.id_usuario
+            LEFT JOIN categorias c ON s.id_categoria = c.id_categoria
+            LEFT JOIN calificaciones cal ON cal.id_servicio = s.id_servicio
+            GROUP BY
+                s.id_servicio, s.id_proveedor, s.titulo, s.descripcion,
+                s.precio_hora, s.icono, s.fecha_publicacion, s.modalidad,
+                s.disponibilidad, c.nombre_categoria, u.nombre
+            ORDER BY s.fecha_publicacion DESC
+        ", conn);
 
             using var reader = await cmd.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
+                double prom = (double)reader["promedio_estrellas"];
+                int numResenas = (int)reader["num_resenas"];
+
+                // Construimos el array de estrellas que espera el frontend
+                // (repite el promedio tantas veces como reseñas, que es lo que usa calcularEstrellas())
+                var estrellasArr = Enumerable.Repeat(prom, numResenas).ToArray();
+
                 servicios.Add(new
                 {
                     id_servicio = reader["id_servicio"],
@@ -65,7 +80,8 @@ public class ServicesController : ControllerBase
                     modalidad = MapModalidad(reader["modalidad"]),
                     disponibilidad = MapDisponibilidad(reader["disponibilidad"]),
                     nombre_categoria = reader["nombre_categoria"]?.ToString(),
-                    proveedor = reader["proveedor"]?.ToString()
+                    proveedor = reader["proveedor"]?.ToString(),
+                    estrellas = estrellasArr   // ← array que ya entiende el frontend
                 });
             }
 
@@ -76,7 +92,6 @@ public class ServicesController : ControllerBase
             return StatusCode(500, new { error = ex.Message });
         }
     }
-
     // =========================
     // GET POR ID
     // =========================
