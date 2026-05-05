@@ -4,29 +4,32 @@ import Navbar from "../Components/Navbar_Perfil";
 import "../styles/styleHome.css";
 import "../styles/stylePerfil.css";
 
+// URL base del API de usuarios
 const API_USUARIO = "http://localhost:5165/api/users";
 
 const Perfil = () => {
   const navigate = useNavigate();
+  // useRef para referenciar el input de archivo sin re-renderizar el componente
   const FileInputRef = useRef(null);
 
-  // ── Obtener el id de la URL si existe (para perfil externo)
-  // Si no hay id en la URL, asumimos que es el perfil propio
+  // useParams permite leer el :id de la URL, por ejemplo /perfil/12
+  // Si no hay id en la URL, el usuario está viendo su propio perfil
   const { id: idUrl } = useParams();
 
-  // ── ID del usuario logueado (siempre el mismo desde localStorage)
+  // ID del usuario que inició sesión (guardado en localStorage al hacer login)
   const id_usuario_logueado = localStorage.getItem("usuarioId");
 
-  // ── Si hay id en la URL y es diferente al logueado → perfil externo
+  // Si la URL trae un ID distinto al del usuario logueado, es un perfil ajeno
   const esPerfilExterno = idUrl && idUrl !== id_usuario_logueado;
 
-  // ── El ID a consultar: si es externo usa el de la URL, si no el propio
+  // Dependiendo de si es externo o propio, consultamos un ID diferente
   const id_a_consultar = esPerfilExterno ? idUrl : id_usuario_logueado;
 
-  // ── Estado de seguimiento (solo aplica en perfil externo)
+  // Estado para saber si el usuario logueado ya sigue al dueño del perfil externo
   const [siguiendo, setSiguiendo] = useState(false);
 
-  // ── Estado principal con datos del usuario
+  // Estado principal con todos los datos del perfil a mostrar
+  // Se inicializa con valores por defecto mientras llega la respuesta del API
   const [userData, setUserData] = useState({
     nombre: "Cargando...",
     avatar: "../src/img/default-avatar.png",
@@ -42,17 +45,20 @@ const Perfil = () => {
     universidad: "Sin universidad",
   });
 
+  // Evita que el usuario haga clic en "Seguir" varias veces seguidas
   const [enviandoSeguimiento, setEnviandoSeguimiento] = useState(false);
 
-  // ── Controla qué modal está abierto
+  // Controla qué modal está visible: "info", "imagen", "actividad" o null (ninguno)
   const [activeModal, setActiveModal] = useState(null);
 
   const [misServicios, setMisServicios] = useState([]);
+  // Almacena el servicio que se está editando (con todos sus campos)
   const [editando, setEditando] = useState(null);
+  // Guarda el ID del servicio que se quiere eliminar, para mostrar confirmación
   const [confirmEliminar, setConfirmEliminar] = useState(null);
 
   // ════════════════════════════════════════════════════════════
-  // SABER SI YA SAGUIMOS A ESTE USUARIO (solo en perfil externo)
+  // SABER SI YA SEGUIMOS A ESTE USUARIO (solo en perfil externo)
   // ════════════════════════════════════════════════════════════
 
   useEffect(() => {
@@ -70,18 +76,20 @@ const Perfil = () => {
   // CARGAR DATOS DEL USUARIO
   // ════════════════════════
   useEffect(() => {
-    // 1. Evitamos el error de "undefined"
+    // Guardamos para no hacer fetch con un ID inválido
     if (!id_a_consultar || id_a_consultar === "undefined") {
       console.warn("No hay ID guardado. Debes iniciar sesión.");
       return;
     }
 
+    // GET al endpoint de usuarios con el token JWT en el header para autenticar
     fetch(`http://localhost:5165/api/users/${id_a_consultar}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((res) => res.json())
       .then((data) => {
         if (!data.error) {
+          // Normalizamos el estado a boolean, ya que puede llegar como 0/1, true/false o string
           const estadoNormalizado = !!(
             data.estado === true ||
             data.estado === 1 ||
@@ -96,11 +104,12 @@ const Perfil = () => {
       })
       .catch((err) => console.error("Error al cargar perfil:", err));
 
-    // Cerrar modal con Escape
+    // Permitimos cerrar cualquier modal con la tecla Escape
     const handleKeyDown = (e) => {
       if (e.key === "Escape") setActiveModal(null);
     };
     window.addEventListener("keydown", handleKeyDown);
+    // Limpiamos el evento al desmontar el componente para evitar memory leaks
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [id_a_consultar]);
 
@@ -108,10 +117,11 @@ const Perfil = () => {
   // CARGAR DATOS DE SERVICIOS PROPIOS
   // ═════════════════════════════════
   useEffect(() => {
+    // Los servicios solo se cargan si es el perfil propio
     if (esPerfilExterno || !id_a_consultar || id_a_consultar === "undefined")
       return;
 
-    // USAMOS LA URL COMPLETA AQUI TAMBIEN
+    // Traemos todos los servicios y filtramos los que le pertenecen al usuario
     fetch(`http://localhost:5165/api/services`)
       .then((r) => r.json())
       .then((data) =>
@@ -125,6 +135,8 @@ const Perfil = () => {
   // ════════════════════════════════════════════════════════
   // ACTUALIZAR INFO EN LA BASE DE DATOS (solo perfil propio)
   // ════════════════════════════════════════════════════════
+  // Función genérica: recibe el nombre del campo y el nuevo valor
+  // Esto permite reusar la misma función para nombre, descripción, teléfono, etc.
   const handleUpdate = async (campo, valor) => {
     try {
       const res = await fetch(`/api/users/${id_usuario_logueado}`, {
@@ -133,10 +145,11 @@ const Perfil = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ [campo]: valor }),
+        body: JSON.stringify({ [campo]: valor }), // Enviamos solo el campo que cambió
       });
       const result = await res.json();
       if (result.ok) {
+        // Actualizamos el estado local sin necesidad de recargar la página
         setUserData((prev) => ({ ...prev, [campo]: valor }));
         setActiveModal(null);
       }
@@ -150,21 +163,25 @@ const Perfil = () => {
   // ═════════════
   const handleCerrarSesion = async () => {
     try {
+      // Antes de salir, marcamos al usuario como desconectado en la BD
       await fetch(`/api/users/${id_usuario_logueado}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ estado: 0 }), // marca como desconectado
+        body: JSON.stringify({ estado: 0 }), // 0 = desconectado
       });
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
     } finally {
+      // Siempre limpiamos el localStorage y redirigimos, aunque falle el PUT
       localStorage.clear();
       navigate("/home-guest");
     }
   };
+
+  // Prepara y envía los datos del servicio editado al backend
   const guardarEdicion = async (s) => {
     const body = {
       id_proveedor: parseInt(id_usuario_logueado),
@@ -185,6 +202,7 @@ const Perfil = () => {
     );
 
     if (res.ok) {
+      // Actualizamos solo el servicio modificado en el estado local (sin recargar toda la lista)
       setMisServicios((prev) =>
         prev.map((x) =>
           x.id_servicio === s.id_servicio ? { ...x, ...body } : x,
@@ -197,6 +215,7 @@ const Perfil = () => {
     }
   };
 
+  // Llama al endpoint DELETE y elimina el servicio de la lista local si el servidor responde OK
   const confirmarEliminar = async () => {
     const res = await fetch(
       `http://localhost:5165/api/services/${confirmEliminar}?id_proveedor=${id_usuario_logueado}`,
@@ -206,6 +225,7 @@ const Perfil = () => {
       },
     );
     if (res.ok) {
+      // Filtramos el servicio eliminado del estado para que desaparezca de la UI
       setMisServicios((prev) =>
         prev.filter((s) => s.id_servicio !== confirmEliminar),
       );
@@ -215,17 +235,19 @@ const Perfil = () => {
     }
   };
 
-  // ════════════════
+  // ════════════════════════════════
   // COMPARTIR PERFIL
-  // ════════════════
+  // ════════════════════════════════
   const handleShare = async () => {
     try {
+      // Usamos la Web Share API si el navegador la soporta (principalmente móvil)
       if (navigator.share) {
         await navigator.share({
           title: "UniServices - Perfil de " + userData.nombre,
           url: window.location.href,
         });
       } else {
+        // Fallback: copiar el enlace al portapapeles en navegadores de escritorio
         await navigator.clipboard.writeText(window.location.href);
         alert("¡Enlace copiado al portapapeles!");
       }
@@ -241,6 +263,7 @@ const Perfil = () => {
     const file = event.target.files[0];
     if (!file) return;
 
+    // FormData permite enviar archivos binarios al servidor (multipart/form-data)
     const formData = new FormData();
     formData.append("file", file); // Debe coincidir con el nombre del parámetro IFormFile en C#
     formData.append("id_usuario", id_usuario_logueado);
@@ -251,7 +274,7 @@ const Perfil = () => {
         {
           method: "POST",
           headers: {
-            // No incluyas Content-Type, el navegador lo pondrá por ti al ser FormData
+            // No incluyas Content-Type, el navegador lo pondrá automáticamente con el boundary correcto
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: formData,
@@ -261,6 +284,7 @@ const Perfil = () => {
       const result = await response.json();
 
       if (response.ok && result.ok) {
+        // Actualizamos el avatar en el estado sin recargar la página
         setUserData((prev) => ({ ...prev, avatar: result.avatarUrl }));
         setActiveModal(null);
       } else {
@@ -272,7 +296,7 @@ const Perfil = () => {
     }
   };
 
-  // ── Helper para formatear fecha
+  // Convierte una fecha ISO en texto legible: "mayo 2024"
   const formatearFecha = (fecha) => {
     if (!fecha) return "Fecha desconocida";
     return new Date(fecha).toLocaleDateString("es-ES", {
@@ -281,7 +305,7 @@ const Perfil = () => {
     });
   };
 
-  // ── Helper para formatear números grandes
+  // Abrevia números grandes para que no rompan el diseño: 1200 → "1.2k"
   const formatearNumero = (num) => {
     if (!num) return 0;
     if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
@@ -289,22 +313,24 @@ const Perfil = () => {
     return num;
   };
 
-  // ── Estado del usuario: verde si estado===1, rojo si no
-
+  // Boolean que indica si el usuario está activo/disponible según la BD
   const estaConectado = userData.estado;
 
-  // ── Reputación formateada
+  // Si no hay calificaciones, mostramos un texto en lugar de "0/5.0"
   const reputacionTexto =
     userData.reputacion && userData.reputacion !== "N/A"
       ? parseFloat(userData.reputacion).toFixed(1) + "/5.0"
       : "Sin calificaciones";
 
+  // Maneja la lógica de seguir/dejar de seguir
+  // Usa el flag enviandoSeguimiento para bloquear el botón mientras espera respuesta
   const toggleSeguir = async () => {
     if (enviandoSeguimiento) return;
     setEnviandoSeguimiento(true);
 
     try {
       const accionActual = siguiendo;
+      // Si ya seguimos → DELETE "dejar-seguir"; si no → POST "seguir"
       const endpoint = accionActual ? "dejar-seguir" : "seguir";
       const metodo = accionActual ? "DELETE" : "POST";
 
@@ -312,7 +338,7 @@ const Perfil = () => {
         method: metodo,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 Agregado por seguridad
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           id_seguidor: parseInt(id_usuario_logueado),
@@ -322,6 +348,7 @@ const Perfil = () => {
 
       if (response.ok) {
         setSiguiendo(!accionActual);
+        // Actualizamos el contador de seguidores localmente para respuesta inmediata
         setUserData((prev) => ({
           ...prev,
           total_seguidores: accionActual
@@ -329,7 +356,6 @@ const Perfil = () => {
             : (prev.total_seguidores || 0) + 1,
         }));
       } else {
-        // Intenta leer el error del servidor para debug
         const errorData = await response.json();
         console.error("Error del servidor:", errorData);
         alert(
@@ -341,6 +367,7 @@ const Perfil = () => {
       console.error("Error de conexión:", error);
       alert("Error de conexión al procesar el seguimiento");
     } finally {
+      // Siempre liberamos el botón, haya salido bien o mal
       setEnviandoSeguimiento(false);
     }
   };
@@ -367,7 +394,7 @@ const Perfil = () => {
             {/* ══ TARJETA IZQUIERDA ══ */}
             <div className="profile-card">
               <div className="profile-header">
-                {/* Avatar — clickeable solo en perfil propio */}
+                {/* Avatar — solo es clickeable para cambiar si es el perfil propio */}
                 <div
                   className="avatar-wrapper"
                   onClick={() => !esPerfilExterno && setActiveModal("imagen")}
@@ -375,7 +402,7 @@ const Perfil = () => {
                 >
                   <div className="avatar-ring"></div>
                   <img src={userData.avatar} alt="Avatar" className="avatar" />
-                  {/* ── Indicador de estado: verde=conectado, rojo=desconectado ── */}
+                  {/* Indicador de estado online/offline según el campo "estado" de la BD */}
                   <div
                     className={`status-badge ${estaConectado ? "online" : "busy"}`}
                   ></div>
@@ -408,7 +435,7 @@ const Perfil = () => {
 
                 <div className="action-buttons">
                   {esPerfilExterno ? (
-                    // ── PERFIL EXTERNO: mostrar Seguir + Compartir ──
+                    // Perfil ajeno: se muestran Seguir y Compartir
                     <>
                       <button
                         className={`btn-seguir ${siguiendo ? "btn-siguiendo" : ""}`}
@@ -425,7 +452,7 @@ const Perfil = () => {
                       </button>
                     </>
                   ) : (
-                    // ── PERFIL PROPIO: mostrar Editar + Compartir ──
+                    // Perfil propio: se muestran Editar y Compartir
                     <>
                       <button
                         className="btn btn-primary"
@@ -447,7 +474,7 @@ const Perfil = () => {
 
             {/* ══ PANEL DERECHO ══ */}
             <div className="right-panel">
-              {/* Estado — verde/rojo según la base de datos */}
+              {/* El estado verde/rojo refleja el campo "estado" real de la BD */}
               <section className="menu-section">
                 <div className="section-title">📊 Estado y Actividad</div>
                 <div className="menu-list">
@@ -461,7 +488,6 @@ const Perfil = () => {
                         {estaConectado ? "Disponible" : "No disponible"}
                       </div>
                     </div>
-                    {/* Tag verde/rojo según estado real */}
                     <span
                       className={`status-tag ${estaConectado ? "online" : "busy"}`}
                     >
@@ -469,7 +495,7 @@ const Perfil = () => {
                     </span>
                   </div>
 
-                  {/* Actividad — solo en perfil propio */}
+                  {/* La sección de actividad solo es visible para el dueño del perfil */}
                   {!esPerfilExterno && (
                     <div
                       className="menu-item"
@@ -500,13 +526,13 @@ const Perfil = () => {
                     label="🏫 Universidad"
                     value={userData.universidad || "Sin universidad"}
                   />
-                  {/* Reputación calculada desde calificaciones */}
+                  {/* La reputación se calcula en el backend promediando las calificaciones recibidas */}
                   <InfoItem label="⭐ Reputación" value={reputacionTexto} />
                   <InfoItem
                     label="📱 Teléfono"
                     value={userData.telefono || "No disponible"}
                   />
-                  {/* Acciones rápidas — solo en perfil propio */}
+                  {/* Acceso rápido a secciones de seguridad, solo visible para el usuario propio */}
                   {!esPerfilExterno && (
                     <div className="menu-list">
                       <MenuItem
@@ -519,7 +545,8 @@ const Perfil = () => {
                   )}
                 </div>
               </section>
-              {/* ══ MIS SERVICIOS ══ */}
+
+              {/* ══ MIS SERVICIOS — Solo visible en el perfil propio ══ */}
               {!esPerfilExterno && (
                 <section className="menu-section">
                   <div className="section-title">
@@ -574,7 +601,6 @@ const Perfil = () => {
                             </div>
                           </div>
 
-                          {/* Contenedor de botones ajustado */}
                           <div
                             style={{
                               display: "flex",
@@ -583,11 +609,12 @@ const Perfil = () => {
                               alignItems: "center",
                             }}
                           >
+                            {/* Botón editar: carga el servicio en el estado "editando" */}
                             <button
                               className="btn btn-primary"
                               style={{
                                 width: "36px",
-                                height: "36px", // Tamaño fijo cuadrado
+                                height: "36px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -600,11 +627,12 @@ const Perfil = () => {
                             >
                               ✏️
                             </button>
+                            {/* Botón eliminar: guarda el ID y abre el modal de confirmación */}
                             <button
                               className="btn btn-primary"
                               style={{
                                 width: "36px",
-                                height: "36px", // Tamaño fijo cuadrado
+                                height: "36px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -628,7 +656,9 @@ const Perfil = () => {
                 </section>
               )}
 
-              {/* ══ MODAL: Confirmar eliminar ══ */}
+              {/* ══ MODAL: Confirmar eliminar ══ 
+                  Aparece solo cuando confirmEliminar tiene un ID guardado
+                  Clic fuera del modal lo cierra sin eliminar nada */}
               {confirmEliminar && (
                 <div
                   className="image-menu-overlay active"
@@ -677,7 +707,8 @@ const Perfil = () => {
                 </div>
               )}
 
-              {/* ══ MODAL: Editar servicio ══ */}
+              {/* ══ MODAL: Editar servicio ══
+                  e.stopPropagation() evita que el clic dentro del modal cierre el overlay */}
               {editando && (
                 <div
                   className="image-menu-overlay active"
@@ -694,6 +725,7 @@ const Perfil = () => {
                   >
                     <h3 className="image-menu-title">✏️ Editar servicio</h3>
 
+                    {/* Generamos los campos del formulario dinámicamente desde un array */}
                     {[
                       ["Título", "titulo", "text"],
                       ["Precio/hora", "precio_hora", "number"],
@@ -804,7 +836,7 @@ const Perfil = () => {
             <div className="image-menu" onClick={(e) => e.stopPropagation()}>
               <h3 className="image-menu-title">✍️ Editar Perfil</h3>
               <div className="image-menu-options">
-                {/* BOTÓN PARA CAMBIAR USER NAME */}
+                {/* Cada botón usa prompt() para pedir el nuevo valor y llama a handleUpdate */}
 
                 <button
                   className="image-option"
@@ -818,8 +850,6 @@ const Perfil = () => {
                     <b>Cambiar Nombre</b>
                   </div>
                 </button>
-
-                {/* BOTÓN PARA CAMBIAR DESCRIPCIÓN */}
 
                 <button
                   className="image-option"
@@ -837,8 +867,6 @@ const Perfil = () => {
                   </div>
                 </button>
 
-                {/* BOTÓN PARA CAMBIAR UNIVERSIDAD */}
-
                 <button
                   className="image-option"
                   onClick={() => {
@@ -854,8 +882,6 @@ const Perfil = () => {
                     <b>Cambiar Universidad</b>
                   </div>
                 </button>
-
-                {/* BOTÓN PARA CAMBIAR NÚMERO DE TELÉFONO */}
 
                 <button
                   className="image-option"
@@ -877,7 +903,8 @@ const Perfil = () => {
           </div>
         )}
 
-        {/* ══ MODAL: Cambiar avatar (solo perfil propio) ══ */}
+        {/* ══ MODAL: Cambiar avatar (solo perfil propio) ══ 
+            Dos opciones: URL externa o archivo local desde el dispositivo */}
         {activeModal === "imagen" && (
           <div
             className="image-menu-overlay active"
@@ -885,6 +912,7 @@ const Perfil = () => {
           >
             <div className="image-menu" onClick={(e) => e.stopPropagation()}>
               <h3 className="image-menu-title">📸 Cambiar Avatar</h3>
+              {/* Input oculto: se activa programáticamente con FileInputRef.current.click() */}
               <input
                 type="file"
                 ref={FileInputRef}
@@ -919,7 +947,8 @@ const Perfil = () => {
           </div>
         )}
 
-        {/* ══ MODAL: Actividad (solo perfil propio) ══ */}
+        {/* ══ MODAL: Actividad (solo perfil propio) ══ 
+            Muestra estadísticas, logros y actividad reciente del usuario */}
         {activeModal === "actividad" && (
           <div
             className="activity-overlay active"
@@ -995,8 +1024,9 @@ const Perfil = () => {
   );
 };
 
-// ── Subcomponentes ──
+// ── Subcomponentes reutilizables ──
 
+// Muestra un número grande con su etiqueta (publicaciones, seguidores, siguiendo)
 const StatItem = ({ value, label }) => (
   <div className="stat-item">
     <div className="stat-value">{value}</div>
@@ -1004,7 +1034,7 @@ const StatItem = ({ value, label }) => (
   </div>
 );
 
-// danger=true aplica estilo rojo para el botón de cerrar sesión
+// Ítem de menú clickeable; danger=true aplica estilo rojo (usado en "Cerrar sesión")
 const MenuItem = ({ icon, title, desc, tag, onClick, danger }) => (
   <div
     className="menu-item"
@@ -1033,6 +1063,7 @@ const MenuItem = ({ icon, title, desc, tag, onClick, danger }) => (
   </div>
 );
 
+// Muestra un par label/valor en la sección de información del perfil
 const InfoItem = ({ label, value }) => (
   <div className="info-item">
     <div className="info-label">{label}</div>
@@ -1040,6 +1071,7 @@ const InfoItem = ({ label, value }) => (
   </div>
 );
 
+// Tarjeta compacta de estadística rápida dentro del modal de actividad
 const QuickStatCard = ({ icon, value, label }) => (
   <div className="quick-stat-card">
     <div className="quick-stat-icon">{icon}</div>
@@ -1048,6 +1080,7 @@ const QuickStatCard = ({ icon, value, label }) => (
   </div>
 );
 
+// Barra de progreso con porcentaje y color configurable (teal, green, yellow)
 const ProgressBar = ({ label, value, color }) => (
   <div className="progress-item">
     <div className="progress-header">
@@ -1060,6 +1093,7 @@ const ProgressBar = ({ label, value, color }) => (
   </div>
 );
 
+// Ítem de actividad reciente con ícono, texto, tiempo y badge de tipo (success, info, etc.)
 const ActivityItem = ({ icon, text, time, badge, type }) => (
   <div className="activity-item">
     <div className="activity-icon">{icon}</div>

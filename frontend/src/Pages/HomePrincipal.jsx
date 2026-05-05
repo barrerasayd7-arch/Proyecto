@@ -4,11 +4,15 @@ import "../styles/styleHome.css";
 import { formatearFecha } from "../utils/helpers";
 
 // ── Constantes ──
+// Centralizamos las URLs del API aquí arriba para que sea fácil cambiarlas si el servidor cambia de puerto
 const API = "https://localhost:7237/api/Services";
 const API_USUARIO = "https://localhost:7237/api/Users";
 const API_SOLICITUD = "https://localhost:7237/api/Solicitudes";
+
+// Cuántos servicios se muestran por "página" en la sección de búsqueda
 const CANTIDAD_POR_PAGINA = 8;
 
+// Lista de categorías disponibles para el formulario de publicación
 const CATEGORIAS = [
   { valor: "", label: "Todas las categorías" },
   { valor: "tutorias", label: "📚 Tutorías" },
@@ -28,6 +32,7 @@ const DISPONIBILIDAD = [
   "⏰ Siempre disponible",
 ];
 
+// Chips de filtrado rápido que aparecen en la sección de búsqueda
 const CHIPS_CATEGORIA = [
   { label: "🌐 Todos", valor: "todos" },
   { label: "📚 Tutorías", valor: "tutorias" },
@@ -38,6 +43,7 @@ const CHIPS_CATEGORIA = [
   { label: "🏠 Arriendo", valor: "arriendo" },
 ];
 
+// Estado inicial del formulario de publicación (todos los campos vacíos)
 const initialPublicar = {
   titulo: "",
   descripcion: "",
@@ -50,6 +56,8 @@ const initialPublicar = {
 };
 
 // ── Helpers ──
+
+// Convierte un array de puntuaciones numéricas en íconos de estrellas (★☆)
 function calcularEstrellas(estrellas) {
   if (!Array.isArray(estrellas) || estrellas.length === 0) return "☆☆☆☆☆";
   const prom = estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
@@ -57,16 +65,19 @@ function calcularEstrellas(estrellas) {
   return "★".repeat(llenas) + "☆".repeat(5 - llenas);
 }
 
+// Devuelve el promedio numérico de las estrellas, usado para ordenar servicios por rating
 function promedioEstrellas(estrellas) {
   if (!Array.isArray(estrellas) || estrellas.length === 0) return 0;
   return estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
 }
 
+// Recorta textos largos para que no desborden las tarjetas
 function truncar(texto, max = 90) {
   if (!texto) return "";
   return texto.length > max ? texto.substring(0, max) + "..." : texto;
 }
 
+// Normaliza texto quitando tildes y pasando a minúsculas, para que la búsqueda no sea sensible a acentos
 function normalizar(texto) {
   return (texto || "")
     .toString()
@@ -76,6 +87,7 @@ function normalizar(texto) {
     .trim();
 }
 
+// Mapas de categoría a ícono y a ID numérico para enviar al backend
 const mapaIconos = {
   tutorias: "📚",
   ensayos: "✍️",
@@ -98,8 +110,10 @@ const mapaCategoriaId = {
 
 // ── Subcomponentes ──
 
+// Barra de navegación principal: muestra los links de la página y el nombre del usuario logueado
 function Navbar({ scrolled, onCerrarSesion }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  // El nombre del usuario se lee del localStorage donde se guardó al hacer login
   const nombreUsuario = localStorage.getItem("usuario") || "Usuario";
 
   return (
@@ -109,6 +123,7 @@ function Navbar({ scrolled, onCerrarSesion }) {
           UniService
         </a>
 
+        {/* Botón hamburguesa para pantallas pequeñas (responsive) */}
         <button
           className={`nav-toggle${menuAbierto ? " active" : ""}`}
           onClick={() => setMenuAbierto((v) => !v)}
@@ -150,6 +165,7 @@ function Navbar({ scrolled, onCerrarSesion }) {
   );
 }
 
+// Sección hero: presentación principal de la app con botones de acceso rápido
 function Hero() {
   return (
     <section className="hero" id="inicio">
@@ -177,11 +193,13 @@ function Hero() {
   );
 }
 
+// Tarjeta individual de servicio: muestra toda la info resumida y enlaza al detalle
 function TarjetaServicio({ servicio }) {
   const estrellas = calcularEstrellas(servicio.estrellas);
   const numReseñas = Array.isArray(servicio.estrellas)
     ? servicio.estrellas.length
     : 0;
+  // Compatibilidad: si la universidad llega como ID numérico "1", se muestra el nombre completo
   const universidad =
     servicio.universidad === 1 || servicio.universidad === "1"
       ? "Universidad Popular del Cesar"
@@ -215,6 +233,7 @@ function TarjetaServicio({ servicio }) {
               flexShrink: 0,
             }}
           >
+            {/* Avatar con la inicial del nombre del proveedor */}
             {(servicio.proveedor || "?").charAt(0).toUpperCase()}
           </div>
           <span className="texto-muted">
@@ -237,6 +256,7 @@ function TarjetaServicio({ servicio }) {
   );
 }
 
+// Muestra los 4 servicios más recientemente publicados
 function SeccionRecientes({ servicios, cargando }) {
   return (
     <section className="seccion" id="recientes">
@@ -273,6 +293,7 @@ function SeccionRecientes({ servicios, cargando }) {
   );
 }
 
+// Muestra el top 3 de servicios ordenados por promedio de calificaciones
 function SeccionTop({ top3 }) {
   const medallas = ["🥇", "🥈", "🥉"];
   return (
@@ -328,6 +349,8 @@ function SeccionTop({ top3 }) {
   );
 }
 
+// Sección de búsqueda con filtros de texto, categoría y orden
+// Toda la lógica de filtrado se hace en el frontend sobre los datos ya cargados (sin nuevas llamadas al API)
 function SeccionBuscar({ serviciosTotales }) {
   const [busqueda, setBusqueda] = useState("");
   const [categoriaActual, setCategoriaActual] = useState("todos");
@@ -335,15 +358,18 @@ function SeccionBuscar({ serviciosTotales }) {
   const [mostrados, setMostrados] = useState(CANTIDAD_POR_PAGINA);
   const [resultados, setResultados] = useState([]);
 
+  // Cada vez que llegan nuevos servicios del API, se reinician los filtros
   useEffect(() => {
     aplicarFiltros(busqueda, categoriaActual, orden, CANTIDAD_POR_PAGINA);
     setMostrados(CANTIDAD_POR_PAGINA);
   }, [serviciosTotales]);
 
+  // useCallback evita que esta función se recree en cada render, mejorando el rendimiento
   const aplicarFiltros = useCallback(
     (texto, cat, ord, limite) => {
       let filtrados = [...serviciosTotales].filter((s) => {
         const q = normalizar(texto);
+        // Búsqueda en múltiples campos: título, descripción, categoría y nombre del proveedor
         const coincideTexto =
           !q ||
           normalizar(s.titulo).includes(q) ||
@@ -358,6 +384,7 @@ function SeccionBuscar({ serviciosTotales }) {
         return coincideTexto && coincideCat;
       });
 
+      // Ordenamiento según la selección del usuario
       switch (ord) {
         case "precio-menor":
           filtrados.sort(
@@ -396,6 +423,7 @@ function SeccionBuscar({ serviciosTotales }) {
           );
       }
 
+      // Paginación simple: solo mostramos los primeros N resultados
       setResultados(filtrados.slice(0, limite));
     },
     [serviciosTotales],
@@ -422,6 +450,7 @@ function SeccionBuscar({ serviciosTotales }) {
     aplicarFiltros(busqueda, categoriaActual, val, mostrados);
   };
 
+  // Al hacer clic en "Mostrar más" se incrementa el límite y se vuelven a filtrar
   const handleMostrarMas = () => {
     const nuevo = mostrados + CANTIDAD_POR_PAGINA;
     setMostrados(nuevo);
@@ -455,7 +484,7 @@ function SeccionBuscar({ serviciosTotales }) {
         </div>
       </header>
 
-      {/* Chips de categoría */}
+      {/* Chips de categoría: filtros visuales rápidos */}
       <div
         className="container chips-container"
         id="filtros-categorias"
@@ -533,10 +562,13 @@ function SeccionBuscar({ serviciosTotales }) {
   );
 }
 
+// Formulario para que el usuario publique un nuevo servicio
+// Al enviarlo, hace un POST al API y llama a onPublicado() para refrescar la lista
 function SeccionPublicar({ onPublicado }) {
   const [form, setForm] = useState(initialPublicar);
   const [loading, setLoading] = useState(false);
 
+  // Actualiza solo el campo que cambió usando el atributo "name" del input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -555,6 +587,7 @@ function SeccionPublicar({ onPublicado }) {
       disponibilidad,
     } = form;
 
+    // Validación básica antes de enviar al servidor
     if (
       !titulo ||
       !descripcion ||
@@ -569,12 +602,14 @@ function SeccionPublicar({ onPublicado }) {
       return;
     }
 
+    // El ID del proveedor se obtiene del localStorage (guardado al hacer login)
     const proveedor = localStorage.getItem("usuarioId");
     if (!proveedor) {
       alert("❌ Debes iniciar sesión para publicar un servicio");
       return;
     }
 
+    // Convertimos los textos de modalidad y disponibilidad al valor numérico que espera la BD
     const modalidadDB =
       { "🏫 Presencial": 0, "💻 Virtual": 1, "🔄 Mixta": 2 }[modalidad] ?? 0;
     const dispDB =
@@ -584,6 +619,7 @@ function SeccionPublicar({ onPublicado }) {
         "⏰ Siempre disponible": 2,
       }[disponibilidad] ?? 0;
 
+    // Objeto con la estructura exacta que espera el endpoint POST /api/Services
     const nuevoServicio = {
       id_proveedor: Number(proveedor),
       titulo,
@@ -607,8 +643,8 @@ function SeccionPublicar({ onPublicado }) {
       const data = await res.json();
       if (data.ok) {
         alert("✅ Servicio publicado correctamente");
-        setForm(initialPublicar);
-        onPublicado();
+        setForm(initialPublicar); // Limpiamos el formulario tras publicar
+        onPublicado(); // Recargamos la lista de servicios en el padre
       } else {
         alert("❌ Error: " + (data.error || "No se pudo publicar"));
       }
@@ -800,12 +836,14 @@ function SeccionPublicar({ onPublicado }) {
   );
 }
 
+// Estilos de badge según el estado de la solicitud (colores semáforo)
 const BADGE = {
   Pendiente: { bg: "#FFF3CD", color: "#856404", texto: "⏳ Pendiente" },
   Aceptada: { bg: "#D1E7DD", color: "#0A5C36", texto: "✅ Aceptada" },
   Rechazada: { bg: "#F8D7DA", color: "#721C24", texto: "❌ Rechazada" },
 };
 
+// Modal de rechazo: permite al proveedor escribir un motivo y opcionalmente proponer un nuevo precio (contraoferta)
 function ModalRechazo({ onConfirmar, onCancelar }) {
   const [motivo, setMotivo] = useState("");
   const [contraoferta, setContraoferta] = useState("");
@@ -905,7 +943,7 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
           Si propones un precio, el cliente lo verá en su solicitud.
         </p>
 
-        {/* Botones */}
+        {/* El botón de confirmar queda deshabilitado hasta que se escriba un motivo */}
         <div style={{ display: "flex", gap: "10px", marginTop: "22px" }}>
           <button
             type="button"
@@ -935,6 +973,8 @@ function ModalRechazo({ onConfirmar, onCancelar }) {
   );
 }
 
+// Tarjeta de solicitud: se comporta diferente según si la solicitud fue "enviada" o "recibida"
+// Si es recibida y está pendiente, muestra los botones de Aceptar / Rechazar
 function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
   const badge = BADGE[sol.estado] || BADGE.Pendiente;
   const nombre = tipo === "enviada" ? sol.nombre_proveedor : sol.nombre_cliente;
@@ -1001,11 +1041,14 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
         </p>
       )}
 
+      {/* Muestra el motivo de rechazo si la solicitud fue rechazada */}
       {sol.motivo_rechazo && (
         <p style={{ margin: 0, fontSize: "0.8rem", color: "#f87171" }}>
           Motivo: {sol.motivo_rechazo}
         </p>
       )}
+
+      {/* Si el proveedor propuso una contraoferta, se muestra destacada */}
       {sol.contraoferta && (
         <div
           style={{
@@ -1044,6 +1087,7 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
         </div>
       )}
 
+      {/* Solo el proveedor ve los botones de respuesta, y solo si la solicitud aún está pendiente */}
       {tipo === "recibida" && sol.estado === "Pendiente" && (
         <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
           <button
@@ -1068,15 +1112,18 @@ function TarjetaSolicitud({ sol, tipo, responder, setRechazando }) {
   );
 }
 
+// Sección que lista las solicitudes del usuario logueado
+// Divide en dos pestañas: las que él envió y las que recibió para sus servicios
 function SeccionSolicitudes() {
   const [tab, setTab] = useState("enviadas");
   const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [rechazando, setRechazando] = useState(null);
+  const [rechazando, setRechazando] = useState(null); // Guarda el ID de la solicitud que se está rechazando
 
   const id = localStorage.getItem("usuarioId");
 
+  // Al montar el componente se traen ambas listas en paralelo con Promise.all
   useEffect(() => {
     if (!id) return;
     setCargando(true);
@@ -1093,6 +1140,7 @@ function SeccionSolicitudes() {
       .finally(() => setCargando(false));
   }, [id]);
 
+  // Llama al endpoint de respuesta y luego refresca la lista de recibidas
   const responder = async (
     id_solicitud,
     accion,
@@ -1109,6 +1157,7 @@ function SeccionSolicitudes() {
         contraoferta,
       }),
     });
+    // Recargamos solo las recibidas para reflejar el nuevo estado
     const res = await fetch(`${API_SOLICITUD}/recibidas/${id}`);
     setRecibidas(await res.json());
   };
@@ -1121,6 +1170,7 @@ function SeccionSolicitudes() {
         <p className="label-seccion">🔔 Bandeja</p>
         <h2>Mis solicitudes</h2>
 
+        {/* Tabs de navegación entre enviadas y recibidas */}
         <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>
           {[
             ["enviadas", "📤 Enviadas"],
@@ -1175,6 +1225,8 @@ function SeccionSolicitudes() {
           </div>
         )}
       </div>
+
+      {/* El modal de rechazo aparece encima de todo cuando se selecciona una solicitud para rechazar */}
       {rechazando && (
         <ModalRechazo
           onConfirmar={(motivo, contraoferta) => {
@@ -1247,6 +1299,8 @@ function Footer() {
   );
 }
 
+// Componente flotante de notificaciones: actualmente usa datos estáticos de prueba
+// La mejora pendiente es conectarlo al API para mostrar notificaciones reales de la BD
 function NotificacionesFlotantes() {
   const [abierto, setAbierto] = useState(false);
 
@@ -1420,6 +1474,8 @@ function NotificacionesFlotantes() {
   );
 }
 
+// Componente raíz de la página principal
+// Verifica autenticación, carga los servicios del API y organiza todas las secciones
 export default function HomePrincipal() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
@@ -1429,19 +1485,23 @@ export default function HomePrincipal() {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
+    // Si no hay token en localStorage, el usuario no está autenticado: redirigir al login
     if (!localStorage.getItem("token")) navigate("/login");
+
+    // Detecta el scroll para aplicar el estilo "scrolled" en la navbar
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [navigate]);
 
-  // DESPUÉS:
+  // useCallback garantiza que la función no se recree en cada render
+  // Trae todos los servicios y los distribuye en: recientes (últimos 4) y top3 (mejor calificados)
   const cargarServicios = useCallback(() => {
     setCargando(true);
     fetch(API)
       .then((res) => res.json())
       .then((data) => {
-        setServiciosTotales([...data].reverse());
+        setServiciosTotales([...data].reverse()); // Invertimos para que los más nuevos aparezcan primero
         setRecientes(data.slice(0, 4));
         const top = [...data]
           .sort(
@@ -1458,6 +1518,7 @@ export default function HomePrincipal() {
     cargarServicios();
   }, [cargarServicios]);
 
+  // Al cerrar sesión se limpia todo el localStorage y se redirige al home de invitado
   const handleCerrarSesion = () => {
     localStorage.clear();
     navigate("/home-guest");
