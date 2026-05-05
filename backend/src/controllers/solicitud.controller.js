@@ -190,7 +190,6 @@ export const crearSolicitud = async (req, res) => {
         </div>
         `,
       });
-      
     }
 
     res.json(result.recordset[0]);
@@ -213,9 +212,9 @@ export const getMisSolicitudes = async (req, res) => {
     const { id } = req.params; // id_cliente
     const conn = await pool;
 
-    const result = await conn.request()
-      .input("id_cliente", sql.Int, parseInt(id))
-      .query(`
+    const result = await conn
+      .request()
+      .input("id_cliente", sql.Int, parseInt(id)).query(`
         SELECT 
           sol.*,
           s.titulo        AS titulo_servicio,
@@ -241,9 +240,9 @@ export const getSolicitudesRecibidas = async (req, res) => {
     const { id } = req.params; // id_proveedor
     const conn = await pool;
 
-    const result = await conn.request()
-      .input("id_proveedor", sql.Int, parseInt(id))
-      .query(`
+    const result = await conn
+      .request()
+      .input("id_proveedor", sql.Int, parseInt(id)).query(`
         SELECT 
           sol.*,
           s.titulo        AS titulo_servicio,
@@ -271,23 +270,26 @@ export const responderSolicitud = async (req, res) => {
     // accion: "aceptar" | "rechazar"
     const conn = await pool;
 
-if (accion === "aceptar") {
-  await conn.request()
-    .input("id", sql.Int, id_solicitud)
-    .query(`UPDATE solicitudes SET estado = 'Aceptada', fue_aceptada = 1 WHERE id_solicitud = @id`);
-} else {
-  await conn.request()
-    .input("id",           sql.Int,           id_solicitud)
-    .input("motivo",       sql.NVarChar,      motivo_rechazo || "")
-    .input("contraoferta", sql.Decimal(10,2), contraoferta || null)
-    .query(`
+    if (accion === "aceptar") {
+      await conn
+        .request()
+        .input("id", sql.Int, id_solicitud)
+        .query(
+          `UPDATE solicitudes SET estado = 'Aceptada', fue_aceptada = 1 WHERE id_solicitud = @id`,
+        );
+    } else {
+      await conn
+        .request()
+        .input("id", sql.Int, id_solicitud)
+        .input("motivo", sql.NVarChar, motivo_rechazo || "")
+        .input("contraoferta", sql.Decimal(10, 2), contraoferta || null).query(`
       UPDATE solicitudes 
       SET estado = 'Rechazada', 
           motivo_rechazo = @motivo,
           contraoferta   = @contraoferta
       WHERE id_solicitud = @id
     `);
-}
+    }
 
     res.json({ ok: true });
   } catch (error) {

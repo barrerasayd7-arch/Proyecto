@@ -37,7 +37,9 @@ export const register = async (req, res) => {
   const { correo, password, nombre, telefono, codigo } = req.body;
 
   if (!correo || !password || !nombre) {
-    return res.status(400).json({ error: "Correo, contraseña y nombre son obligatorios" });
+    return res
+      .status(400)
+      .json({ error: "Correo, contraseña y nombre son obligatorios" });
   }
 
   try {
@@ -45,13 +47,19 @@ export const register = async (req, res) => {
 
     // 2. Importar el diccionario y validar el código
     const { codigosTemporales } = await import("./auth.controller.js");
-    
-    if (!codigosTemporales[correo] || String(codigosTemporales[correo]) !== String(codigo)) {
-      return res.status(400).json({ error: "Código inválido o expirado. Verifica de nuevo." });
+
+    if (
+      !codigosTemporales[correo] ||
+      String(codigosTemporales[correo]) !== String(codigo)
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Código inválido o expirado. Verifica de nuevo." });
     }
 
     // 🔎 Verificar si el correo ya existe
-    const existing = await conn.request()
+    const existing = await conn
+      .request()
       .input("correo", sql.NVarChar, correo)
       .query("SELECT id_usuario FROM usuarios WHERE correo = @correo");
 
@@ -63,19 +71,18 @@ export const register = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     // Usamos el Store Procedure que acabas de actualizar
-    await conn.request()
+    await conn
+      .request()
       .input("correo", sql.NVarChar, correo)
       .input("password_hash", sql.NVarChar, hash)
       .input("nombre", sql.NVarChar, nombre)
       .input("telefono", sql.NVarChar, telefono || null)
       .execute("sp_CrearUsuario"); // Usar .execute para Procedures
 
-
-      // 4. ELIMINACIÓN: Si todo salió bien, borramos el código
+    // 4. ELIMINACIÓN: Si todo salió bien, borramos el código
     delete codigosTemporales[correo];
 
     res.status(201).json({ message: "Usuario creado correctamente" });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -88,13 +95,16 @@ export const login = async (req, res) => {
   const { correo, password } = req.body;
 
   if (!correo || !password) {
-    return res.status(400).json({ error: "Correo y contraseña son obligatorios" });
+    return res
+      .status(400)
+      .json({ error: "Correo y contraseña son obligatorios" });
   }
 
   try {
     const conn = await pool;
 
-    const result = await conn.request()
+    const result = await conn
+      .request()
       .input("correo", sql.VarChar, correo)
       .query("SELECT * FROM usuarios WHERE correo = @correo");
 
@@ -113,19 +123,15 @@ export const login = async (req, res) => {
     // Quitar password del response
     const { password_hash, ...safeUser } = user;
 
-    const token = jwt.sign(
-      { id: user.id_usuario },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ id: user.id_usuario }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
     res.json({ token, user: safeUser });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 /* =========================
    GET USUARIO POR ID
@@ -134,9 +140,7 @@ export const getUsuarioById = async (req, res) => {
   const { id } = req.params;
   try {
     const conn = await pool;
-    const result = await conn.request()
-      .input("id", sql.Int, id)
-      .query(`
+    const result = await conn.request().input("id", sql.Int, id).query(`
         SELECT 
           u.id_usuario,
           u.nombre,
@@ -165,8 +169,6 @@ export const getUsuarioById = async (req, res) => {
   }
 };
 
-
-
 /* =========================
    VERIFY TOKEN (MIDDLEWARE)
 ========================= */
@@ -188,13 +190,12 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
-
 export const updateUsuario = async (req, res) => {
   const { id } = req.params;
   const campos = req.body; // { nombre, correo, descripcion, avatar, estado }
 
   const columnas = Object.keys(campos)
-    .map(k => `${k} = @${k}`)
+    .map((k) => `${k} = @${k}`)
     .join(", ");
 
   try {
@@ -203,7 +204,9 @@ export const updateUsuario = async (req, res) => {
     for (const [k, v] of Object.entries(campos)) {
       request.input(k, v);
     }
-    await request.query(`UPDATE usuarios SET ${columnas} WHERE id_usuario = @id`);
+    await request.query(
+      `UPDATE usuarios SET ${columnas} WHERE id_usuario = @id`,
+    );
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -221,7 +224,8 @@ export const solicitarResetPassword = async (req, res) => {
   try {
     const conn = await pool;
     // Verificar que el correo existe en la base
-    const result = await conn.request()
+    const result = await conn
+      .request()
       .input("correo", sql.NVarChar, correo)
       .query("SELECT id_usuario FROM usuarios WHERE correo = @correo");
 
@@ -233,7 +237,6 @@ export const solicitarResetPassword = async (req, res) => {
     // Reusar el endpoint de envío de código que ya tienes
     const { enviarCodigo } = await import("./auth.controller.js");
     return enviarCodigo(req, res);
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -257,17 +260,19 @@ export const resetPassword = async (req, res) => {
     // 3. Si es válido, procedemos al cambio en SQL Server
     const hash = await bcrypt.hash(nuevaPassword, 10);
     const conn = await pool;
-    
-    await conn.request()
+
+    await conn
+      .request()
       .input("correo", sql.NVarChar, correo)
       .input("hash", sql.NVarChar, hash)
-      .query("UPDATE usuarios SET password_hash = @hash WHERE correo = @correo");
+      .query(
+        "UPDATE usuarios SET password_hash = @hash WHERE correo = @correo",
+      );
 
     // 4. Borramos el código para que no se use dos veces
     delete codigosTemporales[correo];
 
     res.json({ ok: true, message: "Contraseña actualizada" });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error interno al resetear password" });

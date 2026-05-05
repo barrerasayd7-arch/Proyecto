@@ -27,7 +27,7 @@ export const enviarCodigo = async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: '"UniService Plattform 🎓" <' + process.env.EMAIL_USER + '>',
+      from: '"UniService Plattform 🎓" <' + process.env.EMAIL_USER + ">",
       to: correo,
       subject: "Tu código de Autentificación Único - UniService",
 
@@ -35,7 +35,10 @@ export const enviarCodigo = async (req, res) => {
       attachments: [
         {
           filename: "logo.png",
-          path: path.join(__dirname, "../../../frontend/src/img/Logo+name_color_gnoBG_email.png"),
+          path: path.join(
+            __dirname,
+            "../../../frontend/src/img/Logo+name_color_gnoBG_email.png",
+          ),
           cid: "uniservice-logo", // Debe coincidir con src="cid:..." en el HTML
         },
       ],
