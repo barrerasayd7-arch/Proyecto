@@ -33,16 +33,20 @@ BEGIN
     SET ANSI_WARNINGS ON;
     SET ARITHABORT ON;
     SET CONCAT_NULL_YIELDS_NULL ON;
-    SET NUMERIC_ROUNDABORT OFF;   
+    SET NUMERIC_ROUNDABORT OFF;
     -- Validar si el usuario existe antes de intentar actualizar
-    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = @id_usuario)
+    IF NOT EXISTS (SELECT 1
+    FROM usuarios
+    WHERE id_usuario = @id_usuario)
     BEGIN
         RAISERROR ('El usuario con el ID proporcionado no existe.', 16, 1);
         RETURN;
     END
 
     -- Validar duplicidad de correo solo si se está intentando cambiar
-    IF @correo IS NOT NULL AND EXISTS (SELECT 1 FROM usuarios WHERE correo = @correo AND id_usuario <> @id_usuario)
+    IF @correo IS NOT NULL AND EXISTS (SELECT 1
+        FROM usuarios
+        WHERE correo = @correo AND id_usuario <> @id_usuario)
     BEGIN
         RAISERROR ('El nuevo correo electrónico ya está registrado por otro usuario.', 16, 1);
         RETURN;
@@ -64,8 +68,8 @@ BEGIN
 
         IF @@ROWCOUNT = 0
         BEGIN
-            RAISERROR ('No se pudo actualizar el usuario. Verifique los datos proporcionados.', 16, 1);
-        END
+        RAISERROR ('No se pudo actualizar el usuario. Verifique los datos proporcionados.', 16, 1);
+    END
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();

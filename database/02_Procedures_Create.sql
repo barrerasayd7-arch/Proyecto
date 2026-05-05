@@ -24,15 +24,19 @@ BEGIN
     SET CONCAT_NULL_YIELDS_NULL ON;
     SET NUMERIC_ROUNDABORT OFF;
     -- Validar solo el correo
-    IF EXISTS (SELECT 1 FROM usuarios WHERE correo = @correo)
+    IF EXISTS (SELECT 1
+    FROM usuarios
+    WHERE correo = @correo)
     BEGIN
         RAISERROR ('Este correo electrónico ya se encuentra registrado.', 16, 1);
         RETURN;
     END
 
     BEGIN TRY
-        INSERT INTO usuarios (telefono, password_hash, nombre, correo, id_rol, universidad)
-        VALUES (@telefono, @password_hash, @nombre, @correo, 2, @universidad);
+        INSERT INTO usuarios
+        (telefono, password_hash, nombre, correo, id_rol, universidad)
+    VALUES
+        (@telefono, @password_hash, @nombre, @correo, 2, @universidad);
         SELECT SCOPE_IDENTITY() AS NewUserID;
     END TRY
     BEGIN CATCH
@@ -40,7 +44,8 @@ BEGIN
         RAISERROR (@ErrorMessage, 16, 1);
     END CATCH
 END;
-GO -- <--- IMPORTANTE
+GO
+-- <--- IMPORTANTE
 
 CREATE OR ALTER PROCEDURE sp_ToggleSeguimiento
     @id_seguidor INT,
@@ -54,18 +59,24 @@ BEGIN
         RETURN;
     END
 
-    IF EXISTS (SELECT 1 FROM seguidores WHERE id_seguidor = @id_seguidor AND id_seguido = @id_seguido)
+    IF EXISTS (SELECT 1
+    FROM seguidores
+    WHERE id_seguidor = @id_seguidor AND id_seguido = @id_seguido)
     BEGIN
         DELETE FROM seguidores WHERE id_seguidor = @id_seguidor AND id_seguido = @id_seguido;
         SELECT 'Dejado de seguir' AS Resultado;
     END
     ELSE
     BEGIN
-        INSERT INTO seguidores (id_seguidor, id_seguido) VALUES (@id_seguidor, @id_seguido);
+        INSERT INTO seguidores
+            (id_seguidor, id_seguido)
+        VALUES
+            (@id_seguidor, @id_seguido);
         SELECT 'Siguiendo' AS Resultado;
     END
 END;
-GO -- <--- IMPORTANTE
+GO
+-- <--- IMPORTANTE
 
 CREATE OR ALTER PROCEDURE sp_CrearServicio
     @id_proveedor INT,
@@ -76,19 +87,24 @@ CREATE OR ALTER PROCEDURE sp_CrearServicio
     @contacto NVARCHAR(150),
     @modalidad INT,
     @disponibilidad INT,
-    @icono NVARCHAR(10) -- Corregido a 10 para soportar emojis
+    @icono NVARCHAR(10)
+-- Corregido a 10 para soportar emojis
 AS
 BEGIN
     SET NOCOUNT ON;
-    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = @id_proveedor)
+    IF NOT EXISTS (SELECT 1
+    FROM usuarios
+    WHERE id_usuario = @id_proveedor)
     BEGIN
         RAISERROR ('El proveedor especificado no existe.', 16, 1);
         RETURN;
     END
 
     BEGIN TRY
-        INSERT INTO servicios (id_proveedor, titulo, descripcion, id_categoria, precio_hora, contacto, modalidad, disponibilidad, icono)
-        VALUES (@id_proveedor, @titulo, @descripcion, @id_categoria, @precio_hora, @contacto, @modalidad, @disponibilidad, @icono);
+        INSERT INTO servicios
+        (id_proveedor, titulo, descripcion, id_categoria, precio_hora, contacto, modalidad, disponibilidad, icono)
+    VALUES
+        (@id_proveedor, @titulo, @descripcion, @id_categoria, @precio_hora, @contacto, @modalidad, @disponibilidad, @icono);
         SELECT SCOPE_IDENTITY() AS NuevoServicioID;
     END TRY
     BEGIN CATCH
@@ -96,7 +112,8 @@ BEGIN
         RAISERROR (@Err, 16, 1);
     END CATCH
 END;
-GO -- <--- IMPORTANTE
+GO
+-- <--- IMPORTANTE
 
 USE UniService;
 GO
@@ -135,8 +152,8 @@ BEGIN
     -- Validar que no exista una solicitud pendiente
     IF EXISTS (
         SELECT 1
-        FROM solicitudes
-        WHERE id_cliente = @id_cliente
+    FROM solicitudes
+    WHERE id_cliente = @id_cliente
         AND id_servicio = @id_servicio
         AND estado = 'Pendiente'
     )
@@ -146,30 +163,32 @@ BEGIN
     END
 
     BEGIN TRY
-        INSERT INTO solicitudes (
-            id_cliente,
-            id_proveedor,
-            id_servicio,
-            fue_aceptada,
+        INSERT INTO solicitudes
+        (
+        id_cliente,
+        id_proveedor,
+        id_servicio,
+        fue_aceptada,
 
-            tipo_servicio,
-            tema,
-            descripcion,
+        tipo_servicio,
+        tema,
+        descripcion,
 
-            fecha_deseada,
-            hora_deseada,
-            duracion,
-            modalidad,
+        fecha_deseada,
+        hora_deseada,
+        duracion,
+        modalidad,
 
-            metodo_pago,
-            presupuesto,
-            pago_anticipado,
+        metodo_pago,
+        presupuesto,
+        pago_anticipado,
 
-            urgencia,
-            archivo,
-            estado
+        urgencia,
+        archivo,
+        estado
         )
-        VALUES (
+    VALUES
+        (
             @id_cliente,
             @id_proveedor,
             @id_servicio,
@@ -193,9 +212,9 @@ BEGIN
             'Pendiente'
         );
 
-        SELECT 
-            'Solicitud enviada correctamente' AS Resultado,
-            SCOPE_IDENTITY() AS id_solicitud;
+        SELECT
+        'Solicitud enviada correctamente' AS Resultado,
+        SCOPE_IDENTITY() AS id_solicitud;
 
     END TRY
     BEGIN CATCH
@@ -213,7 +232,7 @@ CREATE OR ALTER PROCEDURE sp_GuardarCalificacionConAspectos
     @id_servicio INT,
     @puntuacion TINYINT,
     @comentario NVARCHAR(MAX),
-    @aspectos_nombres NVARCHAR(MAX) 
+    @aspectos_nombres NVARCHAR(MAX)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -221,27 +240,33 @@ BEGIN
     BEGIN TRY
         DECLARE @id_calificacion_generado INT;
 
-        IF EXISTS (SELECT 1 FROM calificaciones WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio)
+        IF EXISTS (SELECT 1
+    FROM calificaciones
+    WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio)
         BEGIN
-            UPDATE calificaciones 
+        UPDATE calificaciones 
             SET puntuacion = @puntuacion, comentario = @comentario, fecha_modificacion = GETDATE()
             WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio;
 
-            SELECT @id_calificacion_generado = id_calificacion FROM calificaciones 
-            WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio;
+        SELECT @id_calificacion_generado = id_calificacion
+        FROM calificaciones
+        WHERE id_cliente = @id_cliente AND id_servicio = @id_servicio;
 
-            DELETE FROM aspectos_destacados WHERE id_calificacion = @id_calificacion_generado;
-        END
+        DELETE FROM aspectos_destacados WHERE id_calificacion = @id_calificacion_generado;
+    END
         ELSE
         BEGIN
-            INSERT INTO calificaciones (id_solicitud, id_cliente, id_servicio, puntuacion, comentario)
-            VALUES (@id_solicitud, @id_cliente, @id_servicio, @puntuacion, @comentario);
-            SET @id_calificacion_generado = SCOPE_IDENTITY();
-        END
+        INSERT INTO calificaciones
+            (id_solicitud, id_cliente, id_servicio, puntuacion, comentario)
+        VALUES
+            (@id_solicitud, @id_cliente, @id_servicio, @puntuacion, @comentario);
+        SET @id_calificacion_generado = SCOPE_IDENTITY();
+    END
 
-        INSERT INTO aspectos_destacados (id_calificacion, tipo_aspecto)
-        SELECT @id_calificacion_generado, TRIM(value)
-        FROM STRING_SPLIT(@aspectos_nombres, ',');
+        INSERT INTO aspectos_destacados
+        (id_calificacion, tipo_aspecto)
+    SELECT @id_calificacion_generado, TRIM(value)
+    FROM STRING_SPLIT(@aspectos_nombres, ',');
 
         COMMIT TRANSACTION;
         SELECT 'Calificación procesada correctamente' AS Resultado;
