@@ -58,17 +58,21 @@ const initialPublicar = {
 // ── Helpers ──
 
 // Convierte un array de puntuaciones numéricas en íconos de estrellas (★☆)
-function calcularEstrellas(estrellas) {
-  if (!Array.isArray(estrellas) || estrellas.length === 0) return "☆☆☆☆☆";
-  const prom = estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
-  const llenas = Math.round(prom);
-  return "★".repeat(llenas) + "☆".repeat(5 - llenas);
-}
+function calcularEstrellas(puntuaciones) {
+  // Asegura que tratamos con un array válido de puntuaciones
+  if (!Array.isArray(puntuaciones) || puntuaciones.length === 0) return "☆☆☆☆☆";
 
-// Devuelve el promedio numérico de las estrellas, usado para ordenar servicios por rating
-function promedioEstrellas(estrellas) {
-  if (!Array.isArray(estrellas) || estrellas.length === 0) return 0;
-  return estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
+  // Calcula el promedio basado en el array de puntuaciones
+  const prom =
+    puntuaciones.reduce((a, b) => a + Number(b), 0) / puntuaciones.length;
+  const llenas = Math.min(5, Math.max(0, Math.round(prom))); // Garantiza rango 0-5
+
+  return "★".repeat(llenas) + "☆".repeat(5 - llenas);
+
+  function promedioEstrellas(estrellas) {
+    if (!Array.isArray(estrellas) || estrellas.length === 0) return 0;
+    return estrellas.reduce((a, b) => a + Number(b), 0) / estrellas.length;
+  }
 }
 
 // Recorta textos largos para que no desborden las tarjetas
@@ -199,6 +203,7 @@ function TarjetaServicio({ servicio }) {
   const numReseñas = Array.isArray(servicio.estrellas)
     ? servicio.estrellas.length
     : 0;
+
   // Compatibilidad: si la universidad llega como ID numérico "1", se muestra el nombre completo
   const universidad =
     servicio.universidad === 1 || servicio.universidad === "1"
@@ -330,7 +335,7 @@ function SeccionTop({ top3 }) {
                   </span>
                   <span className="rating-text">
                     {Array.isArray(s.estrellas) ? s.estrellas.length : 0}{" "}
-                    reseñas
+                    puntuaciones
                   </span>
                 </div>
                 <div className="top-card-footer">
@@ -1506,7 +1511,7 @@ export default function HomePrincipal() {
         const top = [...data]
           .sort(
             (a, b) =>
-              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas),
+              promedioEstrellas(b.estrellas) - promedioEstrellas(a.estrellas)
           )
           .slice(0, 3);
         setTop3(top);
