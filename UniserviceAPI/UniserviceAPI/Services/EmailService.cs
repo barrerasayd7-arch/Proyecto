@@ -1,84 +1,83 @@
-using System.Net;
-using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MimeKit;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Threading.Tasks;
 
-public class EmailService
+namespace UniserviceAPI.Services
 {
-    private readonly IConfiguration _config;
-
-    public EmailService(IConfiguration config)
+    public class EmailService
     {
-        _config = config;
-    }
+        private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _config;
 
-    public async Task EnviarCodigo(string correo, string codigo)
-    {
-        var smtp = new SmtpClient("smtp.gmail.com")
+        public EmailService(IWebHostEnvironment env, IConfiguration config)
         {
-            Port = 587,
-            Credentials = new NetworkCredential(
-                _config["EmailSettings:Email"],
-                _config["EmailSettings:Password"]
-            ),
-            EnableSsl = true
-        };
+            _env = env;
+            _config = config;
+        }
 
-        var mensaje = new MailMessage
+        public async Task EnviarCodigoVerificacion(string emailDestino, string codigo)
         {
-            From = new MailAddress(_config["EmailSettings:Email"], "UniService"),
-            Subject = "Código de verificación",
-            Body = $@"
-                    <div style='background-color:#031424;padding:10px 0;font-family:Helvetica,Arial,sans-serif;text-align:center'>
-                      <div style='max-width:500px;margin:0 auto;background-color:#051a2d;border-radius:16px;overflow:hidden;border:1px solid #10304a'>
+            var mensaje = new MimeMessage();
 
-                        <div style='padding:36px 40px 20px 40px'>
-                          <img src='https://i.postimg.cc/5NDfZyCv/Logo-name-color-gno-BG-email.png'
-                               style='width:340px;height:auto;display:block;margin:0 auto'>
-                        </div>
+            // Configuración del Remitente usando EmailSettings del JSON
+            mensaje.From.Add(new MailboxAddress("UniService", _config["EmailSettings:Email"]));
+            mensaje.To.Add(new MailboxAddress("", emailDestino));
+            mensaje.Subject = "Verifica tu cuenta - UniService";
 
-                        <div style='height:1px;background:#10304a;margin:0 40px'></div>
+            var builder = new BodyBuilder();
 
-                        <div style='padding:28px 40px 20px 40px'>
-                          <h2 style='color:#4ac7b6;font-size:24px;font-weight:700;margin:0 0 12px 0'>
-                            Verifica tu cuenta
-                          </h2>
+            // 1. Cargar la plantilla HTML desde wwwroot/templates
+            string pathHtml = Path.Combine(_env.WebRootPath, "templates", "email_verificacion.html");
 
-                          <p style='color:#ffffff;font-size:15px;line-height:1.7;margin-bottom:30px;opacity:0.85'>
-                            ¡Gracias por unirte a <strong style='color:#4ac7b6'>Uni</strong>
-                            <strong style='color:#ffdd57'>Service</strong>!
-                            Para completar tu registro, usa este código:
-                          </p>
+            if (!File.Exists(pathHtml))
+            {
+                throw new FileNotFoundException("No se encontró la plantilla HTML en la ruta: " + pathHtml);
+            }
 
-                          <div style='background-color:#031424;border-radius:14px;padding:28px 20px;margin-bottom:28px;border:2px solid #10304a'>
-                            <p style='color:#4ac7b6;font-size:11px;margin-bottom:12px'>
-                              Tu código de verificación
-                            </p>
+            string htmlBody = await File.ReadAllTextAsync(pathHtml);
 
-                            <span style='font-family:monospace;font-size:44px;font-weight:bold;color:#4ac7b6;letter-spacing:12px'>
-                              {codigo}
-                            </span>
-                          </div>
+            // 2. Inyectar el código dinámico
+            htmlBody = htmlBody.Replace("{{codigo}}", codigo);
 
-                          <div style='background-color:#10304a;border-radius:8px;padding:12px'>
-                            <p style='color:#ffffff;font-size:13px;margin:0'>
-                              ?? Este código expira en 5 minutos
-                            </p>
-                          </div>
+            // 3. Embeber el logo local mediante Content-ID (CID)
+            string pathLogo = Path.Combine(_env.WebRootPath, "img", "logo_uniservice.png");
 
-                        </div>
+            if (File.Exists(pathLogo))
+            {
+                var image = builder.LinkedResources.Add(pathLogo);
+                image.ContentId = "logo_uniservice";
+            }
 
-                        <div style='padding:16px;background-color:#031424;border-top:1px solid #10304a'>
-                          <p style='color:#4ac7b6;font-size:12px;margin:0'>
-                            © 2026 UniService · Tu socio universitario
-                          </p>
-                        </div>
+            builder.HtmlBody = htmlBody;
+            mensaje.Body = builder.ToMessageBody();
 
-                      </div>
-                    </div>",
-            IsBodyHtml = true
-        };
+            // 4. Configuración y envío mediante SMTP
+            using var client = new MailKit.Net.Smtp.SmtpClient();
 
-        mensaje.To.Add(correo);
+            try
+            {
+                // Conexión usando las llaves exactas de tu appsettings.json
+                await client.ConnectAsync(
+                    _config["EmailSettings:Host"],
+                    int.Parse(_config["EmailSettings:Port"]),
+                    MailKit.Security.SecureSocketOptions.StartTls
+                );
 
-        await smtp.SendMailAsync(mensaje);
+                await client.AuthenticateAsync(
+                    _config["EmailSettings:Email"],
+                    _config["EmailSettings:Password"]
+                );
+
+                await client.SendAsync(mensaje);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
+                client.Dispose();
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using UniserviceAPI.DTOs;
+using UniserviceAPI.Services;
+using UniServiceAPI.Models;
 
 [ApiController]
 [Route("api/auth")]
@@ -40,7 +42,7 @@ public class AuthController : ControllerBase
                 codigos.Remove(data.correo);
         });
 
-        await _emailService.EnviarCodigo(data.correo, codigo);
+        await _emailService.EnviarCodigoVerificacion(data.correo, codigo);
 
         return Ok(new { ok = true });
     }
