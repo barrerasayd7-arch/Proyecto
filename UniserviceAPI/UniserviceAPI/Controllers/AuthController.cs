@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+ï»¿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
     }
 
     // =========================
-    // ENVIAR CÓDIGO
+    // ENVIAR CÃ“DIGO
     // =========================
     [HttpPost("send-code")]
     public async Task<IActionResult> EnviarCodigo([FromBody] EmailDTO data)
@@ -48,14 +48,13 @@ public class AuthController : ControllerBase
     }
 
     // =========================
-    // VERIFICAR CÓDIGO
+    // VERIFICAR CÃ“DIGO
     // =========================
     [HttpPost("verify-code")]
     public IActionResult VerificarCodigo([FromBody] VerificarCodigoDTO data)
     {
         if (codigos.ContainsKey(data.correo) && codigos[data.correo] == data.codigo)
         {
-            codigos.Remove(data.correo);
             correosVerificados.Add(data.correo);
 
             return Ok(new { valido = true });
@@ -65,44 +64,63 @@ public class AuthController : ControllerBase
     }
 
     // =========================
-    // REGISTER (BLOQUEADO SI NO VERIFICÓ)
+    // REGISTER (BLOQUEADO SI NO VERIFICÃ“)
     // =========================
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
     {
-        if (!correosVerificados.Contains(dto.correo))
+        if (string.IsNullOrEmpty(dto.codigo) ||
+    !codigos.ContainsKey(dto.correo) ||
+    codigos[dto.correo] != dto.codigo)
             return BadRequest(new { error = "Debes verificar el correo primero" });
 
-        using (SqlConnection conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
-        {
-            await conn.OpenAsync();
+        codigos.Remove(dto.correo);
 
-            // Verificar si ya existe
-            var check = new SqlCommand("SELECT COUNT(*) FROM usuarios WHERE correo = @correo", conn);
-            check.Parameters.AddWithValue("@correo", dto.correo);
+        try {
+            using (SqlConnection conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
+            {
+                await conn.OpenAsync();
 
-            int existe = (int)await check.ExecuteScalarAsync();
-            if (existe > 0)
-                return BadRequest(new { error = "Correo ya registrado" });
+                // Verificar si ya existe
+                var check = new SqlCommand("SELECT COUNT(*) FROM usuarios WHERE correo = @correo", conn);
+                check.Parameters.AddWithValue("@correo", dto.correo);
 
-            // Hash password
-            string hash = BCrypt.Net.BCrypt.HashPassword(dto.password);
+                int existe = (int)await check.ExecuteScalarAsync();
+                if (existe > 0)
+                    return BadRequest(new { error = "Correo ya registrado" });
 
-            // Usar tu SP
-            var cmd = new SqlCommand("sp_CrearUsuario", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
+                // Hash password
+                string hash = BCrypt.Net.BCrypt.HashPassword(dto.password);
 
-            cmd.Parameters.AddWithValue("@correo", dto.correo);
-            cmd.Parameters.AddWithValue("@password_hash", hash);
-            cmd.Parameters.AddWithValue("@nombre", dto.nombre);
-            cmd.Parameters.AddWithValue("@telefono", dto.telefono ?? (object)DBNull.Value);
+                // Usar tu SP
+                var cmd = new SqlCommand("sp_CrearUsuario", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
 
-            await cmd.ExecuteNonQueryAsync();
+                cmd.Parameters.AddWithValue("@correo", dto.correo);
+                cmd.Parameters.AddWithValue("@password_hash", hash);
+                cmd.Parameters.AddWithValue("@nombre", dto.nombre);
 
-            correosVerificados.Remove(dto.correo);
+                // ðŸ‘‡ ExecuteScalar en vez de ExecuteNonQuery porque el SP retorna SCOPE_IDENTITY
+                var resultado = await cmd.ExecuteScalarAsync();
 
-            return Ok(new { ok = true });
+                if (resultado == null)
+                    return StatusCode(500, new { error = "No se pudo crear el usuario" });
+
+                correosVerificados.Remove(dto.correo);
+
+                return Ok(new { ok = true });
+            }
         }
+        catch (SqlException ex)
+        {
+            // ðŸ‘‡ Ahora captura el RAISERROR del SP y lo devuelve al frontend
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
+
     }
 
     // =========================
@@ -128,7 +146,7 @@ public class AuthController : ControllerBase
             string hash = reader["password_hash"].ToString();
 
             if (!BCrypt.Net.BCrypt.Verify(dto.password, hash))
-                return Unauthorized(new { error = "Contraseña incorrecta" });
+                return Unauthorized(new { error = "ContraseÃ±a incorrecta" });
 
             int id = (int)reader["id_usuario"];
 
